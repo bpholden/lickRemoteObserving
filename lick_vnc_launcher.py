@@ -23,13 +23,11 @@ import traceback
 import warnings
 
 import yaml
-
 import paramiko
-
 
 import soundplay
 
-__version__ = '0.2'
+__version__ = '0.3'
 
 
 class VNCSession(object):
