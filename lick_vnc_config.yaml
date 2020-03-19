@@ -5,7 +5,8 @@
   ssh_pkey: '/Users/holden/.ssh/laptop3',
   
   ## When first connecting to Keck to determine which VNC server to connect to
-  ## (i.e. where to run `kvncinfo -server`) this is the list of computers to try
+  ## (i.e. where to run `vncstatus {instrument}`) this is the list of
+  ## computers to try
 
   servers_to_try: ['shimmy','noir','frankfurt'],
 
