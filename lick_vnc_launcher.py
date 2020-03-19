@@ -838,6 +838,9 @@ class LickVncLauncher(object):
                 if ln[0] != "#":
                     fields = ln.split('-')
                     display = fields[0].strip()
+                    if display == 'Usage':
+                        # this should not happen
+                        break
                     desktop = fields[1].strip()
                     name = ''.join(desktop.split()[1:]) 
                     s = VNCSession(display=display, desktop=desktop, user=account)
