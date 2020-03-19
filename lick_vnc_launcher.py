@@ -722,6 +722,7 @@ class LickVncLauncher(object):
                     }
 
         if account.lower() in instruments:
+            instrument = account.lower()
             return instrument, telescope[instrument]
 
         return None, None
