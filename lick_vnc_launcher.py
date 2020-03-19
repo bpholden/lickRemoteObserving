@@ -415,6 +415,7 @@ class LickVncLauncher(object):
         else:
             if not pathlib.Path(self.ssh_pkey).exists():
                 self.log.warning(f"SSH private key path does not exist: {self.ssh_pkey}")
+        self.servers_to_try = self.config.get('servers_to_try', None)
 
         #check default_sessions
         ds = self.config.get('default_sessions', None)
