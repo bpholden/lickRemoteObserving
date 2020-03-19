@@ -811,10 +811,12 @@ class LickVncLauncher(object):
             cmd = f"vncstatus {instrument}"
             data = self.do_ssh_cmd(cmd, server, account, password)
             # parse data
-            if data and len(data) > 3: # refactor
-                vncserver = server
-                self.log.info(f"Got VNC server: '{vncserver}'")
-                break
+            if data and len(data) > 3:
+                mtch = re.search("Usage",data)
+                if not mtch:
+                    vncserver = server
+                    self.log.info(f"Got VNC server: '{vncserver}'")
+                    break
 
         return vncserver
 
