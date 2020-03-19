@@ -2,9 +2,9 @@
 
 These scripts are to be used by remote sites to connect to Keck for remote observing.
 
-Before embarking on setting up a Keck Remote Observing station, we recommend reading the offical remote observing policy and documentation at: [https://](https://)
+Before embarking on setting up a Remote Observing station, we recommend reading the offical remote observing policy and documentation at: [https://](https://)
 
-## Notify Keck of your intent to connect remotely
+## Notify Lick of your intent to connect remotely
 Before you can connect to Keck remotely, we need to provide you with the firewall info and passwords.  As well, we need info about your remote observing station.
 
 - Email `sa@ucolick.org` with the following info about your remote site:
@@ -20,13 +20,13 @@ Once we receive your request, we will respond with instructions on obtaining the
 
 ## Displays
 
-The primary hardware requirement for running Keck VNCs is screen space.  Previous incarnations of the remote observing system have used four (4) 1920x1200 monitors (~24 inch diagonal) and placed one VNC session per monitor.  An alternative setup would be to use a single, very large 4k monitor and place the four VNC sessions on that one monitor.  In order for the VNC sessions to be of reasonable physical size, the monitor would have to be 43-48 inches (we've found that even 43 inches may be a bit on the small size, see below).  The pixel pitch which we used which works well is 0.272 mm/pixel (or about 93 pixels per inch) for our four 24 inch monitor setup.  
+The primary hardware requirement for running Lick VNCs is screen space.  Previous incarnations of the remote observing system have used four (4) 1920x1200 monitors (~24 inch diagonal) and placed one VNC session per monitor.  An alternative setup would be to use a single, very large 4k monitor and place the four VNC sessions on that one monitor.  In order for the VNC sessions to be of reasonable physical size, the monitor would have to be 43-48 inches (we've found that even 43 inches may be a bit on the small size, see below).  The pixel pitch which we used which works well is 0.272 mm/pixel (or about 93 pixels per inch) for our four 24 inch monitor setup.  
 
 We have also tried a 43 inch 4k resolution TV screen (which works out to about 103 ppi), but it is less readable at that size.  The advantage of a single 4k monitor is that it is easy to have a second monitor beside it which is dedicated to the Zoom connection or to a web browser for documentation or displaying weather conditions.
 
 ## Computer Recommendations
 
-The following hardware configuration has been tested at Keck HQ:
+The following hardware configuration has been tested at Lick HQ:
 
 - Computer: [Intel NUC](https://www.intel.com/content/www/us/en/products/boards-kits/nuc.html)
     - CPU: Intel Core i7-7567U CPU @ 3.50Ghz (dual core)
@@ -67,25 +67,25 @@ The software has been tested for CentOS 7.6, RedHat, Ubuntu, and macOS.
         - **On macOS**: It is also possible to use the built in VNC viewer on macOS, but we have seen a few instances where the screen freezes and the client needs to be closed and reopened to get an up to date screen.
 
 
-## Download and Install Keck VNC software
+## Download and Install Lick VNC software
 
 (NOTE: Examples below assuming a user named 'observer' and installing to home directory)
 
 - Download or clone this project from github: 
     ```
     cd
-    git clone https://github.com/KeckObservatory/RemoteObserving
-    cd ~/RemoteObserving
+    git clone https://github.com/bpholden/lickRemoteObserving
+    cd ~/lickRemoteObserving
     ```
 
-- Create configuration file: copy `keck_vnc_config.yaml` to `local_config.yaml`.
+- Create configuration file: copy `lick_vnc_config.yaml` to `local_config.yaml`.
     ```
-    cp keck_vnc_config.yaml local_config.yaml
+    cp lick_vnc_config.yaml local_config.yaml
     ```
 
 - Create a KRO [conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html) using the provided environment.yaml file:
     ```
-    cd ~/RemoteObserving
+    cd ~/lickRemoteObserving
     conda env create -f environment.yaml
     ```
 
@@ -93,24 +93,24 @@ The software has been tested for CentOS 7.6, RedHat, Ubuntu, and macOS.
     - Generate ssh public/private key pair **(no passphrase)** 
         ```
         cd ~/.ssh
-        ssh-keygen -t rsa -b 4096
+        ssh-keygen -t rsa -b 4096 -m PEM
         ```
     - Make sure that the resulting key is an RSA key.  The **private** key should have a first line which looks like `-----BEGIN RSA PRIVATE KEY-----` (it should not be an OPENSSH key).  If you do get an OPENSSH key (we've seen this on macOS and ubuntu linux), try generating the key with the `-m PEM` option:
         ```
         ssh-keygen -t rsa -b 4096 -m PEM
         ```
-    - Email the **public** key file (i.e. `id_rsa.pub`) to `mainland_observing@keck.hawaii.edu`
+    - Email the **public** key file (i.e. `id_rsa.pub`) to `sa@ucolick.org`
 
 - (optional) Add VNC start script to path:
     ```
-    export PATH=/home/observer/RemoteObserving:$PATH
+    export PATH=/home/observer/lickRemoteObserving:$PATH
     ```
 
-## Configure Keck VNC software
+## Configure Lick VNC software
 
 Edit the configuration file as appropriate.  Read the comments in the configuration file itself as they can guide you.  You may need to uncomment (remove the leading `#`) from lines you want to customize.
 
-- **Configure Firewall:** If you are connecting outside of the Keck network, enter the firewall address, port and user info.  You'll need to get this information from someone at Keck.
+- **Configure Firewall:** If you are connecting outside of the Lick network, enter the firewall address, port and user info.  You'll need to get this information from someone at Lick.
 
     ```
     firewall_address: ???.???.???.???,
@@ -118,7 +118,7 @@ Edit the configuration file as appropriate.  Read the comments in the configurat
     firewall_user: '???',
     ```
 
-- **Configure Path to Private SSH Key:** Enter the path to the **private** key corresponding to the public key that you emailed to Keck in the appropriate field.  For example:
+- **Configure Path to Private SSH Key:** Enter the path to the **private** key corresponding to the public key that you emailed to Lick in the appropriate field.  For example:
 
     ```
     ssh_pkey: '/home/observer/.ssh/id_rsa',
@@ -134,17 +134,17 @@ Edit the configuration file as appropriate.  Read the comments in the configurat
             vncargs: '-passwd=/home/observer/.vnc/passwd',
             ```
 
-- **Configure Default Sessions:** Keck instruments typically use 4 VNC sessions for instrument control named "control0", "control1", "control2", and "telstatus".  On a normal invocation of the software (via the `start_keck_viewers` command) it will open the four sessions specified here.  For stations which split the duties among 2 computers, one could set this line to control which computer opens which sessions.
+- **Configure Default Sessions:** Lick instruments typically use 4 VNC sessions for instrument control named "control0", "control1", "control2", and "telstatus".  On a normal invocation of the software (via the `start_lick_viewers` command) it will open the four sessions specified here.  For stations which split the duties among 2 computers, one could set this line to control which computer opens which sessions.
 
-- **Soundplay Configuration:** For compatible systems, uncomment the `soundplayer` line to specify which compiled executable for soundplay to use.  Other operating systems sometimes need other soundplay versions, contact `mainland_observing@keck.hawaii.edu` for help configuring this value.  Also, if you local machine's path to the `aplay` executable is non-standard, specify that in the `aplay` value.
+- **Soundplay Configuration:** For compatible systems, uncomment the `soundplayer` line to specify which compiled executable for soundplay to use.  Other operating systems sometimes need other soundplay versions, contact `sa@ucolick.org` for help configuring this value.  Also, if you local machine's path to the `aplay` executable is non-standard, specify that in the `aplay` value.
     - At the moment, the default linux executable seems to work for CentOS and Ubuntu linux.  We do not have a functioning soundplay executable for MacOS.
     - If your system is not compatible, or if you do not want it to have sounds, add a line to your `local_config.yaml` file: `nosound: True,` to avoid starting sounds.  This is important for sites which are using multiple computers for each set of VNC sessions.  Choose one to handle sounds, and set the `nosound: True,` option for the other.
 
-# Test your connection to Keck
+# Test your connection to Lick
 
-Only after your SSH key is successfully installed at Keck, you can test your system.
+Only after your SSH key is successfully installed at Lick, you can test your system.
 
-From the directory where the Keck VNC software is installed (e.g. `~/RemoteObserving/`), run pytest:
+From the directory where the Lick VNC software is installed (e.g. `~/lickRemoteObserving/`), run pytest:
 
 ```
 conda activate KRO
@@ -153,20 +153,20 @@ pytest
 
 This may query you for passwords, depending on your local configuration. It should print out a report which indicates that all tests passed. Make sure there are no test failures.
 
-If there are test failures, email your logfile to `mainland_observing@keck.hawaii.edu`.  Verbose debug information is logged to the `RemoteObserving/logs/` folder.  Log files are created based on the UTC date.
+If there are test failures, email your logfile to `sa@ucolick.org`.  Verbose debug information is logged to the `lickRemoteObserving/logs/` folder.  Log files are created based on the UTC date.
 
 
 # Run the VNC launch script
 
-From the command line, cd into your install directory and run `start_keck_viewers` followed by the name of the instrument account assigned for your observing night (ie `nires1`, `mosfire2`).  Running the script without options will start 4 VNC sessions (control0, control1, control2, telstatus) and the soundplayer. Additionally, you should see a command line menu with more options once you have started the script.:
+From the command line, cd into your install directory and run `start_lick_viewers` followed by the name of the instrument account assigned for your observing night (ie `kast`, `nickel`).  Running the script without options will start 4 VNC sessions (control0, control1, control2, telstatus) and the soundplayer. Additionally, you should see a command line menu with more options once you have started the script.:
 ```
-cd ~/RemoteObserving
-./start_keck_viewers [instrument account]
+cd ~/lickRemoteObserving
+./start_lick_viewers [instrument account]
 ```
 
 To get help on available command line options:
 ```
-./start_keck_viewers --help
+./start_lick_viewers --help
 ```
 
 **NOTE:** Be sure to exit the script by using the 'q' quit option or control-c to ensure all VNC processes, SSH tunnels, and authentication are terminated properly.
@@ -174,7 +174,7 @@ To get help on available command line options:
 
 # Troubleshooting and common problems
 
-Verbose debug information is logged to the `RemoteObserving/logs/` folder.  Log files are created based on the UTC date.
+Verbose debug information is logged to the `lickRemoteObserving/logs/` folder.  Log files are created based on the UTC date.
 
-If you need assistance, please email `mainland_observing@keck.hawaii.edu` and attach the most recent log file from the logs folder.
+If you need assistance, please email `sa@ucolick.org` and attach the most recent log file from the logs folder.
 
