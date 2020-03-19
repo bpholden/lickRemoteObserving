@@ -2,7 +2,7 @@ import paramiko
 import sshtunnel
 import logging
 from getpass import getpass
-from keck_vnc_launcher import create_logger, KeckVncLauncher, create_parser
+from lick_vnc_launcher import create_logger, LickVncLauncher, create_parser
 import pytest
 
 
@@ -18,9 +18,9 @@ if lvl.config.get('nosshkey', False) is True:
     vnc_account = lvl.args.account
     lvl.vnc_password = getpass(f"\nPassword for user {vnc_account}: ")
 
-servers_and_results = [('frankfurt', ''),
-                       ('shimmy', 'ohaiula'),
-                       ('noir', 'vm-mosfire')
+servers_and_results = [('frankfurt', 'frankfurt.apf.ucolick.org'),
+                       ('shimmy', 'shimmy.ucolick.org'),
+                       ('noir', 'noir.ucolick.org')
                            ]
 
 def test_firewall_authentication():
@@ -52,4 +52,4 @@ def test_connection_to_servers(server, result):
     assert output is not None
     assert output != ''
     assert output.strip() in [server, result]
-    lvl!.log.info(f' Passed')
+    lvl.log.info(f' Passed')
