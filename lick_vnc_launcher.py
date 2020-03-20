@@ -597,9 +597,8 @@ class LickVncLauncher(object):
         cmd.append(f'{vncprefix}{vncserver}:{port:4d}')
 
         self.log.debug(f"VNC viewer command: {cmd}")
-        # proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-        #                         stderr=subprocess.PIPE)
-        proc = subprocess.Popen(cmd)
+        null = subprocess.DEVNULL
+        proc = subprocess.Popen(cmd,stdin=null,stdout=null,stderr=null)
 
         #append to proc list so we can terminate on app exit
         self.vnc_processes.append(proc)
