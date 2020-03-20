@@ -30,7 +30,8 @@
 
   ## For ssh tunnelling, a starting local port number is used and incremented 
   ## for each port needed.  Default is 5901.
-  # local_port_start: 50001,
+  # local_port_start: 5901,
+  
 
   ## Soundplay configs
   ## Name of soundplayer executable to use (see ./soundplayer/ folder)
