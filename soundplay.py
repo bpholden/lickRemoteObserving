@@ -29,7 +29,7 @@ class soundplay(object):
             port = str(port)
             if server == None: server = self.getVncServer(instrument)
             serverport = f'{server}:{port}'
-            if aplay  == None: aplay  = 'aplay'
+            if aplay  == None: aplay  = 'afplay -v %v %s'
             if player == None: player = 'soundplay'
 
             #check existing soundplay process
