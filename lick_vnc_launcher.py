@@ -159,7 +159,7 @@ class LickVncLauncher(object):
             self.validate_ssh_key()
             if not self.is_ssh_key_valid:
                 self.log.error("\n\n\tCould not validate SSH key.\n\t"\
-                          "Contact mainland_observing@keck.hawaii.edu "\
+                          "Contact sa@ucolick.org "\
                           "for other options to connect remotely.\n")
                 self.exit_app()
         else:
@@ -648,7 +648,7 @@ class LickVncLauncher(object):
 
 
     ##-------------------------------------------------------------------------
-    ## Authenticate through the Keck firewall - needs to be rewritten 
+    ## Authenticate through the firewall - needs to be rewritten 
     ##-------------------------------------------------------------------------
     def authenticate(self, authpass):
 
@@ -1166,7 +1166,7 @@ class LickVncLauncher(object):
     def handle_fatal_error(self, error):
 
         #helpful user error message
-        supportEmail = 'mainland_observing@keck.hawaii.edu'
+        supportEmail = 'sa@ucolick.org'
         print("\n****** PROGRAM ERROR ******\n")
         print("Error message: " + str(error) + "\n")
         print("If you need troubleshooting assistance:")
@@ -1196,7 +1196,7 @@ def create_parser():
                    f"sessions for the specified instrument account. For "
                    f"help or information on how to configure the code, please "
                    f"see the included README.md file or email "
-                   f"mainland_observing@keck.hawaii.edu")
+                   f"sa@ucolick.org")
     parser = argparse.ArgumentParser(description=description)
 
 
