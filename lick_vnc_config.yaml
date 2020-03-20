@@ -36,6 +36,7 @@
   ## Soundplay configs
   ## Name of soundplayer executable to use (see ./soundplayer/ folder)
   # soundplayer: 'soundplay-8.5.1-linux-x86_64',
+  soundplayer: 'soundplay-107050-8.6.3-macosx10.5-ix86+x86_64',
   ## Path to "aplay" command-line sound player.  Default assumed in path as 'aplay'.
   # aplay: '/usr/bin/aplay',
 
