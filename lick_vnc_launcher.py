@@ -531,14 +531,15 @@ class LickVncLauncher(object):
             command.append(ssh_pkey)
 
         self.log.debug('ssh command: ' + ' '.join (command))
-        process = subprocess.Popen(command)
+        null = subprocess.DEVNULL
+        proc = subprocess.Popen(command,stdin=null,stdout=null,stderr=null)
 
 
         # Having started the process let's make sure it's actually running.
         # First try polling,  then confirm the requested local port is in use.
         # It's a fatal error if either check fails.
 
-        if process.poll() is not None:
+        if proc.poll() is not None:
             raise RuntimeError('subprocess failed to execute ssh')
         
         checks = 50
@@ -553,7 +554,7 @@ class LickVncLauncher(object):
         if checks == 0:
             raise RuntimeError('ssh tunnel failed to open after 5 seconds')
 
-        in_use = [address_and_port, session_name, process]
+        in_use = [address_and_port, session_name, proc]
         self.ports_in_use[local_port] = in_use
         
         return local_port
