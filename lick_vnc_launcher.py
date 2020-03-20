@@ -61,7 +61,7 @@ class LickVncLauncher(object):
         self.is_authenticated = False
         self.instrument = None
         self.vncserver = None
-        self.is_ssh_key_valid = False
+        self.ssh_key_valid = False
         self.exit = False
 
         self.servers_to_try = ['shimmy','noir',]
@@ -157,7 +157,7 @@ class LickVncLauncher(object):
         ##---------------------------------------------------------------------
         if self.args.nosshkey is False and self.config.get('nosshkey', None) is None:
             self.validate_ssh_key()
-            if not self.is_ssh_key_valid:
+            if not self.ssh_key_valid:
                 self.log.error("\n\n\tCould not validate SSH key.\n\t"\
                           "Contact sa@ucolick.org "\
                           "for other options to connect remotely.\n")
@@ -169,7 +169,7 @@ class LickVncLauncher(object):
         ##---------------------------------------------------------------------
         ## Determine VNC server
         ##---------------------------------------------------------------------
-        if self.is_ssh_key_valid:
+        if self.ssh_key_valid:
             self.vncserver = self.get_vnc_server(self.SSH_KEY_ACCOUNT,
                                                  None,
                                                  self.instrument)
@@ -184,7 +184,7 @@ class LickVncLauncher(object):
         ##---------------------------------------------------------------------
         ## Determine VNC Sessions
         ##---------------------------------------------------------------------
-        if self.is_ssh_key_valid:
+        if self.ssh_key_valid:
             # self.engv_account = self.get_engv_account(self.instrument)
             self.sessions_found = self.get_vnc_sessions(self.vncserver,
                                                         self.instrument,
@@ -262,8 +262,8 @@ class LickVncLauncher(object):
         if self.do_forward:
 
             #determine account and password         
-            account  = self.SSH_KEY_ACCOUNT if self.is_ssh_key_valid else self.args.account
-            password = None if self.is_ssh_key_valid else self.vnc_password
+            account  = self.SSH_KEY_ACCOUNT if self.ssh_key_valid else self.args.account
+            password = None if self.ssh_key_valid else self.vnc_password
 
             # determine if there is already a tunnel for this session
             local_port = None
@@ -625,8 +625,8 @@ class LickVncLauncher(object):
             #Do we need ssh tunnel for this?
             if self.do_forward:
 
-                account  = self.SSH_KEY_ACCOUNT if self.is_ssh_key_valid else self.args.account
-                password = None if self.is_ssh_key_valid else self.vnc_password
+                account  = self.SSH_KEY_ACCOUNT if self.ssh_key_valid else self.args.account
+                password = None if self.ssh_key_valid else self.vnc_password
                 sound_port = self.open_ssh_tunnel(self.vncserver, account,
                                                   password, self.ssh_pkey,
                                                   sound_port, None)
@@ -770,15 +770,15 @@ class LickVncLauncher(object):
     def validate_ssh_key(self):
         self.log.info(f"Validating ssh key...")
 
-        self.is_ssh_key_valid = False
+        self.ssh_key_valid = False
         cmd = 'whoami'
         data = self.do_ssh_cmd(cmd, self.SSH_KEY_SERVER, self.SSH_KEY_ACCOUNT,
                                None)
 
         if data == self.SSH_KEY_ACCOUNT:
-            self.is_ssh_key_valid = True
+            self.ssh_key_valid = True
 
-        if self.is_ssh_key_valid: self.log.info("  SSH key OK")
+        if self.ssh_key_valid: self.log.info("  SSH key OK")
         else                    : self.log.error("  SSH key invalid")
 
 
@@ -1081,8 +1081,8 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     def upload_log(self):
         try:
-            user = self.SSH_KEY_ACCOUNT if self.is_ssh_key_valid else self.args.account
-            pw = None if self.is_ssh_key_valid else self.vnc_password
+            user = self.SSH_KEY_ACCOUNT if self.ssh_key_valid else self.args.account
+            pw = None if self.ssh_key_valid else self.vnc_password
 
             client = paramiko.SSHClient()
             client.load_system_host_keys()
