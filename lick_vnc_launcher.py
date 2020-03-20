@@ -1053,7 +1053,7 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     def check_version(self):
         url = ('https://raw.githubusercontent.com/bpholden/'
-               'RemoteObserving/master/lick_vnc_launcher.py')
+               'lickRemoteObserving/master/lick_vnc_launcher.py')
         try:
             import requests
             from packaging import version
@@ -1070,7 +1070,7 @@ class LickVncLauncher(object):
             elif remote_version > local_version:
                 self.log.info(f'Your software (v{__version__}) is ahead of the released version')
             else:
-                self.log.warning(f'Your local software (v{__version__}) is behind '
+                self.log.warning(f'Your local software (v{__version__}) is not  '
                                  f'the currently available version '
                                  f'(v{remote_version})')
         except:
