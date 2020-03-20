@@ -621,7 +621,7 @@ class LickVncLauncher(object):
             vncserver   = self.vncserver
 
             #Do we need ssh tunnel for this?
-            if self.do_authenticate:
+            if self.do_forward:
 
                 account  = self.SSH_KEY_ACCOUNT if self.is_ssh_key_valid else self.args.account
                 password = None if self.is_ssh_key_valid else self.vnc_password
