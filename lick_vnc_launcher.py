@@ -633,7 +633,7 @@ class LickVncLauncher(object):
                 else:
                     vncserver = 'localhost'
 
-            self.sound = soundplay()
+            self.sound = soundplay.soundplay()
             self.sound.connect(self.instrument, vncserver, sound_port,
                                aplay=aplay, player=soundplayer)
         except Exception:
