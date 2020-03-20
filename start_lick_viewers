@@ -13,5 +13,5 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd $DIR
 
 #launch 
-python lick_vnc_launcher.py $@
+python3 lick_vnc_launcher.py $@
 
