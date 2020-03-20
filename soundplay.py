@@ -44,7 +44,7 @@ class soundplay(object):
             soundplayPath  = os.path.dirname(os.path.abspath(__file__)) + "/soundplayer/" + player
 
             #create command and open process and hold on to handle so we can terminate later
-            cmd = [soundplayPath, '-s', serverport, '-T', instrument, '-px', aplay]
+            cmd = [soundplayPath, '-s', serverport]
             log.debug('Soundplay cmd: ' + str(cmd))
             self.proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         except Exception as error:
