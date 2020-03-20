@@ -8,7 +8,7 @@
   ## (i.e. where to run `vncstatus {instrument}`) this is the list of
   ## computers to try
 
-  servers_to_try: ['shimmy','noir','frankfurt'],
+  servers_to_try: ['shimmy','noir',],
 
   ## This is the command to invoke on the local machine to launch a VNC client
   ## Command will be formatted as [vncviewer] [vncargs] [address]:[port]
