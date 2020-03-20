@@ -526,6 +526,8 @@ class LickVncLauncher(object):
         # build the command
         forwarding = f"{local_port}:localhost:{remote_port}"
         command = ['ssh', '-l', username, '-L', forwarding, '-N', '-T', server]
+        command.append('-oStrictHostKeyChecking=no')
+        command.append('-oKexAlgorithms=+diffie-hellman-group1-sha1')
         if ssh_pkey is not None:
             command.append('-i')
             command.append(ssh_pkey)
