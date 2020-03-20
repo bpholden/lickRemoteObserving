@@ -95,10 +95,10 @@ The software has been tested for CentOS 7.6, RedHat, Ubuntu, and macOS.
         cd ~/.ssh
         ssh-keygen -t rsa -b 4096 -m PEM
         ```
-    - Make sure that the resulting key is an RSA key.  The **private** key should have a first line which looks like `-----BEGIN RSA PRIVATE KEY-----` (it should not be an OPENSSH key).  If you do get an OPENSSH key (we've seen this on macOS and ubuntu linux), try generating the key with the `-m PEM` option:
-        ```
-        ssh-keygen -t rsa -b 4096 -m PEM
-        ```
+    - Make sure that the resulting key is an RSA key.  The **private**
+      key should have a first line which looks like `-----BEGIN RSA
+      PRIVATE KEY-----` (it should not be an OPENSSH key).
+	  
     - Email the **public** key file (i.e. `id_rsa.pub`) to `sa@ucolick.org`
 
 - (optional) Add VNC start script to path:
