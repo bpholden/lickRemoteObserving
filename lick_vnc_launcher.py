@@ -27,7 +27,7 @@ import paramiko
 
 import soundplay
 
-__version__ = '0.3'
+__version__ = '0.4'
 
 
 class VNCSession(object):
