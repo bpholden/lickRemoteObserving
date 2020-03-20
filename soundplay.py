@@ -119,7 +119,7 @@ if __name__ == "__main__":
     log = logging.getLogger('KRO')
 
     # arg parser
-    parser = argparse.ArgumentParser(description="Start Keck event sounds player.")
+    parser = argparse.ArgumentParser(description="Start Lick event sounds player.")
     parser.add_argument("instrument",   type=str,                                           help="Instrument to get event sounds for.")
     parser.add_argument("--server",     type=str,   dest="server",  default=None,           help="IP name or address of sound server to connect to. Will query for value if not given.")
     parser.add_argument("--port",       type=int,   dest="port",    default=9798,           help="Server port where soundplayer should connect. Default is standard.")
