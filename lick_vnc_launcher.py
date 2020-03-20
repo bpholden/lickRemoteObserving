@@ -772,14 +772,18 @@ class LickVncLauncher(object):
 
         self.ssh_key_valid = False
         cmd = 'whoami'
-        data = self.do_ssh_cmd(cmd, self.SSH_KEY_SERVER, self.SSH_KEY_ACCOUNT,
-                               None)
+        for server in self.servers_to_try:
+            data = self.do_ssh_cmd(cmd, server, self.SSH_KEY_ACCOUNT,
+                                       None)
 
-        if data == self.SSH_KEY_ACCOUNT:
-            self.ssh_key_valid = True
+            if data == self.SSH_KEY_ACCOUNT:
+                self.ssh_key_valid = True
+                break
 
-        if self.ssh_key_valid: self.log.info("  SSH key OK")
-        else                    : self.log.error("  SSH key invalid")
+        if self.ssh_key_valid:
+            self.log.info("  SSH key OK")
+        else:
+            self.log.error("  SSH key invalid")
 
 
     ##-------------------------------------------------------------------------
