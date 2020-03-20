@@ -57,8 +57,8 @@ class LickVncLauncher(object):
         self.vnc_threads  = []
         self.vnc_processes = []
         self.do_authenticate = False
-        self.do_forward = True
-        self.is_authenticated = False
+        self.ssh_forward = True
+        self.firewall_opened = False
         self.instrument = None
         self.vncserver = None
         self.ssh_key_valid = False
@@ -127,11 +127,11 @@ class LickVncLauncher(object):
         ## Authenticate Through Firewall (or Disconnect)
         ##---------------------------------------------------------------------
         #todo: handle blank password error properly
-        self.is_authenticated = False
+        self.firewall_opened = False
         if self.do_authenticate:
             self.firewall_pass = getpass.getpass(f"Password for firewall authentication: ")
-            self.is_authenticated = self.authenticate(self.firewall_pass)
-            if not self.is_authenticated:
+            self.firewall_opened = self.authenticate(self.firewall_pass)
+            if not self.firewall_opened:
                 self.exit_app('Authentication failure!')
 
 #         if self.args.authonly is True:
@@ -259,7 +259,7 @@ class LickVncLauncher(object):
         port      = int(f"59{display:02d}")
 
         ## If authenticating, open SSH tunnel for appropriate ports
-        if self.do_forward:
+        if self.ssh_forward:
 
             #determine account and password         
             account  = self.SSH_KEY_ACCOUNT if self.ssh_key_valid else self.args.account
@@ -623,7 +623,7 @@ class LickVncLauncher(object):
             vncserver   = self.vncserver
 
             #Do we need ssh tunnel for this?
-            if self.do_forward:
+            if self.ssh_forward:
 
                 account  = self.SSH_KEY_ACCOUNT if self.ssh_key_valid else self.args.account
                 password = None if self.ssh_key_valid else self.vnc_password
@@ -686,7 +686,7 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     def close_authentication(self, authpass):
 
-        if not self.is_authenticated:
+        if not self.firewall_opened:
             return False
 
         self.log.info('Signing off of firewall authentication')
@@ -1150,7 +1150,7 @@ class LickVncLauncher(object):
             self.sound.terminate()
 
         # Close down ssh tunnels and firewall authentication
-        if self.do_forward:
+        if self.ssh_forward:
             self.close_ssh_threads()
             self.close_authentication(self.firewall_pass)
 
