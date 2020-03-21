@@ -28,8 +28,8 @@ We have also tried a 43 inch 4k resolution TV screen (which works out to about 1
 
 The following hardware configuration has been tested at Lick HQ:
 
-- Computer: [Intel NUC](https://www.intel.com/content/www/us/en/products/boards-kits/nuc.html)
-    - CPU: Intel Core i7-7567U CPU @ 3.50Ghz (dual core)
+- Computer: MacBook Pro 
+    - CPU: Intel Core i7 CPU
     - RAM: 16GB
 
 # Software Installation
@@ -38,7 +38,7 @@ The following hardware configuration has been tested at Lick HQ:
 
 NOTE: Examples below assuming sudo/root installation for all users and were originally written for linux (CentOS).  Modify as appropriate for your local OS.
 
-The software has been tested for CentOS 7.6, RedHat, Ubuntu, and macOS.
+The software has been tested for macOS.
 
 - Install Anaconda python3
     - Download and run the latest installer: https://www.anaconda.com/distribution/
@@ -112,11 +112,9 @@ Edit the configuration file as appropriate.  Read the comments in the configurat
 
 - **Configure Firewall:** If you are connecting outside of the Lick network, enter the firewall address, port and user info.  You'll need to get this information from someone at Lick.
 
-    ```
-    firewall_address: ???.???.???.???,
-    firewall_port: ???,
-    firewall_user: '???',
-    ```
+```
+To be filled in.
+```
 
 - **Configure Path to Private SSH Key:** Enter the path to the **private** key corresponding to the public key that you emailed to Lick in the appropriate field.  For example:
 
