@@ -753,6 +753,7 @@ class LickVncLauncher(object):
         null = subprocess.DEVNULL
         stderr = subprocess.STDOUT
 
+        if password is not None:
             stdin = pipe
         else:
             stdin = null
