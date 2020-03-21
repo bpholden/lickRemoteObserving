@@ -801,7 +801,7 @@ class LickVncLauncher(object):
                                None)
 
         engv = None
-        if data and ' ' not in data:
+        if data is not None and ' ' not in data:
             engv = data
 
         if engv: self.log.debug("engv account is: '{}'")
