@@ -1,4 +1,3 @@
-
 #!/usr/env/python
 
 ## Import General Tools
@@ -23,7 +22,7 @@ import traceback
 import warnings
 
 import yaml
-import paramiko
+
 
 import soundplay
 
@@ -105,10 +104,6 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     def start(self):
     
-        #global suppression of paramiko warnings
-        #todo: log these?
-        warnings.filterwarnings(action='ignore', module='.*paramiko.*')
-
         ##---------------------------------------------------------------------
         ## Parse command line args and get config
         ##---------------------------------------------------------------------
@@ -720,7 +715,6 @@ class LickVncLauncher(object):
     def determine_instrument(self, account):
         instruments = ('apf','kast', 'nickel')
 
-
         telescope = {'apf': 11,
                      'kast':   1,
                      'nickel' : 2,
@@ -737,37 +731,59 @@ class LickVncLauncher(object):
     ## Utility function for opening ssh client, executing command and closing
     ##-------------------------------------------------------------------------
     def do_ssh_cmd(self, cmd, server, account, password):
-        try:
-            output = None
-            self.log.debug(f'Trying SSH connect to {server} as {account}:')
+            
+        output = None
+        self.log.debug(f'Trying SSH connect to {server} as {account}:')
+        command = ['ssh', server, '-l', account, '-T']
 
-            client = paramiko.SSHClient()
-            client.load_system_host_keys()
-            client.set_missing_host_key_policy(paramiko.WarningPolicy())
-            client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            client.connect(
-                server, 
-                port     = 22, 
-                timeout  = 6, 
-                key_filename=self.ssh_pkey,
-                username = account, 
-                password = password)
-            self.log.info('  Connected')
-        except TimeoutError:
-            self.log.error('  Timeout')
-        except Exception as e:
-            self.log.error('  Failed: ' + str(e))
+        if self.ssh_pkey is not None:
+            command.append('-i')
+            command.append(self.ssh_pkey)
+            
+        command.append('-oStrictHostKeyChecking=no')
+        command.append('-oKexAlgorithms=+diffie-hellman-group1-sha1')
+        command.append(cmd)
+        self.log.debug('ssh command: ' + ' '.join (command))
+
+        
+        pipe = subprocess.PIPE
+        null = subprocess.DEVNULL
+        stderr = subprocess.STDOUT
+
+            stdin = pipe
         else:
+            stdin = null
+
+        proc = subprocess.Popen(command, stdin=stdin, stdout=pipe, stderr=stderr)
+        if proc.poll() is not None:
+            raise RuntimeError('subprocess failed to execute ssh')
+        
+        try:
+                port     = 22, 
+            stdout,stderr = proc.communicate(password, timeout=6)
+        except subprocess.TimeoutExpired:
+            self.log.error('  Timeout')
             self.log.debug(f'Command: {cmd}')
-            stdin, stdout, stderr = client.exec_command(cmd)
-            output = stdout.read()
-            output = output.decode().strip('\n')
             self.log.debug(f"Output: '{output}'")
-        finally:
-            client.close()
-            return output
+            return
 
+        if proc.returncode != 0:
+            message = '  command failed with error ' + str(proc.returncode)
+            self.log.error(message)
 
+        stdout = stdout.decode()
+        stdout = stdout.strip()
+        self.log.debug(f"Output: '{stdout}'")
+
+        # The first line might be a warning about accepting a ssh host key.
+        # Check for that, and get rid of it from the output.
+
+        lines = stdout.split('\n')
+
+        output = []
+        
+
+        return stdout
     ##-------------------------------------------------------------------------
     ## Validate ssh key on remote vnc server
     ##-------------------------------------------------------------------------
@@ -777,8 +793,9 @@ class LickVncLauncher(object):
         self.ssh_key_valid = False
         cmd = 'whoami'
         for server in self.servers_to_try:
-            data = self.do_ssh_cmd(cmd, server, self.SSH_KEY_ACCOUNT,
-                                       None)
+            
+                data = None
+
 
             if data == self.SSH_KEY_ACCOUNT:
                 self.ssh_key_valid = True
@@ -797,8 +814,8 @@ class LickVncLauncher(object):
         self.log.info(f"Getting engv account for instrument {instrument} ...")
 
         cmd = f'setenv INSTRUMENT {instrument}; kvncinfo -engineering'
-        data = self.do_ssh_cmd(cmd, self.SSH_KEY_SERVER, self.SSH_KEY_ACCOUNT,
-                               None)
+            data = None
+
 
         engv = None
         if data is not None and ' ' not in data:
@@ -819,7 +836,8 @@ class LickVncLauncher(object):
         for server in self.servers_to_try:
             server += ".ucolick.org"
             cmd = f"vncstatus {instrument}"
-            data = self.do_ssh_cmd(cmd, server, account, password)
+                data = None
+            
             # parse data
             if data and len(data) > 3:
                 mtch = re.search("Usage",data)
@@ -842,7 +860,8 @@ class LickVncLauncher(object):
 
         sessions = []
         cmd = f"vncstatus {instrument}"
-        data = self.do_ssh_cmd(cmd, vncserver, account, password)
+
+
         
         if data:
             lns = data.split("\n")
@@ -1088,31 +1107,58 @@ class LickVncLauncher(object):
     ## Upload log file to Lick
     ##-------------------------------------------------------------------------
     def upload_log(self):
+        
+        if self.ssh_key_valid == True:
+            account = self.SSH_KEY_ACCOUNT
+        else:
+            account = self.args.account
+
+        if self.ssh_key_valid == True:
+            password = None
+        else:
+            password = self.vnc_password
+
+        logfile_handlers = [lh for lh in self.log.handlers if
+                            isinstance(lh, logging.FileHandler)]
+        logfile = pathlib.Path(logfile_handlers.pop(0).baseFilename)
+
+        source = str(logfile)
+        destination = account + '@' + self.vncserver + ':' + logfile.name
+
+        command = ['scp',]
+
+        if self.ssh_pkey is not None:
+            command.append('-i')
+            command.append(self.ssh_pkey)
+
+        command.append('-oStrictHostKeyChecking=no')
+        command.append('-oKexAlgorithms=+diffie-hellman-group1-sha1')
+        command.append(source)
+        command.append(destination)
+
+        self.log.debug('scp command: ' + ' '.join (command))
+
+        pipe = subprocess.PIPE
+        null = subprocess.DEVNULL
+
+            stdin = pipe
+        else:
+            stdin = null
+
+        proc = subprocess.Popen(command, stdin=stdin, stdout=null, stderr=null)
+        if proc.poll() is not None:
+            raise RuntimeError('subprocess failed to execute scp')
+
         try:
-            user = self.SSH_KEY_ACCOUNT if self.ssh_key_valid else self.args.account
-            pw = None if self.ssh_key_valid else self.vnc_password
+        except subprocess.TimeoutExpired:
+            self.log.error('  Timeout attempting to upload log file')
+            return
 
-            client = paramiko.SSHClient()
-            client.load_system_host_keys()
-            client.set_missing_host_key_policy(paramiko.WarningPolicy())
-            client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            client.connect(
-                self.vncserver,
-                port = 22, 
-                timeout = 6, 
-                key_filename=self.ssh_pkey,
-                username = user, 
-                password = pw)
-            sftp = client.open_sftp()
-            self.log.info('  Connected SFTP')
-
-            logfile_handlers = [lh for lh in self.log.handlers if 
-                                isinstance(lh, logging.FileHandler)]
-            logfile = pathlib.Path(logfile_handlers.pop(0).baseFilename)
-            destination = logfile.name
-            sftp.put(logfile, destination)
+        if proc.returncode != 0:
+            message = '  command failed with error ' + str(proc.returncode)
+            self.log.error(message)
+        else:
             self.log.info(f'  Uploaded {logfile.name}')
-            self.log.info(f'  to {self.args.account}@{self.vncserver}:{destination}')
         except TimeoutError:
             self.log.error('  Timed out trying to upload log file')
         except Exception:
