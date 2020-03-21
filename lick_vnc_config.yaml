@@ -1,8 +1,8 @@
 {
   ## SSH private key file path.  If you created an ssh public/private key pair
   ## and provided the public key to Keck, enter the full path the private key here.
-  # ssh_pkey: '/home/observer/.ssh/id_rsa',
-  ssh_pkey: '/Users/holden/.ssh/laptop3',
+  # ssh_pkey: '/home/YOUR_ACCOUNT_NAME_HERE/.ssh/id_rsa',
+  # ssh_pkey: '/Users/YOUR_ACCOUNT_NAME_HERE/.ssh/id_rsa',
   
   ## When first connecting to Keck to determine which VNC server to connect to
   ## (i.e. where to run `vncstatus {instrument}`) this is the list of
@@ -17,8 +17,8 @@
   #  vncprefix: '',
   #  vncargs: '-Shared -FullColor -PreferredEncoding=ZRLE -AutoSelect=0',
   ## Example: use VNCviewer for RealVNC vncviewer on macOS:
-   vncviewer: '/Applications/VNC Viewer.app/Contents/MacOS/vncviewer',
-   vncargs: '-Shared',
+  # vncviewer: '/Applications/VNC Viewer.app/Contents/MacOS/vncviewer',
+  # vncargs: '-Shared',
   ## Example: use built in Screen Sharing app in macOS:
   # vncviewer: 'open',
   # vncprefix: 'vnc://',
@@ -26,8 +26,8 @@
   # vncargs: '-passwd=/home/observer/.vnc/passwd',
 
   ## Default start sessions if none specified. 
-  default_sessions: ['APF Telescope 1','APF Telescope 2','APF Telescope 3','APF Instrument 1','APF Instrument 2','APF Instrument 3',],
-
+  default_sessions: ['Kast blue','Kast red','Kast Guider Camera','Kast Spare 1','Kast Spare 2','Kast Spare 3'],
+  
   ## For ssh tunnelling, a starting local port number is used and incremented 
   ## for each port needed.  Default is 5901.
   # local_port_start: 5901,
