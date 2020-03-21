@@ -759,12 +759,9 @@ class LickVncLauncher(object):
             raise RuntimeError('subprocess failed to execute ssh')
         
         try:
-                port     = 22, 
             stdout,stderr = proc.communicate(password, timeout=6)
         except subprocess.TimeoutExpired:
             self.log.error('  Timeout')
-            self.log.debug(f'Command: {cmd}')
-            self.log.debug(f"Output: '{output}'")
             return
 
         if proc.returncode != 0:
