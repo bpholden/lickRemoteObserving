@@ -465,7 +465,7 @@ class LickVncLauncher(object):
 
         print(f"\nSessions found for account '{self.args.account}':")
         for s in self.sessions_found:
-            print(f"  {s['name']:12s} {s['Display']:5s} {s['Desktop']:s}")
+            print(f"  {s.name:12s} {s.display:5s} {s.desktop:s}")
 
 
     ##-------------------------------------------------------------------------
