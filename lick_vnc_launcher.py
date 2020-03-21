@@ -713,6 +713,9 @@ class LickVncLauncher(object):
     ## Determine Instrument
     ##-------------------------------------------------------------------------
     def determine_instrument(self, account):
+        if account is None:
+            return None, None
+        
         instruments = ('apf','kast', 'nickel')
 
         telescope = {'apf': 11,
