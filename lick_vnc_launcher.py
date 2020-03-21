@@ -783,6 +783,13 @@ class LickVncLauncher(object):
 
         output = []
         
+        for ln in lines:
+            if 'Warning: ' in ln:
+                self.log.debug('Removed warning from command output:')
+                self.log.debug(ln)
+            else:
+                output.append(ln)
+        stdout = '\n'.join(output)
 
         return stdout
     ##-------------------------------------------------------------------------
