@@ -802,6 +802,13 @@ class LickVncLauncher(object):
         cmd = 'whoami'
         for server in self.servers_to_try:
             
+            try:
+                data = self.do_ssh_cmd(cmd, server,
+                                        self.SSH_KEY_ACCOUNT, None)
+            except Exception as e:
+                self.log.error('  Failed: ' + str(e))
+                trace = traceback.format_exc()
+                self.log.debug(trace)
                 data = None
 
 
@@ -822,6 +829,13 @@ class LickVncLauncher(object):
         self.log.info(f"Getting engv account for instrument {instrument} ...")
 
         cmd = f'setenv INSTRUMENT {instrument}; kvncinfo -engineering'
+        try:
+            data = self.do_ssh_cmd(cmd, self.SSH_KEY_SERVER,
+                                        self.SSH_KEY_ACCOUNT, None)
+        except Exception as e:
+            self.log.error('  Failed: ' + str(e))
+            trace = traceback.format_exc()
+            self.log.debug(trace)
             data = None
 
 
@@ -844,6 +858,13 @@ class LickVncLauncher(object):
         for server in self.servers_to_try:
             server += ".ucolick.org"
             cmd = f"vncstatus {instrument}"
+
+            try:
+                data = self.do_ssh_cmd(cmd, server, account, password)
+            except Exception as e:
+                self.log.error('  Failed: ' + str(e))
+                trace = traceback.format_exc()
+                self.log.debug(trace)
                 data = None
             
             # parse data
@@ -868,6 +889,13 @@ class LickVncLauncher(object):
 
         sessions = []
         cmd = f"vncstatus {instrument}"
+        try:
+            data = self.do_ssh_cmd(cmd, vncserver, account, password)
+        except Exception as e:
+            self.log.error('  Failed: ' + str(e))
+            trace = traceback.format_exc()
+            self.log.debug(trace)
+            data = ''
 
 
         
@@ -1149,6 +1177,7 @@ class LickVncLauncher(object):
         pipe = subprocess.PIPE
         null = subprocess.DEVNULL
 
+        if password is not None:
             stdin = pipe
         else:
             stdin = null
@@ -1158,6 +1187,7 @@ class LickVncLauncher(object):
             raise RuntimeError('subprocess failed to execute scp')
 
         try:
+            stdout,stderr = proc.communicate(password, timeout=10)
         except subprocess.TimeoutExpired:
             self.log.error('  Timeout attempting to upload log file')
             return
@@ -1167,13 +1197,9 @@ class LickVncLauncher(object):
             self.log.error(message)
         else:
             self.log.info(f'  Uploaded {logfile.name}')
-        except TimeoutError:
-            self.log.error('  Timed out trying to upload log file')
-        except Exception:
-            self.log.error('  Unable to upload logfile: ' + str(e))
-            trace = traceback.format_exc()
-            self.log.debug(trace)
+            self.log.info(f'  to {destination}')
 
+        
     ##-------------------------------------------------------------------------
     ## Terminate all vnc processes
     ##-------------------------------------------------------------------------
