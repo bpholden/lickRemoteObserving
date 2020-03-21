@@ -20,13 +20,15 @@ Once we receive your request, we will respond with instructions on obtaining the
 
 ## Displays
 
-The primary hardware requirement for running Lick VNCs is screen space.  Previous incarnations of the remote observing system have used four (4) 1920x1200 monitors (~24 inch diagonal) and placed one VNC session per monitor.  An alternative setup would be to use a single, very large 4k monitor and place the four VNC sessions on that one monitor.  In order for the VNC sessions to be of reasonable physical size, the monitor would have to be 43-48 inches (we've found that even 43 inches may be a bit on the small size, see below).  The pixel pitch which we used which works well is 0.272 mm/pixel (or about 93 pixels per inch) for our four 24 inch monitor setup.  
+The primary hardware requirement for running Lick VNCs is screen space. 
 
-We have also tried a 43 inch 4k resolution TV screen (which works out to about 103 ppi), but it is less readable at that size.  The advantage of a single 4k monitor is that it is easy to have a second monitor beside it which is dedicated to the Zoom connection or to a web browser for documentation or displaying weather conditions.
+We recommend you use the largest monitors you available. If you have
+access to a large HDMI TV and the appropriate cables, that is also a
+solution though it maybe less readable. 
 
 ## Computer Recommendations
 
-The following hardware configuration has been tested at Lick HQ:
+The following hardware configuration has been tested:
 
 - Computer: MacBook Pro 
     - CPU: Intel Core i7 CPU
