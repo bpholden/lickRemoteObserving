@@ -163,7 +163,11 @@ class LickVncLauncher(object):
                           "for other options to connect remotely.\n")
                 self.exit_app()
         else:
-            self.vnc_password = getpass.getpass(f"Password for user {self.args.account}: ")
+            while self.vnc_password is None:
+                vnc_password = getpass.getpass(f"Password for user {self.args.account}: ")
+                vnc_password = vnc_password.strip()
+                if vnc_password != '':
+                     self.vnc_password = vnc_password
 
 
         ##---------------------------------------------------------------------
