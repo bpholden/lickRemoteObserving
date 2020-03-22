@@ -63,6 +63,10 @@ class LickVncLauncher(object):
         self.ssh_key_valid = False
         self.exit = False
 
+        #ssh key constants
+        self.ssh_account = 'user'
+        self.ssh_server  = 'shimmy.ucolick.org'
+
         self.servers_to_try = ['shimmy','noir',]
 
         #session name consts
@@ -94,9 +98,6 @@ class LickVncLauncher(object):
         self.STATUS_PORT       = ':1'
         self.LOCAL_PORT_START  = 5901
 
-        #ssh key constants
-        self.SSH_KEY_ACCOUNT = 'user'
-        self.SSH_KEY_SERVER  = 'shimmy.ucolick.org'
 
 
     ##-------------------------------------------------------------------------
@@ -169,13 +170,8 @@ class LickVncLauncher(object):
         ## Determine VNC server
         ##---------------------------------------------------------------------
         if self.ssh_key_valid:
-            self.vncserver = self.get_vnc_server(self.SSH_KEY_ACCOUNT,
-                                                 None,
-                                                 self.instrument)
-        else:
-            self.vncserver = self.get_vnc_server(self.args.account,
-                                                 self.vnc_password,
-                                                 self.instrument)
+            self.vncserver = self.get_vnc_server(self.ssh_account,
+                                                    self.instrument)
         if not self.vncserver:
             self.exit_app("Could not determine VNC server.")
 
@@ -187,14 +183,7 @@ class LickVncLauncher(object):
             # self.engv_account = self.get_engv_account(self.instrument)
             self.sessions_found = self.get_vnc_sessions(self.vncserver,
                                                         self.instrument,
-                                                        self.SSH_KEY_ACCOUNT,
-                                                        None,
-                                                        self.args.account)
-        else:
-            self.sessions_found = self.get_vnc_sessions(self.vncserver,
-                                                        self.instrument,
-                                                        self.args.account,
-                                                        self.vnc_password,
+                                                        self.ssh_account,
                                                         self.args.account)
         if self.args.authonly is False and\
                 (not self.sessions_found or len(self.sessions_found) == 0):
@@ -261,7 +250,7 @@ class LickVncLauncher(object):
         if self.ssh_forward:
 
             #determine account and password         
-            account  = self.SSH_KEY_ACCOUNT if self.ssh_key_valid else self.args.account
+            account  = self.ssh_account if self.ssh_key_valid else self.args.account
             password = None if self.ssh_key_valid else self.vnc_password
 
             # determine if there is already a tunnel for this session
@@ -624,7 +613,7 @@ class LickVncLauncher(object):
             #Do we need ssh tunnel for this?
             if self.ssh_forward:
 
-                account  = self.SSH_KEY_ACCOUNT if self.ssh_key_valid else self.args.account
+                account  = self.ssh_account if self.ssh_key_valid else self.args.account
                 password = None if self.ssh_key_valid else self.vnc_password
                 sound_port = self.open_ssh_tunnel(self.vncserver, account,
                                                   password, self.ssh_pkey,
@@ -734,7 +723,7 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     ## Utility function for opening ssh client, executing command and closing
     ##-------------------------------------------------------------------------
-    def do_ssh_cmd(self, cmd, server, account, password):
+    def do_ssh_cmd(self, cmd, server, account):
             
         output = None
         self.log.debug(f'Trying SSH connect to {server} as {account}:')
@@ -752,19 +741,15 @@ class LickVncLauncher(object):
         
         pipe = subprocess.PIPE
         null = subprocess.DEVNULL
-        stderr = subprocess.STDOUT
+        stdout = subprocess.STDOUT        
+        stdin = null
 
-        if password is not None:
-            stdin = pipe
-        else:
-            stdin = null
-
-        proc = subprocess.Popen(command, stdin=stdin, stdout=pipe, stderr=stderr)
+        proc = subprocess.Popen(command, stdin=stdin, stdout=pipe, stderr=stdout)
         if proc.poll() is not None:
             raise RuntimeError('subprocess failed to execute ssh')
         
         try:
-            stdout,stderr = proc.communicate(password, timeout=6)
+            stdout,stderr = proc.communicate(timeout=6)
         except subprocess.TimeoutExpired:
             self.log.error('  Timeout')
             return
@@ -805,7 +790,7 @@ class LickVncLauncher(object):
             
             try:
                 data = self.do_ssh_cmd(cmd, server,
-                                        self.SSH_KEY_ACCOUNT, None)
+                                        self.ssh_account)
             except Exception as e:
                 self.log.error('  Failed: ' + str(e))
                 trace = traceback.format_exc()
@@ -813,7 +798,7 @@ class LickVncLauncher(object):
                 data = None
 
 
-            if data == self.SSH_KEY_ACCOUNT:
+            if data == self.ssh_account:
                 self.ssh_key_valid = True
                 break
 
@@ -831,8 +816,8 @@ class LickVncLauncher(object):
 
         cmd = f'setenv INSTRUMENT {instrument}; kvncinfo -engineering'
         try:
-            data = self.do_ssh_cmd(cmd, self.SSH_KEY_SERVER,
-                                        self.SSH_KEY_ACCOUNT, None)
+            data = self.do_ssh_cmd(cmd, self.ssh_server,
+                                        self.ssh_account)
         except Exception as e:
             self.log.error('  Failed: ' + str(e))
             trace = traceback.format_exc()
@@ -853,7 +838,7 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     ## Determine VNC Server
     ##-------------------------------------------------------------------------
-    def get_vnc_server(self, account, password, instrument):
+    def get_vnc_server(self, account, instrument):
         self.log.info(f"Determining VNC server for '{account}'...")
         vncserver = None
         for server in self.servers_to_try:
@@ -861,7 +846,7 @@ class LickVncLauncher(object):
             cmd = f"vncstatus {instrument}"
 
             try:
-                data = self.do_ssh_cmd(cmd, server, account, password)
+                data = self.do_ssh_cmd(cmd, server, account)
             except Exception as e:
                 self.log.error('  Failed: ' + str(e))
                 trace = traceback.format_exc()
@@ -884,21 +869,18 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     ## Determine VNC Sessions
     ##-------------------------------------------------------------------------
-    def get_vnc_sessions(self, vncserver, instrument, account, password,
-                         instr_account):
+    def get_vnc_sessions(self, vncserver, instrument, account, instr_account):
         self.log.info(f"Connecting to {account}@{vncserver} to get VNC sessions list")
 
         sessions = []
         cmd = f"vncstatus {instrument}"
         try:
-            data = self.do_ssh_cmd(cmd, vncserver, account, password)
+            data = self.do_ssh_cmd(cmd, vncserver, account)
         except Exception as e:
             self.log.error('  Failed: ' + str(e))
             trace = traceback.format_exc()
             self.log.debug(trace)
             data = ''
-
-
         
         if data:
             lns = data.split("\n")
@@ -908,6 +890,7 @@ class LickVncLauncher(object):
                     display = fields[0].strip()
                     if display == 'Usage':
                         # this should not happen
+                        self.log.error(f'{instrument} not supported on host {vncserver}')
                         break
                     desktop = fields[1].strip()
                     name = ''.join(desktop.split()[1:]) 
@@ -1146,7 +1129,7 @@ class LickVncLauncher(object):
     def upload_log(self):
         
         if self.ssh_key_valid == True:
-            account = self.SSH_KEY_ACCOUNT
+            account = self.ssh_account
         else:
             account = self.args.account
 
