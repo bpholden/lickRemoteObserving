@@ -185,6 +185,7 @@ class LickVncLauncher(object):
                                                         self.instrument,
                                                         self.ssh_account,
                                                         self.args.account)
+
         if self.args.authonly is False and\
                 (not self.sessions_found or len(self.sessions_found) == 0):
             self.exit_app('No VNC sessions found')
@@ -394,14 +395,14 @@ class LickVncLauncher(object):
                 if not self.firewall_user: self.log.warning("firewall_user not set")
                 if not self.firewall_port: self.log.warning("firewall_port not set")
 
-        #check ssh_pkeys servers_to try
+        #check ssh_pkeys 
         self.ssh_pkey = self.config.get('ssh_pkey', None)
         if not self.ssh_pkey:
             self.log.warning("No ssh private key file specified in config file.\n")
         else:
             if not pathlib.Path(self.ssh_pkey).exists():
                 self.log.warning(f"SSH private key path does not exist: {self.ssh_pkey}")
-        self.servers_to_try = self.config.get('servers_to_try', None)
+
 
         #check default_sessions
         ds = self.config.get('default_sessions', None)
