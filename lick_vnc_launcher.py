@@ -1129,15 +1129,7 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     def upload_log(self):
         
-        if self.ssh_key_valid == True:
-            account = self.ssh_account
-        else:
-            account = self.args.account
-
-        if self.ssh_key_valid == True:
-            password = None
-        else:
-            password = self.vnc_password
+        account = self.ssh_account
 
         logfile_handlers = [lh for lh in self.log.handlers if
                             isinstance(lh, logging.FileHandler)]
@@ -1162,17 +1154,14 @@ class LickVncLauncher(object):
         pipe = subprocess.PIPE
         null = subprocess.DEVNULL
 
-        if password is not None:
-            stdin = pipe
-        else:
-            stdin = null
+        stdin = null
 
         proc = subprocess.Popen(command, stdin=stdin, stdout=null, stderr=null)
         if proc.poll() is not None:
             raise RuntimeError('subprocess failed to execute scp')
 
         try:
-            stdout,stderr = proc.communicate(password, timeout=10)
+            stdout,stderr = proc.communicate(timeout=10)
         except subprocess.TimeoutExpired:
             self.log.error('  Timeout attempting to upload log file')
             return
