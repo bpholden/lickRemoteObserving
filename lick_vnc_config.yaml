@@ -1,9 +1,4 @@
 {
-  ## SSH private key file path.  If you created an ssh public/private key pair
-  ## and provided the public key to Keck, enter the full path the private key here.
-  # ssh_pkey: '/home/YOUR_ACCOUNT_NAME_HERE/.ssh/id_rsa',
-  # ssh_pkey: '/Users/YOUR_ACCOUNT_NAME_HERE/.ssh/id_rsa',
-  
   ## This is the command to invoke on the local machine to launch a VNC client
   ## Command will be formatted as [vncviewer] [vncargs] [address]:[port]
   ## Example: Default setup for TigerVnC's vncviewer wither preferred arg options
