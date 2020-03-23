@@ -8,9 +8,7 @@ When everything is properly configured, all you need to do is run
 ```./start_lick_viewers kast```
 or
 ```./start_lick_viewers nickel```
-to enable the connection after typing
-```chmod u+x start_lick_viewers```
-
+to enable the connection.
 
 ## Notify Lick of your intent to connect remotely
 Before you can connect to Keck remotely, we need to provide you with the firewall info and passwords.  As well, we need info about your remote observing station.
