@@ -188,7 +188,8 @@ soundplayer. Additionally, you should see a command line menu with
 more options once you have started the script.:
 
 ```
-cd ~/lickRemoteObserving ./start_lick_viewers [instrument account]
+cd ~/lickRemoteObserving
+./start_lick_viewers [kast or nickel]
 ```
 
 To get help on available command line options:
