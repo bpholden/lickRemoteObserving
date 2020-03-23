@@ -7,7 +7,7 @@ Before embarking on setting up a Remote Observing station, we recommend reading 
 ## Notify Lick of your intent to connect remotely
 Before you can connect to Keck remotely, we need to provide you with the firewall info and passwords.  As well, we need info about your remote observing station.
 
-- Email `@ucolick.org` with the following info about your remote site:
+- Email `sa@ucolick.org` with the following info about your remote site:
     - Institution
     - City, State
     - Room Name/#
