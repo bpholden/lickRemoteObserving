@@ -70,18 +70,6 @@ class LickVncLauncher(object):
 
         self.servers_to_try = ['shimmy','noir',]
 
-        #session name consts
-        self.SESSION_NAMES = [
-            'control0',
-            'control1',
-            'control2',
-            'analysis0',
-            'analysis1',
-            'analysis2',
-            'telanalys',
-            'telstatus',
-            'status'
-        ]
 
         #default start sessions
         self.DEFAULT_SESSIONS = [
