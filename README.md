@@ -149,7 +149,7 @@ To be filled in.
             ```
 		- **On MacOS** (optional) If you use the MacOS builtin VNC
           viewer, you can optionally save the password by clicking the
-          box that says "Save Password"
+          box that says "Remember Password"
 
 
 - **Soundplay Configuration:** For compatible systems, uncomment the
