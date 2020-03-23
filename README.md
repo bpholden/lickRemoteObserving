@@ -101,7 +101,7 @@ The software has been tested for macOS.
 
 ## Configure Lick VNC software
 
-Edit the configuration file as appropriate.  Read the comments in the
+Edit the configuration file  ```local_config.yaml```.  Read the comments in the
 configuration file itself as they can guide you.  You may need to
 uncomment (remove the leading `#`) from lines you want to customize.
 
@@ -112,13 +112,6 @@ uncomment (remove the leading `#`) from lines you want to customize.
 To be filled in.
 ```
 
-- **Configure Path to Private SSH Key:** Enter the path to the
-  **private** key corresponding you obtained from Lick.  For example:
-
-    ```
-    ssh_pkey: '/Users/YOUR_ACCOUNT_NAME_HERE/.ssh/id_rsa',
-    ```
-
 - **Configure Local VNC Viewer Software:** This is where one sets
   `vncviewer` with the path and executable for the local VNC viewer
   client (we recommend TigerVNC as the most compatible with our
@@ -127,6 +120,8 @@ To be filled in.
   value.  Options which should be passed to the vncviewer application
   are set in the `vncargs` value (defaults should be good for Tiger
   VNC).
+
+This goes in the file ``` local_config.yaml```
   
     - **Important:** Make sure you have configured your client **not** to resize the sessions (see the note about TigerVNC above).
     - **On Linux:** (optional) Save VNC session password (not available on macOS):
@@ -145,7 +140,7 @@ To be filled in.
 - **Soundplay Configuration:** For compatible systems, uncomment the
   `soundplayer` line to specify which compiled executable for
   soundplay to use.  Other operating systems sometimes need other
-  soundplay versions, contact `@ucolick.org` for help configuring
+  soundplay versions, contact `holden@ucolick.org` for help configuring
   this value.  Also, if you local machine's path to the `aplay`
   executable is non-standard, specify that in the `aplay` value.
   
@@ -160,8 +155,6 @@ To be filled in.
 
 # Test your connection to Lick
 
-Only after your SSH key is successfully installed at Lick, you can
-test your system.
 
 From the directory where the Lick VNC software is installed
 (e.g. `~/lickRemoteObserving/`), run pytest:
@@ -178,7 +171,7 @@ This may query you for passwords, depending on your local
 configuration. It should print out a report which indicates that all
 tests passed. Make sure there are no test failures.
 
-If there are test failures, email your logfile to `@ucolick.org`.
+If there are test failures, email your logfile to `holden@ucolick.org`.
 Verbose debug information is logged to the `lickRemoteObserving/logs/`
 folder.  Log files are created based on the UTC date.
 
@@ -210,6 +203,6 @@ To get help on available command line options:
 Verbose debug information is logged to the `lickRemoteObserving/logs/`
 folder.  Log files are created based on the UTC date.
 
-If you need assistance, please email `@ucolick.org` and attach the
+If you need assistance, please email `holden@ucolick.org` and attach the
 most recent log file from the logs folder.
 
