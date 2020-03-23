@@ -5,7 +5,7 @@ These scripts are to be used by remote sites to connect to Keck for remote obser
 Before embarking on setting up a Remote Observing station, we recommend reading the offical remote observing policy and documentation at: [https://](https://)
 
 When everything is properly configured, all you need to do is run
-```./start_lick_viewers kast```
+```./start_lick_viewers shane```
 or
 ```./start_lick_viewers nickel```
 to enable the connection.
@@ -176,14 +176,14 @@ folder.  Log files are created based on the UTC date.
 
 From the command line, cd into your install directory and run
 `start_lick_viewers` followed by the name of the instrument account
-assigned for your observing night (ie `kast`, `nickel`).  Running the
+assigned for your observing night (ie `shane`, `nickel`).  Running the
 script without options will start 6 VNC sessions for the Kast and the
 soundplayer. Additionally, you should see a command line menu with
 more options once you have started the script.:
 
 ```
 cd ~/lickRemoteObserving
-./start_lick_viewers [kast or nickel]
+./start_lick_viewers [shane or nickel]
 ```
 
 To get help on available command line options:
