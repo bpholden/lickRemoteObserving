@@ -388,19 +388,6 @@ class LickVncLauncher(object):
         lps = self.config.get('local_port_start', None)
         if lps: self.local_port = lps
 
-        #check firewall config
-        self.do_authenticate = False
-        self.firewall_address = self.config.get('firewall_address', None)
-        self.firewall_user    = self.config.get('firewall_user',    None)
-        self.firewall_port    = self.config.get('firewall_port',    None)
-        if self.firewall_address or self.firewall_user or self.firewall_port:
-            if self.firewall_address and self.firewall_user and self.firewall_port:
-                self.do_authenticate = True
-            else:
-                self.log.warning("Partial firewall configuration detected in config file:")
-                if not self.firewall_address: self.log.warning("firewall_address not set")
-                if not self.firewall_user: self.log.warning("firewall_user not set")
-                if not self.firewall_port: self.log.warning("firewall_port not set")
 
         #check ssh_pkeys
         filepath = os.path.dirname(os.path.abspath(__file__))
