@@ -64,6 +64,7 @@ class LickVncLauncher(object):
         self.exit = False
 
         #ssh key constants
+        self.ssh_pkey = 'lick_id_rsa'
         self.ssh_account = 'user'
         self.ssh_server  = 'shimmy.ucolick.org'
 
@@ -355,7 +356,7 @@ class LickVncLauncher(object):
         with open(file) as FO:
             config = yaml.load(FO, Loader=yaml.FullLoader)
 
-        for key in ['ssh_pkey', 'vncviewer', 'soundplayer', 'aplay']:
+        for key in ['vncviewer', 'soundplayer', 'aplay']:
             if key in config.keys():
                 config[key] = os.path.expanduser(config[key])
                 config[key] = os.path.expandvars(config[key])
@@ -401,13 +402,16 @@ class LickVncLauncher(object):
                 if not self.firewall_user: self.log.warning("firewall_user not set")
                 if not self.firewall_port: self.log.warning("firewall_port not set")
 
-        #check ssh_pkeys 
-        self.ssh_pkey = self.config.get('ssh_pkey', None)
+        #check ssh_pkeys
+        filepath = os.path.dirname(os.path.abspath(__file__))
+        self.ssh_pkey = os.path.join(filepath,self.ssh_pkey)
         if not self.ssh_pkey:
             self.log.warning("No ssh private key file specified in config file.\n")
+            sys.exit()
         else:
             if not pathlib.Path(self.ssh_pkey).exists():
                 self.log.warning(f"SSH private key path does not exist: {self.ssh_pkey}")
+                sys.exit()
 
 
         #check default_sessions
