@@ -1,7 +1,5 @@
-import paramiko
-import sshtunnel
 import logging
-from getpass import getpass
+import getpass
 from lick_vnc_launcher import create_logger, LickVncLauncher, create_parser
 import pytest
 
