@@ -42,7 +42,7 @@ def test_connection_to_servers(server, result):
 
     lvl.log.info(f'Testing SSH to {vnc_account}@{server}.ucolick.org')
     output = lvl.do_ssh_cmd('hostname', f'{server}.ucolick.org',
-                            vnc_account, vnc_password)
+                            vnc_account)
     assert output is not None
     assert output != ''
     assert output.strip() in [server, result]
