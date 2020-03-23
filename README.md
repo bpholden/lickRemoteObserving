@@ -168,6 +168,9 @@ From the directory where the Lick VNC software is installed
 (e.g. `~/lickRemoteObserving/`), run pytest:
 
 ```
+/bin/bash
+CONDA_BASE=$(conda info --base)
+source $CONDA_BASE/etc/profile.d/conda.sh
 conda activate KRO
 pytest
 ```
