@@ -140,10 +140,8 @@ To be filled in.
 - **Configure Default Sessions:** Lick instruments typically use 4 VNC
   sessions for instrument control named "control0", "control1",
   "control2", and "telstatus".  On a normal invocation of the software
-  (via the `start_lick_viewers` command) it will open the four
-  sessions specified here.  For stations which split the duties among
-  2 computers, one could set this line to control which computer opens
-  which sessions.
+  (via the `start_lick_viewers` command) it will open the six
+  sessions specified here. 
 
 - **Soundplay Configuration:** For compatible systems, uncomment the
   `soundplayer` line to specify which compiled executable for
