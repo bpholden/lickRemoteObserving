@@ -14,7 +14,7 @@ lvl.get_config()
 lvl.check_config()
 if lvl.config.get('nosshkey', False) is True:
     vnc_account = lvl.args.account
-    lvl.vnc_password = getpass(f"\nPassword for user {vnc_account}: ")
+    lvl.vnc_password = getpass.getpass(f"\nPassword for user {vnc_account}: ")
 
 servers_and_results = [('frankfurt', 'frankfurt.apf.ucolick.org'),
                        ('shimmy', 'shimmy.ucolick.org'),
@@ -24,7 +24,7 @@ servers_and_results = [('frankfurt', 'frankfurt.apf.ucolick.org'),
 def test_firewall_authentication():
     lvl.is_authenticated = False
     if lvl.do_authenticate:
-        lvl.firewall_pass = getpass(f"\nPassword for firewall authentication: ")
+        lvl.firewall_pass = getpass.getpass(f"\nPassword for firewall authentication: ")
         lvl.is_authenticated = lvl.authenticate(lvl.firewall_pass)
         assert lvl.is_authenticated is True
 
