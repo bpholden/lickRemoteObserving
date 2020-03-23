@@ -501,6 +501,7 @@ class LickVncLauncher(object):
         command = ['ssh', '-l', username, '-L', forwarding, '-N', '-T', server]
         command.append('-oStrictHostKeyChecking=no')
         command.append('-oKexAlgorithms=+diffie-hellman-group1-sha1')
+        command.append('-oCompression=yes')        
         if ssh_pkey is not None:
             command.append('-i')
             command.append(ssh_pkey)
@@ -727,6 +728,7 @@ class LickVncLauncher(object):
             
         command.append('-oStrictHostKeyChecking=no')
         command.append('-oKexAlgorithms=+diffie-hellman-group1-sha1')
+        command.append('-oCompression=yes')        
         command.append(cmd)
         self.log.debug('ssh command: ' + ' '.join (command))
 
@@ -1137,6 +1139,7 @@ class LickVncLauncher(object):
 
         command.append('-oStrictHostKeyChecking=no')
         command.append('-oKexAlgorithms=+diffie-hellman-group1-sha1')
+        command.append('-oCompression=yes')
         command.append(source)
         command.append(destination)
 
