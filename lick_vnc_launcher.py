@@ -1236,7 +1236,7 @@ class LickVncLauncher(object):
     def handle_fatal_error(self, error):
 
         #helpful user error message
-        supportEmail = 'sa@ucolick.org'
+        supportEmail = 'holden@ucolick.org'
         print("\n****** PROGRAM ERROR ******\n")
         print("Error message: " + str(error) + "\n")
         print("If you need troubleshooting assistance:")
@@ -1266,7 +1266,7 @@ def create_parser():
                    f"sessions for the specified instrument account. For "
                    f"help or information on how to configure the code, please "
                    f"see the included README.md file or email "
-                   f"sa@ucolick.org")
+                   f"holden@ucolick.org")
     parser = argparse.ArgumentParser(description=description)
 
 
