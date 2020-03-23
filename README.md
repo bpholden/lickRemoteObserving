@@ -4,6 +4,14 @@ These scripts are to be used by remote sites to connect to Keck for remote obser
 
 Before embarking on setting up a Remote Observing station, we recommend reading the offical remote observing policy and documentation at: [https://](https://)
 
+When everything is properly configured, all you need to do is run
+```./start_lick_viewers kast```
+or
+```./start_lick_viewers nickel```
+to enable the connection after typing
+```chmod u+x start_lick_viewers```
+
+
 ## Notify Lick of your intent to connect remotely
 Before you can connect to Keck remotely, we need to provide you with the firewall info and passwords.  As well, we need info about your remote observing station.
 
