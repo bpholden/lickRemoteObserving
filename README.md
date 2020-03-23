@@ -99,9 +99,6 @@ The software has been tested for macOS.
     conda env create -f environment.yaml
     ```
 
-- Obtain SSH Keys:
-    - 
-
 - (optional) Add VNC start script to path:
     ```
     export PATH=/home/observer/lickRemoteObserving:$PATH
