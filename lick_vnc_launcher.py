@@ -691,16 +691,23 @@ class LickVncLauncher(object):
         if account is None:
             return None, None
         
-        instruments = ('apf','kast', 'nickel')
+        instruments = {'apf' : 'apf',
+                           'shane' : 'kast',
+                           'nickel' : 'nickel'}
 
-        telescope = {'apf': 11,
-                     'kast':   1,
-                     'nickel' : 2,
-                    }
+        telescope = ('APF','Shane','Nickel')
 
-        if account.lower() in instruments:
-            instrument = account.lower()
-            return instrument, telescope[instrument]
+        if account.lower() in telescope:
+            telescope = account.lower()
+        else:
+            telescope = None
+
+        if account.lower() in instruments.keys():
+            instrument = instruments[account.lower()]
+        else:
+            instrument = None
+            
+        return instrument, telescope
 
         return None, None
 
