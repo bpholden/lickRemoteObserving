@@ -73,13 +73,12 @@ class LickVncLauncher(object):
 
         #default start sessions
         self.DEFAULT_SESSIONS = [
-            'Telescope1',
-            'Telescope2',
-            'Telescope3',
-            'Instrument1',
-            'Instrument2',
-            'Instrument3',
-            
+            'Kast blue',
+            'Kast red',
+            'Kast Guider Camera',
+            'Kast Spare 1',
+            'Kast Spare 2',
+            'Kast Spare 3'
         ]
 
         #NOTE: 'status' session on different server and always on port 1, 
