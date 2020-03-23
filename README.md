@@ -158,7 +158,7 @@ To be filled in.
 
 
 From the directory where the Lick VNC software is installed
-(e.g. `~/lickRemoteObserving/`), run pytest:
+(e.g. `~/lickRemoteObserving/`), run ```test_connection```
 
 ```
 ./test_connection
