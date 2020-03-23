@@ -1270,7 +1270,7 @@ def create_parser():
         help=argparse.SUPPRESS)
 
     ## add arguments
-    parser.add_argument("account", type=str, nargs='?', default='kast',
+    parser.add_argument("account", type=str, nargs='?', default='shane',
                         help="The user account.")
 
     ## add options
