@@ -106,16 +106,14 @@ configuration file itself as they can guide you.  You may need to
 uncomment (remove the leading `#`) from lines you want to customize.
 
 - **Configure Firewall:** If you are connecting outside of the Lick
-  network, enter the firewall address, port and user info.  You'll
-  need to get this information from someone at Lick.
+  network,
 
 ```
 To be filled in.
 ```
 
 - **Configure Path to Private SSH Key:** Enter the path to the
-  **private** key corresponding to the public key that you emailed to
-  Lick in the appropriate field.  For example:
+  **private** key corresponding you obtained from Lick.  For example:
 
     ```
     ssh_pkey: '/home/observer/.ssh/id_rsa',
