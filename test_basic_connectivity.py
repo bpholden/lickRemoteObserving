@@ -16,8 +16,7 @@ if lvl.config.get('nosshkey', False) is True:
     vnc_account = lvl.args.account
     lvl.vnc_password = getpass.getpass(f"\nPassword for user {vnc_account}: ")
 
-servers_and_results = [('frankfurt', 'frankfurt.apf.ucolick.org'),
-                       ('shimmy', 'shimmy.ucolick.org'),
+servers_and_results = [('shimmy', 'shimmy.ucolick.org'),
                        ('noir', 'noir.ucolick.org')
                            ]
 
@@ -32,17 +31,14 @@ def test_firewall_authentication():
 def test_ssh_key():
     if lvl.config.get('nosshkey', False) is not True:
         lvl.validate_ssh_key()
-        assert lvl.is_ssh_key_valid is True
+        assert lvl.ssh_key_valid is True
 
 
 @pytest.mark.parametrize("server,result", servers_and_results)
 def test_connection_to_servers(server, result):
-    if lvl.is_ssh_key_valid is True:
-        vnc_account = lvl.SSH_KEY_ACCOUNT
-        vnc_password = None
-    else:
-        vnc_account = lvl.args.account
-        vnc_password = lvl.vnc_password
+
+    vnc_account = lvl.ssh_account
+    vnc_password = None
 
     lvl.log.info(f'Testing SSH to {vnc_account}@{server}.ucolick.org')
     output = lvl.do_ssh_cmd('hostname', f'{server}.ucolick.org',
