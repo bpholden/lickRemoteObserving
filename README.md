@@ -152,11 +152,6 @@ To be filled in.
           box that says "Save Password"
 
 
-- **Configure Default Sessions:** Lick instruments typically use 6 VNC
-  sessions for instrument control.  On a normal invocation of the software
-  (via the `start_lick_viewers` command) it will open the six
-  sessions specified here. 
-
 - **Soundplay Configuration:** For compatible systems, uncomment the
   `soundplayer` line to specify which compiled executable for
   soundplay to use.  Other operating systems sometimes need other
