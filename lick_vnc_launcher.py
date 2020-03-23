@@ -779,7 +779,7 @@ class LickVncLauncher(object):
         self.ssh_key_valid = False
         cmd = 'whoami'
         for server in self.servers_to_try:
-            
+            server = server + '.ucolick.org'
             try:
                 data = self.do_ssh_cmd(cmd, server,
                                         self.ssh_account)
