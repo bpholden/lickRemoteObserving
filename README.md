@@ -71,8 +71,15 @@ The software has been tested for macOS.
             sudo yum install wmctrl
             ```
     - **For macOS**
-        - **On macOS**: Real VNC's [VNC Viewer](https://www.realvnc.com/en/connect/download/viewer/) is recommended (note, this is the free software, you do not need VNC Viewer Plus).
-        - **On macOS**: It is also possible to use the built in VNC viewer on macOS, but we have seen a few instances where the screen freezes and the client needs to be closed and reopened to get an up to date screen.
+        - **On macOS**: Real VNC's
+          [VNC Viewer](https://www.realvnc.com/en/connect/download/viewer/)
+          is recommended (note, this is the free software, you do not
+          need VNC Viewer Plus).
+		  
+        - **On macOS**: It is also possible to use the built in VNC
+          viewer on macOS, but we have seen a few instances where the
+          screen freezes and the client needs to be closed and
+          reopened to get an up to date screen. 
 
 
 ## Download and Install Lick VNC software
