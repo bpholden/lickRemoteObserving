@@ -99,6 +99,8 @@ To retreive the software, you can download it or clone it using git.
     cd ~/lickRemoteObserving
     ```
 
+Once you have downloaded the software:
+
 - Create configuration file: copy `lick_vnc_config.yaml` to `local_config.yaml`.
     ```
     cp lick_vnc_config.yaml local_config.yaml
