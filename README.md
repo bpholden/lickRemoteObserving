@@ -86,7 +86,13 @@ The software has been tested for macOS.
 
 (NOTE: Examples below assuming a user named 'observer' and installing to home directory)
 
-- Download or clone this project from github: 
+
+To retreive the software, you can download it or clone it using git.
+
+- [Click here to download the software as a zipfile](https://github.com/bpholden/lickRemoteObserving/archive/master.zip)
+
+
+- To clone this project from github:
     ```
     cd
     git clone https://github.com/bpholden/lickRemoteObserving
