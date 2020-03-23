@@ -147,6 +147,10 @@ To be filled in.
             ```
             vncargs: '-passwd=/home/observer/.vnc/passwd',
             ```
+		- **On MacOS** (optional) If you use the MacOS builtin VNC
+          viewer, you can optionally save the password by clicking the
+          box that says "Save Password"
+
 
 - **Configure Default Sessions:** Lick instruments typically use 6 VNC
   sessions for instrument control.  On a normal invocation of the software
