@@ -170,8 +170,7 @@ conda activate KRO
 pytest
 ```
 
-This may query you for passwords, depending on your local
-configuration. It should print out a report which indicates that all
+It should print out a report which indicates that all
 tests passed. Make sure there are no test failures.
 
 If there are test failures, email your logfile to `holden@ucolick.org`.
