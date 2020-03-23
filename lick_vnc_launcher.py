@@ -343,7 +343,7 @@ class LickVncLauncher(object):
             self.exit_app()
 
         #load config file and make sure it has the info we need
-        self.log.info(f'Using config file: {file}')
+        self.log.info(f'Using config file:\n {file}')
 
         # open file a first time just to log the raw contents
         with open(file) as FO:
@@ -354,6 +354,12 @@ class LickVncLauncher(object):
         # open file a second time to properly read config
         with open(file) as FO:
             config = yaml.load(FO, Loader=yaml.FullLoader)
+
+        for key in ['ssh_pkey', 'vncviewer', 'soundplayer', 'aplay']:
+            if key in config.keys():
+                config[key] = os.path.expanduser(config[key])
+                config[key] = os.path.expandvars(config[key])
+
 
         cstr = "Parsed Configuration:\n"
         for key, c in config.items():
