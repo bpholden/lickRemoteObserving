@@ -1,6 +1,6 @@
 # lickRemoteObserving
 
-These scripts are to be used by remote sites to connect to Keck for remote observing.
+These scripts are to be used by remote sites to connect to Lick for remote observing.
 
 Before embarking on setting up a Remote Observing station, we recommend reading the offical remote observing policy and documentation at: [https://](https://)
 
@@ -11,7 +11,7 @@ or
 to enable the connection.
 
 ## Notify Lick of your intent to connect remotely
-Before you can connect to Keck remotely, we need to provide you with the firewall info and passwords.  As well, we need info about your remote observing station.
+Before you can connect to Lick remotely, we need to provide you with the firewall info and passwords.  As well, we need info about your remote observing station.
 
 - Email `sa@ucolick.org` with the following info about your remote site:
     - Institution
