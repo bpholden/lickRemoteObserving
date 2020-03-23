@@ -14,9 +14,6 @@
   ## Example using vncpasswd file:
   # vncargs: '-passwd=/home/observer/.vnc/passwd',
 
-  ## Default start sessions if none specified. 
-  default_sessions: ['Kast blue','Kast red','Kast Guider Camera','Kast Spare 1','Kast Spare 2','Kast Spare 3'],
-  
   ## For ssh tunnelling, a starting local port number is used and incremented 
   ## for each port needed.  Default is 5901.
   # local_port_start: 5901,
