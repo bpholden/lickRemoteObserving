@@ -91,17 +91,8 @@ The software has been tested for macOS.
     conda env create -f environment.yaml
     ```
 
-- Setup SSH Keys:
-    - Generate ssh public/private key pair **(no passphrase)** 
-        ```
-        cd ~/.ssh
-        ssh-keygen -t rsa -b 4096 -m PEM
-        ```
-    - Make sure that the resulting key is an RSA key.  The **private**
-      key should have a first line which looks like `-----BEGIN RSA
-      PRIVATE KEY-----` (it should not be an OPENSSH key).
-	  
-    - Email the **public** key file (i.e. `id_rsa.pub`) to `@ucolick.org`
+- Obtain SSH Keys:
+    - 
 
 - (optional) Add VNC start script to path:
     ```
