@@ -137,9 +137,8 @@ To be filled in.
             vncargs: '-passwd=/home/observer/.vnc/passwd',
             ```
 
-- **Configure Default Sessions:** Lick instruments typically use 4 VNC
-  sessions for instrument control named "control0", "control1",
-  "control2", and "telstatus".  On a normal invocation of the software
+- **Configure Default Sessions:** Lick instruments typically use 6 VNC
+  sessions for instrument control.  On a normal invocation of the software
   (via the `start_lick_viewers` command) it will open the six
   sessions specified here. 
 
