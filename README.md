@@ -116,7 +116,7 @@ To be filled in.
   **private** key corresponding you obtained from Lick.  For example:
 
     ```
-    ssh_pkey: '/home/observer/.ssh/id_rsa',
+    ssh_pkey: '/Users/YOUR_ACCOUNT_NAME_HERE/.ssh/id_rsa',
     ```
 
 - **Configure Local VNC Viewer Software:** This is where one sets
