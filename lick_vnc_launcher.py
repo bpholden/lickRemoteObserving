@@ -388,15 +388,6 @@ class LickVncLauncher(object):
                 sys.exit()
 
 
-        #check default_sessions
-        ds = self.config.get('default_sessions', None)
-        self.log.debug(f'Default sessions from config file: {ds}')
-        if self.args.authonly is True:
-            self.log.debug(f'authonly is True, so default sessions set to []')
-            ds = []
-        if ds is not None: self.DEFAULT_SESSIONS = ds
-
-
     ##-------------------------------------------------------------------------
     ## Log basic system info
     ##-------------------------------------------------------------------------
