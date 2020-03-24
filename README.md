@@ -184,6 +184,7 @@ From the directory where the Lick VNC software is installed
 (e.g. `~/lickRemoteObserving/`), run ```test_connection```
 
 ```
+cd ~/lickRemoteObserving
 ./test_connection
 ```
 
