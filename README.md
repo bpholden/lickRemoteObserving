@@ -81,6 +81,10 @@ The software has been tested for macOS.
           screen freezes and the client needs to be closed and
           reopened to get an up to date screen. 
 
+- Install VPN client
+  - **For macOS**, install [Tunnelblick](https://tunnelblick.net/) by
+    downloading latest stable release
+  - **For Linux**, ```fill in preferred client here```
 
 ## Download and Install Lick VNC software
 
@@ -123,12 +127,16 @@ Edit the configuration file  ```local_config.yaml```.  Read the comments in the
 configuration file itself as they can guide you.  You may need to
 uncomment (remove the leading `#`) from lines you want to customize.
 
-- **Configure Firewall:** If you are connecting outside of the Lick
-  network,
+- **Configure OpenVPN:**
+  - **For macOS**: Obtain the tblk file from [here](http://) for your
+    schedule observing run. Open the Tunnelblick and click on the
+    ```VPN Details``` menu item. When the window for Tunnelblick
+    opens, click on the Configurations tab at the top, it is in the
+    upper left. 	Using the Finder, drag the tblk file into your
+    configurations list on the left. It will ask if you want this
+    installed for everyone or only you, select "Me". The hit the
+    connect button to start the VPN.
 
-```
-To be filled in.
-```
 
 - **Configure Local VNC Viewer Software:** This is where one sets
   `vncviewer` with the path and executable for the local VNC viewer
