@@ -36,9 +36,10 @@ solution though it maybe less readable.
 
 The following hardware configuration has been tested:
 
-- Computer: MacBook Pro 
+- Computer: MacBook 13" Pro 
     - CPU: Intel Core i7 CPU
     - RAM: 16GB
+	- an old Samsung 24" 1920x1200 that was lying around
 
 # Software Installation
 
