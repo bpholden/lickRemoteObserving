@@ -615,7 +615,22 @@ class LickVncLauncher(object):
 
 
     def play_test_sound(self):
-        self.log.warning('Playing of a test sound is not yet implemented')
+        if self.config.get('nosound', False) is True:
+            self.log.warning('Sounds are not enabled on this install.  See config file.')
+            return
+
+        # Build the soundplay test command.
+        soundplayer = self.config.get('soundplayer', None)
+        soundplayer = soundplay.full_path(soundplayer)
+
+        command = [soundplayer, '-l']
+        
+        self.log.info('Calling: ' + ' '.join (command))
+        test_sound_STDOUT = subprocess.check_output(command)
+        for line in test_sound_STDOUT.decode().split('\n'):
+            self.log.debug(f'  {line}')
+
+
 
 
     ##-------------------------------------------------------------------------
