@@ -134,7 +134,7 @@ class LickVncLauncher(object):
         ##---------------------------------------------------------------------
         ## Determine instrument
         ##---------------------------------------------------------------------
-        self.instrument, self.tel = self.determine_instrument(self.args.account)
+        self.determine_instrument(self.args.account)
         if not self.instrument: 
             self.exit_app(f'Invalid instrument account: "{self.args.account}"')
 
@@ -160,11 +160,10 @@ class LickVncLauncher(object):
         ##---------------------------------------------------------------------
         ## Determine VNC server
         ##---------------------------------------------------------------------
-        if self.ssh_key_valid:
-            self.vncserver = self.get_vnc_server(self.ssh_account,
-                                                    self.instrument)
-        if not self.vncserver:
-            self.exit_app("Could not determine VNC server.")
+#        if self.ssh_key_valid:
+#            self.vncserver = self.get_vnc_server()
+#        if not self.vncserver:
+#            self.exit_app("Could not determine VNC server.")
 
 
         ##---------------------------------------------------------------------
