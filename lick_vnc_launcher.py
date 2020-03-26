@@ -121,15 +121,6 @@ class LickVncLauncher(object):
             if not self.firewall_opened:
                 self.exit_app('Authentication failure!')
 
-#         if self.args.authonly is True:
-#             self.exit_app('Authentication only')
-
-
-        ##---------------------------------------------------------------------
-        ## Determine sessions to open
-        ##---------------------------------------------------------------------
-#        self.sessions_requested = self.get_sessions_requested(self.args)
-
 
         ##---------------------------------------------------------------------
         ## Determine instrument
