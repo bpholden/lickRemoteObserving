@@ -59,6 +59,7 @@ class LickVncLauncher(object):
         self.ssh_forward = True
         self.firewall_opened = False
         self.instrument = None
+        self.tel = None
         self.vncserver = None
         self.ssh_key_valid = False
         self.exit = False
