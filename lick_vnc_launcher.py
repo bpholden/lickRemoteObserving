@@ -1041,10 +1041,10 @@ class LickVncLauncher(object):
             if cmd == '':
                 pass
             elif cmd == 'q':
-                self.log.info(f'Recieved command "{cmd}"')
+                self.log.debug(f'Recieved command "{cmd}"')
                 quit = True
             elif cmd == 'w':
-                self.log.info(f'Recieved command "{cmd}"')
+                self.log.debug(f'Recieved command "{cmd}"')
                 try:
                     self.position_vnc_windows()
                 except:
@@ -1052,33 +1052,33 @@ class LickVncLauncher(object):
                     trace = traceback.format_exc()
                     self.log.debug(trace)
             elif cmd == 'p':
-                self.log.info(f'Recieved command "{cmd}"')
+                self.log.debug(f'Recieved command "{cmd}"')
                 self.play_test_sound()
             elif cmd == 's':
-                self.log.info(f'Recieved command "{cmd}"')
+                self.log.debug(f'Recieved command "{cmd}"')
                 self.start_soundplay()
             elif cmd == 'u':
-                self.log.info(f'Recieved command "{cmd}"')
+                self.log.debug(f'Recieved command "{cmd}"')
                 self.upload_log()
             elif cmd == 'l':
-                self.log.info(f'Recieved command "{cmd}"')
+                self.log.debug(f'Recieved command "{cmd}"')
                 self.print_sessions_found()
             elif cmd == 't':
-                self.log.info(f'Recieved command "{cmd}"')
+                self.log.debug(f'Recieved command "{cmd}"')
                 self.list_tunnels()
             elif cmd == 'v':
-                self.log.info(f'Recieved command "{cmd}"')
+                self.log.debug(f'Recieved command "{cmd}"')
                 self.check_version()
             elif cmatch is not None:
-                self.log.info(f'Recieved command "{cmd}"')
+                self.log.debug(f'Recieved command "{cmd}"')
                 self.close_ssh_thread(int(cmatch.group(1)))
             #elif cmd == 'v': self.validate_ssh_key()
             #elif cmd == 'x': self.kill_vnc_processes()
             elif cmd in self.sessions_found['name']:
-                self.log.info(f'Recieved command "{cmd}"')
+                self.log.debug(f'Recieved command "{cmd}"')
                 self.start_vnc_session(cmd)
             else:
-                self.log.info(f'Recieved command "{cmd}"')
+                self.log.debug(f'Recieved command "{cmd}"')
                 self.log.error(f'Unrecognized command: "{cmd}"')
 
 
