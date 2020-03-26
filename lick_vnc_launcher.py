@@ -69,7 +69,9 @@ class LickVncLauncher(object):
         self.ssh_account = 'user'
         self.ssh_server  = 'shimmy.ucolick.org'
 
-        self.servers_to_try = ['shimmy','noir',]
+        self.servers_to_try = {'shane' : 'shimmy',
+                                   'nickel' : 'noir',
+                                   'apf' : 'frankfurt.apf'}
 
 
         #default start sessions
@@ -688,21 +690,15 @@ class LickVncLauncher(object):
                            'shane' : 'kast',
                            'nickel' : 'nickel'}
 
-        telescope = ('APF','Shane','Nickel')
+        telescope = ('apf','shane','nickel')
 
         if account.lower() in telescope:
-            telescope = account.lower()
-        else:
-            telescope = None
+            self.tel = account.lower()
 
         if account.lower() in instruments.keys():
-            instrument = instruments[account.lower()]
-        else:
-            instrument = None
+            self.instrument = instruments[account.lower()]
             
-        return instrument, telescope
-
-        return None, None
+        return 
 
 
     ##-------------------------------------------------------------------------
@@ -769,19 +765,21 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     def validate_ssh_key(self):
         self.log.info(f"Validating ssh key...")
-
+        if self.tel is None:
+            self.log.error(" Cannot validate SSH key for undefined telescope")
+            return
+        
         self.ssh_key_valid = False
         cmd = 'whoami'
-        for server in self.servers_to_try:
-            server = server + '.ucolick.org'
-            try:
-                data = self.do_ssh_cmd(cmd, server,
-                                        self.ssh_account)
-            except Exception as e:
-                self.log.error('  Failed: ' + str(e))
-                trace = traceback.format_exc()
-                self.log.debug(trace)
-                data = None
+        server =  self.servers_to_try[self.tel] + '.ucolick.org'
+        try:
+            data = self.do_ssh_cmd(cmd, server,
+                                    self.ssh_account)
+        except Exception as e:
+            self.log.error('  Failed: ' + str(e))
+            trace = traceback.format_exc()
+            self.log.debug(trace)
+            data = None
 
 
             if data == self.ssh_account:
@@ -824,28 +822,31 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     ## Determine VNC Server
     ##-------------------------------------------------------------------------
-    def get_vnc_server(self, account, instrument):
-        self.log.info(f"Determining VNC server for '{account}'...")
+    def get_vnc_server(self):
+        self.log.info(f"Determining VNC sessions for '{self.instrument}'...")
         vncserver = None
-        for server in self.servers_to_try:
-            server += ".ucolick.org"
-            cmd = f"vncstatus {instrument}"
 
-            try:
-                data = self.do_ssh_cmd(cmd, server, account)
-            except Exception as e:
-                self.log.error('  Failed: ' + str(e))
-                trace = traceback.format_exc()
-                self.log.debug(trace)
-                data = None
+        if self.tel is None:
+            return vncserver
+        
+        server = self.servers_to_try[self.tel] + ".ucolick.org"
+        cmd = f"vncstatus {self.instrument}"
+
+        try:
+            data = self.do_ssh_cmd(cmd, server, self.ssh_account)
+        except Exception as e:
+            self.log.error('  Failed: ' + str(e))
+            trace = traceback.format_exc()
+            self.log.debug(trace)
+            data = None
             
-            # parse data
-            if data and len(data) > 3:
-                mtch = re.search("Usage",data)
-                if not mtch:
-                    vncserver = server
-                    self.log.info(f"Got VNC server: '{vncserver}'")
-                    break
+        # parse data
+        if data and len(data) > 3:
+            mtch = re.search("Usage",data)
+            if not mtch:
+                vncserver = server
+                self.log.info(f"Got VNC server: '{vncserver}'")
+
 
         return vncserver
 
