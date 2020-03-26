@@ -782,9 +782,9 @@ class LickVncLauncher(object):
             data = None
 
 
-            if data == self.ssh_account:
-                self.ssh_key_valid = True
-                break
+        if data == self.ssh_account:
+            self.ssh_key_valid = True
+            self.vncserver = server
 
         if self.ssh_key_valid:
             self.log.info("  SSH key OK")
