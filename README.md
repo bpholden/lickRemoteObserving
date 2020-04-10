@@ -2,8 +2,6 @@
 
 These scripts are to be used by remote sites to connect to Lick for remote observing.
 
-Before embarking on setting up a Remote Observing station, we recommend reading the offical remote observing policy and documentation at: [https://](https://)
-
 When everything is properly configured, all you need to do is run
 ```./start_lick_viewers shane```
 or
