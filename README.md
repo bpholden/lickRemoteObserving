@@ -41,6 +41,15 @@ The following hardware configuration has been tested:
 
 # Software Installation
 
+## VPN Software
+
+- For macOS, we recommend [Tunnelblick](https://tunnelblick.net/)
+- For Linux, we recommend
+[OpenVPN](https://openvpn.net/community-downloads/)
+
+The actual certificates which will be valid for only your observing
+run are available here []()
+
 ## Install Software Dependencies
 
 NOTE: Examples below assuming sudo/root installation for all users and were originally written for linux (CentOS).  Modify as appropriate for your local OS.
