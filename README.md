@@ -48,7 +48,7 @@ The following hardware configuration has been tested:
 [OpenVPN](https://openvpn.net/community-downloads/)
 
 The actual certificates which will be valid for only your observing
-run are available here []()
+run are available [here](https://www.ucolick.org)
 
 ## Install Software Dependencies
 
