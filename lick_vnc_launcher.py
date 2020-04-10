@@ -1023,7 +1023,7 @@ class LickVncLauncher(object):
                  f"                        MENU",
                  f"-"*(line_length-2),
                  f"  l               List sessions available",
-                 f"  [session name]  Open VNC session by name",
+                 f"  [desktop number]  Open VNC session by number (1-6)",
                  f"  w               Position VNC windows",
                  f"  s               Soundplayer restart",
                  f"  u               Upload log to Lick",
@@ -1043,6 +1043,7 @@ class LickVncLauncher(object):
         while quit is None:
             cmd = input(menu).lower()
             cmatch = re.match(r'c (\d+)', cmd)
+            nmatch = re.match(r'(\d)', cmd)
             if cmd == '':
                 pass
             elif cmd == 'q':
@@ -1077,11 +1078,13 @@ class LickVncLauncher(object):
             elif cmatch is not None:
                 self.log.debug(f'Recieved command "{cmd}"')
                 self.close_ssh_thread(int(cmatch.group(1)))
-            #elif cmd == 'v': self.validate_ssh_key()
-            #elif cmd == 'x': self.kill_vnc_processes()
-            elif cmd in self.sessions_found['name']:
+            elif nmatch is not None:
                 self.log.debug(f'Recieved command "{cmd}"')
-                self.start_vnc_session(cmd)
+                desktop = int(nmatch.group(1)) - 1
+                if desktop >= 0 and desktop < 6:
+                    self.start_vnc_session(self.sessions_found[desktop].name)
+                else:
+                    self.log.error(f'Unrecognized desktop: "{cmd}"')
             else:
                 self.log.debug(f'Recieved command "{cmd}"')
                 self.log.error(f'Unrecognized command: "{cmd}"')
