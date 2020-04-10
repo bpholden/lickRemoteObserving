@@ -18,7 +18,16 @@ Before you can connect to Lick remotely, we need to provide you with the firewal
     - Room phone #
     - Emergency Services phone #
 
-Once we receive your request, we will respond with instructions on obtaining the firewall info, firewall password, and VNC session password.
+Once we receive your request, we will respond with instructions on
+obtaining the VPN verification.
+
+
+# Familiarize Yourself with Remote Operations
+
+We have extensive instructions for
+[Nickel Remote Operations](http://mthamilton.ucolick.org/techdocs/remoteObs/nickel/intro/)
+and 
+[Shane Remote Operations](http://mthamilton.ucolick.org/techdocs/remoteObs/shane/intro/)
 
 # Hardware Setup
 
