@@ -127,6 +127,11 @@ Once you have downloaded the software:
     cp lick_vnc_config.yaml local_config.yaml
     ```
 
+- Change the permissions on the `lick_id_rsa`
+```
+chmod 400 lick_id_rsa
+```
+
 - Create a KRO [conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html) using the provided environment.yaml file:
     ```
     cd ~/lickRemoteObserving
@@ -204,7 +209,7 @@ cd ~/lickRemoteObserving
 ./test_connection
 ```
 
-It should print out a report which indicates that all
+It should print out a report which indicates that all four
 tests passed. Make sure there are no test failures.
 
 If there are test failures, email your logfile to `holden@ucolick.org`.
