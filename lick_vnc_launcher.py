@@ -774,6 +774,10 @@ class LickVncLauncher(object):
         if self.tel is None:
             self.log.error(" Cannot validate SSH key for undefined telescope")
             return
+
+        if self.change_mod() is False:
+            self.log.error(" Cannot validate SSH key for undefined telescope")
+            return
         
         self.ssh_key_valid = False
         cmd = 'whoami'
