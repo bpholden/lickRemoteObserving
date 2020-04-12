@@ -799,6 +799,27 @@ class LickVncLauncher(object):
 
 
     ##-------------------------------------------------------------------------
+    ## Ensure that the ssh key file has the ride mode
+    ##-------------------------------------------------------------------------
+    def change_mod(self):
+        # find file
+        rv = False
+        cpath = os.path.dirname(os.path.abspath(__file__))
+        fullpath = os.path.join(cpath,self.ssh_pkey)
+        if not os.path.exists:
+            self.log.error(f"RSA key {fullpath} does not exist")
+            return rv
+        # check mode
+        # set mode to 400
+        try:
+            os.chmod(fullpath,stat.S_IRUSR)
+            rv = True
+        except:
+            self.log.error(f"Cannot set {fullpath} to the correct mode, ssh may fail")
+            
+        return rv
+
+    ##-------------------------------------------------------------------------
     ## Get engv account for instrument
     ##-------------------------------------------------------------------------
     def get_engv_account(self, instrument):
