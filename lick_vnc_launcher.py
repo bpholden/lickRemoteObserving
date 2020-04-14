@@ -389,6 +389,12 @@ class LickVncLauncher(object):
         #todo: gethostbyname stopped working after I updated mac. need better method
         try:
             self.log.debug(f'System Info: {os.uname()}')
+        except:
+            self.log.debug("os.uname() did not work, hopefully we are on a Windows box")
+            trace = traceback.format_exc()
+            self.log.debug(trace)
+
+        try:
             hostname = socket.gethostname()
             self.log.debug(f'System hostname: {hostname}')
             # ip = socket.gethostbyname(hostname)
