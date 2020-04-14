@@ -12,11 +12,7 @@ to enable the connection.
 Before you can connect to Lick remotely, we need to provide you with the firewall info and passwords.  As well, we need info about your remote observing station.
 
 - Email `sa@ucolick.org` with the following info about your remote site:
-    - Institution
-    - City, State
-    - Room Name/#
-    - Room phone #
-    - Emergency Services phone #
+    - Phone #
 
 Once we receive your request, we will respond with instructions on
 obtaining the VPN verification.
