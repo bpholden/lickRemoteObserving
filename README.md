@@ -44,6 +44,10 @@ The following hardware configuration has been tested:
     - RAM: 16GB
 	- an old Samsung 24" 1920x1200 that was lying around
 
+The ability to use more than one monitor can be helpful. The Shane and
+the Nickel are setup to have 6 virtual desktops, and at least 3 are
+required for observing. 
+
 # Software Installation
 
 ## VPN Software
