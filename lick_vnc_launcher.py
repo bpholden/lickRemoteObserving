@@ -529,6 +529,7 @@ class LickVncLauncher(object):
         try:
             cmd0 = subprocess.check_output(['which', 'ss'])
             self.use_ss = True
+            return
         except subprocess.CalledProcessError:
             self.log.debug("ss is not found")
         try:
