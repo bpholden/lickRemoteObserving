@@ -28,6 +28,14 @@ def test_vncviewer():
     if vncviewer != 'open':
         assert os.path.exists(vncviewer)
     
+def test_port_lookup():
+    lvl.log.info('Testing port lookup')
+
+    lvl.how_check_local_port()
+    one_works = lvl.use_ss or lvl.use_lsof
+    assert one_works
+
+    assert lvl.is_local_port_in_use(lvl.LOCAL_PORT_START) is False
 
 def test_ssh_key():
     lvl.log.info('Testing config file: ssh_pkey')
