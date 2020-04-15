@@ -355,7 +355,7 @@ class LickVncLauncher(object):
         #check for vncviewer
         #NOTE: Ok if not specified, we will tell them to open vncviewer manually
         #todo: check if valid cmd path?
-        self.vncviewerCmd = self.config.get('vncviewer', None).strip()
+        self.vncviewerCmd = self.config.get('vncviewer', None)
         if not self.vncviewerCmd:
             self.log.warning("Config parameter 'vncviewer' undefined.")
             self.log.warning("You will need to open your vnc viewer manually.\n")
