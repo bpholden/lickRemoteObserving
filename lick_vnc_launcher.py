@@ -545,7 +545,7 @@ class LickVncLauncher(object):
 
         cmdo = "/usr/sbin/lsof"
         if self.use_ss:
-            cmd = f'ss | grep ":{port}'
+            cmd = f'ss | grep ":{port}"'
         elif self.use_lsof:
             cmd = f'lsof -i -P -n | grep LISTEN | grep ":{port} (LISTEN)" | grep -v grep'
         
