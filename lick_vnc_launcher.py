@@ -65,6 +65,11 @@ class LickVncLauncher(object):
         self.ssh_key_valid = False
         self.exit = False
 
+        self.use_ss = False
+        self.use_lsof = False
+
+
+        
         #ssh key constants
         self.ssh_pkey = 'lick_id_rsa'
         self.ssh_account = 'user'
@@ -111,18 +116,9 @@ class LickVncLauncher(object):
         self.log_system_info()
         self.check_version()
 
-        ##---------------------------------------------------------------------
-        ## Authenticate Through Firewall (or Disconnect)
-        ##---------------------------------------------------------------------
-        #todo: handle blank password error properly
-        self.firewall_opened = False
-        if self.do_authenticate:
-            self.firewall_pass = getpass.getpass(f"Password for firewall authentication: ")
-            self.firewall_opened = self.authenticate(self.firewall_pass)
-            if not self.firewall_opened:
-                self.exit_app('Authentication failure!')
 
-
+        self.how_check_local_port()
+        
         ##---------------------------------------------------------------------
         ## Determine instrument
         ##---------------------------------------------------------------------
@@ -529,8 +525,30 @@ class LickVncLauncher(object):
 
     ##-------------------------------------------------------------------------
     ##-------------------------------------------------------------------------
+    def how_check_local_port(self):
+        try:
+            cmd0 = subprocess.check_output(['which', 'ss'])
+            self.use_ss = True
+        except subprocess.CalledProcessError:
+            self.log.debug("ss is not found")
+        try:
+            cmd1 = subprocess.check_output(['which','lsof'])
+            self.use_lsof = True
+        except subprocess.CalledProcessError:
+            self.log.debug("lsof is not found")
+
+        return
+        
+    ##-------------------------------------------------------------------------
+    ##-------------------------------------------------------------------------
     def is_local_port_in_use(self, port):
-        cmd = f'lsof -i -P -n | grep LISTEN | grep ":{port} (LISTEN)" | grep -v grep'
+
+        cmdo = "/usr/sbin/lsof"
+        if self.use_ss:
+            cmd = f'ss | grep ":{port}'
+        elif self.use_lsof:
+            cmd = f'lsof -i -P -n | grep LISTEN | grep ":{port} (LISTEN)" | grep -v grep'
+        
         self.log.debug(f'Checking for port {port} in use: ' + cmd)
         proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
         data = proc.communicate()[0]
