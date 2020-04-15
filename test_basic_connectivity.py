@@ -21,9 +21,10 @@ servers_and_results = [('shimmy', 'shimmy.ucolick.org'),
 def test_vncviewer():
     lvl.log.info('Testing config file: vncviewer')
     vncviewer = lvl.config.get('vncviewer', None)
+    vncviewer = vncviewer.strip()
     if vncviewer in [None, '', 'vncviewer']:
         # the line below will throw and error if which fails
-        vncviewer = subprocess.check_output(['which', 'vncviewer'])
+        vncviewer = subprocess.check_output(['which', 'vncviewer']).strip()
     if vncviewer != 'open':
         assert os.path.exists(vncviewer)
     
