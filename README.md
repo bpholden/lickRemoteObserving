@@ -96,7 +96,12 @@ The software has been tested for macOS.
         - **On macOS**: It is also possible to use the built in VNC
           viewer on macOS, but we have seen a few instances where the
           screen freezes and the client needs to be closed and
-          reopened to get an up to date screen. 
+          reopened to get an up to date screen.  To select this use
+          the second option in the config file, the one labeled
+          "open". This may not work under Catalina.
+
+	- [TightVNC](https://tightvnc.com) will work on most hosts, as it uses Java. In my
+      (BPH) experience it is slower. 
 
 - Install VPN client
   - **For macOS**, install [Tunnelblick](https://tunnelblick.net/) by
