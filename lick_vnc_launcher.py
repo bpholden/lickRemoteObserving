@@ -65,6 +65,7 @@ class LickVncLauncher(object):
         self.ssh_key_valid = False
         self.exit = False
 
+        self.use_ps = False
         self.use_ss = False
         self.use_lsof = False
 
@@ -527,6 +528,12 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     def how_check_local_port(self):
         try:
+            cmd = subprocess.check_output(['which', 'ps'])
+            self.use_ps = True
+            return
+        except subprocess.CalledProcessError:
+            self.log.debug("ss is not found")
+        try:
             cmd0 = subprocess.check_output(['which', 'ss'])
             self.use_ss = True
             return
@@ -544,8 +551,9 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     def is_local_port_in_use(self, port):
 
-        cmdo = "/usr/sbin/lsof"
-        if self.use_ss:
+        if self.use_ps:
+            cmd = f'ps aux | grep "{port}:" | grep -v grep'
+        elif self.use_ss:
             cmd = f'ss -l | grep ":{port}"'
         elif self.use_lsof:
             cmd = f'lsof -i -P -n | grep LISTEN | grep ":{port} (LISTEN)" | grep -v grep'
