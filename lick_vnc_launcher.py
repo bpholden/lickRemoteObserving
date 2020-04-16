@@ -588,7 +588,10 @@ class LickVncLauncher(object):
         #todo: make this config on/off so it doesn't break things 
         if geometry: 
             cmd.append(f'-geometry={geometry}')
-        cmd.append(f'{vncprefix}{vncserver}:{port:4d}')
+        if vncviewercmd == "open":
+            cmd.append(f'{vncprefix}{vncserver}:{port:4d}')
+        else:
+            cmd.append(f'{vncprefix}{vncserver}::{port:4d}')
 
         self.log.debug(f"VNC viewer command: {cmd}")
         null = subprocess.DEVNULL
