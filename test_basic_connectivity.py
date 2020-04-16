@@ -32,7 +32,7 @@ def test_port_lookup():
     lvl.log.info('Testing port lookup')
 
     lvl.how_check_local_port()
-    one_works = lvl.use_ss or lvl.use_lsof
+    one_works = lvl.use_ps or lvl.use_ss or lvl.use_lsof
     assert one_works
 
     assert lvl.is_local_port_in_use(lvl.LOCAL_PORT_START) is False
