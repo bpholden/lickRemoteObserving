@@ -535,22 +535,31 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     def how_check_local_port(self):
         try:
-            cmd = subprocess.check_output(['which', 'ps'])
-            self.use_ps = True
-            return
-        except subprocess.CalledProcessError:
-            self.log.debug("ss is not found")
-        try:
             cmd0 = subprocess.check_output(['which', 'ss'])
             self.use_ss = True
             return
         except subprocess.CalledProcessError:
             self.log.debug("ss is not found")
+            
         try:
             cmd1 = subprocess.check_output(['which','lsof'])
             self.use_lsof = True
+            return
         except subprocess.CalledProcessError:
             self.log.debug("lsof is not found")
+
+        try:
+            cmd1 = subprocess.check_output(['which','netstat.exe'])
+            self.use_netstat = True
+            return
+        except subprocess.CalledProcessError:
+            self.log.debug("lsof is not found")
+
+        try:
+            cmd = subprocess.check_output(['which', 'ps'])
+            self.use_ps = True
+        except subprocess.CalledProcessError:
+            self.log.debug("ss is not found")
 
         return
         
