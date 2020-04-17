@@ -1,8 +1,9 @@
 {
   ## This is the command to invoke on the local machine to launch a VNC client
   ## Command will be formatted as [vncviewer] [vncargs] [address]:[port]
-  ## Example: Default setup for TigerVnC's vncviewer wither preferred arg options
+  ## Example: Default setup for TigerVnC's vncviewer wither preferred arg options, with both Linux and Mac versions available
   # vncviewer: 'vncviewer',
+  # vncviewer: '/Applications/TigerVNC Viewer 1.10.1.app/Contents/MacOS/TigerVNC Viewer',
   #  vncprefix: '',
   #  vncargs: '-Shared -FullColor -PreferredEncoding=ZRLE -AutoSelect=0',
   ## Example: use VNCviewer for RealVNC vncviewer on macOS:

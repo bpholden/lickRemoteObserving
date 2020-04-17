@@ -213,6 +213,7 @@ class LickVncLauncher(object):
         for s in self.sessions_found:
                 if s.name == session_name:
                         session = s
+                        break
                         
         if not session:
             self.log.error(f"No server VNC session found for '{session_name}'.")
@@ -239,6 +240,7 @@ class LickVncLauncher(object):
                 if session_name == self.ports_in_use[p][1]:
                     local_port = p
                     self.log.info(f"Found existing SSH tunnel on port {port}")
+                    vncserver = 'localhost'
                     break
 
             #open ssh tunnel
@@ -253,12 +255,13 @@ class LickVncLauncher(object):
                     trace = traceback.format_exc()
                     self.log.debug(trace)
                     return
-                
                 vncserver = 'localhost'
-                
         else:
             local_port = port
+            
 
+
+            
         #If vncviewer is not defined, then prompt them to open manually and
         # return now
         if self.config['vncviewer'] in [None, 'None', 'none']:
@@ -280,6 +283,8 @@ class LickVncLauncher(object):
             #     geometry += f'{width}x{height}'
             if xpos != None and ypos != None:
                 geometry += f'+{xpos}+{ypos}'
+
+        time.sleep(2)
 
         ## Open vncviewer as separate thread
         self.vnc_threads.append(threading.Thread(target=self.launch_vncviewer,
