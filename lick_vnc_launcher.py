@@ -66,6 +66,7 @@ class LickVncLauncher(object):
         self.exit = False
 
         self.use_ps = False
+        self.use_netstat = False        
         self.use_ss = False
         self.use_lsof = False
 
