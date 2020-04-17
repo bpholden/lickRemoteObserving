@@ -14,6 +14,12 @@
   ## Example using vncpasswd file:
   # vncargs: '-passwd=/home/observer/.vnc/passwd',
 
+  # Example for TightVNC - which seems much slower than VNCviewer
+  # vncviewer: 'vncviewer',
+  # vncargs: '-shared -truecolor -quality 4 -x11cursor -encodings ZRLE',
+  # if you  have a password file
+  # vncargs: '-shared -truecolor -quality 4 -x11cursor  -encodings ZRLE -passwd /home/observer/.vnc/passwd',
+
   ## For ssh tunnelling, a starting local port number is used and incremented 
   ## for each port needed.  Default is 5901.
   # local_port_start: 5901,
