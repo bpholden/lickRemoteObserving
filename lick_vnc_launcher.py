@@ -517,7 +517,7 @@ class LickVncLauncher(object):
 
         if checks == 0:
             raise RuntimeError('ssh tunnel failed to open after 5 seconds')
-
+        
         in_use = [address_and_port, session_name, proc]
         self.ports_in_use[local_port] = in_use
         
