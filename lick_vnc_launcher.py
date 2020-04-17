@@ -255,11 +255,12 @@ class LickVncLauncher(object):
                     self.log.debug(trace)
                     return
                 
-                vncserver = 'localhost'
-                
         else:
             local_port = port
+            
+        vncserver = 'localhost'
 
+            
         #If vncviewer is not defined, then prompt them to open manually and
         # return now
         if self.config['vncviewer'] in [None, 'None', 'none']:
