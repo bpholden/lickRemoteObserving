@@ -43,6 +43,15 @@ The following hardware configuration has been tested:
     - CPU: Intel Core i7 CPU
     - RAM: 16GB
 	- an old Samsung 24" 1920x1200 that was lying around
+	- Running Mojave (10.14)
+
+- Computer: MacBook 13" Pro
+		- CPU: Intel Core i5 CPU
+		- RAM: 8 GB
+		- Running Sierra (10.12)
+
+
+  
 
 The ability to use more than one monitor can be helpful. The Shane and
 the Nickel are setup to have 6 virtual desktops, and at least 3 are
