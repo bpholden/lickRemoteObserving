@@ -240,6 +240,7 @@ class LickVncLauncher(object):
                 if session_name == self.ports_in_use[p][1]:
                     local_port = p
                     self.log.info(f"Found existing SSH tunnel on port {port}")
+                    vncserver = 'localhost'
                     break
 
             #open ssh tunnel
@@ -254,11 +255,11 @@ class LickVncLauncher(object):
                     trace = traceback.format_exc()
                     self.log.debug(trace)
                     return
-                
+                vncserver = 'localhost'
         else:
             local_port = port
             
-        vncserver = 'localhost'
+
 
             
         #If vncviewer is not defined, then prompt them to open manually and
