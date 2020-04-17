@@ -551,13 +551,15 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     def is_local_port_in_use(self, port):
 
-        if self.use_ps:
-            cmd = f'ps aux | grep "{port}:" | grep -v grep'
+        if self.use_netstat:
+            cmd = f'netstat.exe -an | grep ":{port}"'
         elif self.use_ss:
             cmd = f'ss -l | grep ":{port}"'
         elif self.use_lsof:
             cmd = f'lsof -i -P -n | grep LISTEN | grep ":{port} (LISTEN)" | grep -v grep'
-        
+        elif self.use_ps:
+            cmd = f'ps aux | grep "{port}:" | grep -v grep'
+
         self.log.debug(f'Checking for port {port} in use: ' + cmd)
         proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
         data = proc.communicate()[0]
