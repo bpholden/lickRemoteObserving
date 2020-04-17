@@ -70,8 +70,6 @@ class LickVncLauncher(object):
         self.use_ss = False
         self.use_lsof = False
 
-
-        
         #ssh key constants
         self.ssh_pkey = 'lick_id_rsa'
         self.ssh_account = 'user'
@@ -549,17 +547,17 @@ class LickVncLauncher(object):
             self.log.debug("lsof is not found")
 
         try:
-            cmd1 = subprocess.check_output(['which','netstat.exe'])
+            cmd2 = subprocess.check_output(['which','netstat.exe'])
             self.use_netstat = True
             return
         except subprocess.CalledProcessError:
             self.log.debug("lsof is not found")
 
         try:
-            cmd = subprocess.check_output(['which', 'ps'])
+            cmd3 = subprocess.check_output(['which', 'ps'])
             self.use_ps = True
         except subprocess.CalledProcessError:
-            self.log.debug("ss is not found")
+            self.log.debug("ps is not found")
 
         return
         
