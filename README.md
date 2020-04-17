@@ -46,9 +46,9 @@ The following hardware configuration has been tested:
 	- Running Mojave (10.14)
 
 - Computer: MacBook 13" Pro
-		- CPU: Intel Core i5 CPU
-		- RAM: 8 GB
-		- Running Sierra (10.12)
+  - CPU: Intel Core i5 CPU
+  - RAM: 8 GB
+  - Running Sierra (10.12)
 
 
   
