@@ -1354,7 +1354,7 @@ def create_parser():
         help=argparse.SUPPRESS)
 
     ## add arguments
-    parser.add_argument("account", type=str, nargs='?', default='shane',
+    parser.add_argument("account", type=str, nargs='?', default='nickel',
                         help="The user account.")
 
     ## add options
