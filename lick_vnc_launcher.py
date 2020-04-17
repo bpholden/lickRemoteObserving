@@ -285,7 +285,8 @@ class LickVncLauncher(object):
             if xpos != None and ypos != None:
                 geometry += f'+{xpos}+{ypos}'
 
-        time.sleep(2)
+        if self.use_ps:
+            time.sleep(2)
 
         ## Open vncviewer as separate thread
         self.vnc_threads.append(threading.Thread(target=self.launch_vncviewer,
