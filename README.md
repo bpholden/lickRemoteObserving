@@ -50,6 +50,10 @@ The following hardware configuration has been tested:
   - RAM: 8 GB
   - Running Sierra (10.12)
 
+- Computer: 5th generation Intel Core i5
+   -16 GB RAM
+   - Linux Mint 19.3
+
 
   
 
@@ -82,10 +86,17 @@ The software has been tested for macOS.
     ```
 - Install VNC viewer client
     - **For Linux**
-        - **On Linux:** TigerVNC is recommended as the VNC client.  RealVNC has been tested as well.
+        - **On Linux:** TigerVNC is recommended as the VNC client.
+        RealVNC has been tested as well.
+		- On CentOS
         ```
         sudo yum install tigervnc-x86_64
-        ```
+		```
+		- For Ubuntu flavors:
+		```
+		apt install tigervnc-viewer
+		apt install tigervnc-common
+		```
         - **Important!** If you are using TigerVNC, in the $HOME/.vnc directory, create a file `default.tigervnc` with these two lines: 
         ```
         TigerVNC Configuration file Version 1.0
@@ -115,7 +126,14 @@ The software has been tested for macOS.
 - Install VPN client
   - **For macOS**, install [Tunnelblick](https://tunnelblick.net/) by
     downloading latest stable release
-  - **For Linux**, ```fill in preferred client here```
+  - **For Linux** on Ubuntu flavors
+	  ```
+		apt install openvpn
+		apt install network-manager-openvpn
+		apt install network-manager-openvpn-gnome
+	```
+	- **From source (or Windows installs)**
+	[OpenVPN](https://openvpn.net/community-downloads/)
 
 ## Download and Install Lick VNC software
 
