@@ -51,8 +51,8 @@ The following hardware configuration has been tested:
   - Running Sierra (10.12)
 
 - Computer: 5th generation Intel Core i5
-   - 16 GB RAM
-   - Linux Mint 19.3
+  - 16 GB RAM
+  - Linux Mint 19.3
 
 
   
