@@ -15,7 +15,8 @@ Before you can connect to Lick remotely, we need to provide you with the firewal
     - Phone #
 
 Once we receive your request, we will respond with instructions on
-obtaining the VPN verification.
+obtaining the VPN verification. Your observing team will be emailed a
+certificate for that observing run.
 
 
 # Familiarize Yourself with Remote Operations
@@ -63,14 +64,14 @@ required for observing.
 
 # Software Installation
 
-## VPN Software
+## Outline
 
-- For macOS, we recommend [Tunnelblick](https://tunnelblick.net/)
-- For Linux, we recommend
-[OpenVPN](https://openvpn.net/community-downloads/)
+Here is a list of what is required
 
-The actual certificates which will be valid for only your observing
-run are available [here](https://www.ucolick.org)
+- Anaconda3 or miniconda3
+- OpenVPN or Tunnelblick
+- A VNC Client
+- A terminal client
 
 ## Install Software Dependencies
 
@@ -132,7 +133,7 @@ The software has been tested for macOS.
 		apt install network-manager-openvpn
 		apt install network-manager-openvpn-gnome
 	```
-	- **From source (or Windows installs)**
+  - **From source (or Windows installs)**
 	[OpenVPN](https://openvpn.net/community-downloads/)
 
 ## Download and Install Lick VNC software
