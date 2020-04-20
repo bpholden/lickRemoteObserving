@@ -79,7 +79,8 @@ class LickVncLauncher(object):
                                    'nickel' : 'noir',
                                    'apf' : 'frankfurt.apf'}
 
-
+        self.geometry = list()
+        
         #default start sessions
         self.DEFAULT_SESSIONS = [
             'Kast blue',
@@ -1005,6 +1006,9 @@ class LickVncLauncher(object):
         cmd = "xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1, $2}'"
         p1 = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
         out = p1.communicate()[0].decode('utf-8')
+        if not out:
+            self.log.debug('Could not calc window geometry')
+            return
         screen_width, screen_height = [int(x) for x in out.split()]
         self.log.debug(f"Screen size: {screen_width}x{screen_height}")
 
@@ -1027,7 +1031,6 @@ class LickVncLauncher(object):
             wh = round(screen_height / rows)
 
         #get x/y coords (assume two rows)
-        self.geometry = []
         for row in range(0, rows):
             for col in range(0, cols):
                 x = round(col * screen_width/cols)
