@@ -14,6 +14,11 @@ Before you can connect to Lick remotely, we need to provide you with the firewal
 - Email `sa@ucolick.org` with the following info about your remote site:
     - Phone #
 
+- Email `sla@ucolick.org` for the VPN certificate with:
+ - Name of the PI
+ - Date of observing nights
+ - Telescope 
+
 Once we receive your request, we will respond with instructions on
 obtaining the VPN verification. Your observing team will be emailed a
 certificate for that observing run.
