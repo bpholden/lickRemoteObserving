@@ -8,6 +8,15 @@ or
 ```./start_lick_viewers nickel```
 to enable the connection.
 
+## Outline
+
+- Email for certificate (see below)
+- Run Open VPN or Tunnelblick using certificate
+- Open a terminal
+- Go to directory with software
+- ```./start_lick_viewers nickel``` or ```./start_lick_viewers shane```
+- Type the SSH password for each VNC window
+
 ## Notify Lick of your intent to connect remotely
 Before you can connect to Lick remotely, we need to provide you with the firewall info and passwords.  As well, we need info about your remote observing station.
 
