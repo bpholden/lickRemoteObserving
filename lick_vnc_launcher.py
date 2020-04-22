@@ -1003,6 +1003,12 @@ class LickVncLauncher(object):
 
         #get screen dimensions
         #alternate command: xrandr |grep \* | awk '{print $1}'
+        cmd = "which xdpyinfo"
+        p0 = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+        out = p0.communicate()[0].decode('utf-8')
+        if not out:
+            self.log.debug('Could not calc window geometry')
+            return
         cmd = "xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1, $2}'"
         p1 = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
         out = p1.communicate()[0].decode('utf-8')
