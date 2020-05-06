@@ -27,7 +27,7 @@ import yaml
 
 import soundplay
 
-__version__ = '0.91'
+__version__ = '0.92'
 
 
 class VNCSession(object):
@@ -389,7 +389,7 @@ class LickVncLauncher(object):
     ## Log basic system info
     ##-------------------------------------------------------------------------
     def log_system_info(self):
-        #todo: gethostbyname stopped working after I updated mac. need better method
+
         try:
             self.log.debug(f'System Info: {os.uname()}')
         except:
@@ -634,6 +634,9 @@ class LickVncLauncher(object):
             soundplayer = self.config.get('soundplayer', None)
             vncserver   = self.vncserver
 
+            if soundplayer is None:
+                soundplayer = self.guess_soundplay()
+            
             #Do we need ssh tunnel for this?
             if self.ssh_forward:
 
@@ -674,8 +677,18 @@ class LickVncLauncher(object):
         for line in test_sound_STDOUT.decode().split('\n'):
             self.log.debug(f'  {line}')
 
-
-
+    def guess_soundplay(self):
+        try:
+            sysinfo = os.uname()
+            if sysinfo.sysname == 'Darwin':
+                return 'soundplay-107050-8.6.3-macosx10.5-ix86+x86_64'
+            elif sysinfo.sysname == 'Linux':
+                if 'x86_64' in sysinfo.release:
+                    return 'soundplay-107098-8.6.3-linux-x86_64'
+                else:
+                    return 'soundplay-107098-8.6.3-linux-ix86'
+        except:
+            return None
 
     ##-------------------------------------------------------------------------
     ## Authenticate through the firewall - needs to be rewritten 
