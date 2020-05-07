@@ -192,8 +192,9 @@ configuration file itself as they can guide you.  You may need to
 uncomment (remove the leading `#`) from lines you want to customize.
 
 - **Configure OpenVPN:**
-  - **For macOS**: Obtain the tblk file from [here](http://) for your
-    schedule observing run. Open the Tunnelblick and click on the
+Obtain the tblk file for your schedule observing run.
+
+  - **For macOS**: Open the Tunnelblick and click on the
     ```VPN Details``` menu item. When the window for Tunnelblick
     opens, click on the Configurations tab at the top, it is in the
     upper left. 	Using the Finder, drag the tblk file into your
