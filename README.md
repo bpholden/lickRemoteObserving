@@ -200,7 +200,12 @@ uncomment (remove the leading `#`) from lines you want to customize.
     configurations list on the left. It will ask if you want this
     installed for everyone or only you, select "Me". The hit the
     connect button to start the VPN.
-
+	
+	- **For Linux**: Install the certificate using the appropriate
+	software, such as the Linux NetworkManager. If you do this, you
+	must execute the following command to prevent all traffic (such as
+	Zoom or your browswer) go through the remote observing machine.
+	``nmcli connection modify Nickel20200507 ipv4.never-default yes``
 
 - **Configure Local VNC Viewer Software:** This is where one sets
   `vncviewer` with the path and executable for the local VNC viewer
