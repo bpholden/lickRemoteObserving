@@ -12,7 +12,7 @@ import datetime
 import getpass
 import logging
 import math
-import pathlib 
+import pathlib
 import platform
 import socket
 import subprocess
@@ -66,7 +66,7 @@ class LickVncLauncher(object):
         self.exit = False
 
         self.use_ps = False
-        self.use_netstat = False        
+        self.use_netstat = False
         self.use_ss = False
         self.use_lsof = False
 
@@ -80,7 +80,7 @@ class LickVncLauncher(object):
                                    'apf' : 'frankfurt.apf'}
 
         self.geometry = list()
-        
+
         #default start sessions
         self.DEFAULT_SESSIONS = [
             'Kast blue',
@@ -91,7 +91,7 @@ class LickVncLauncher(object):
             'Kast Spare 3'
         ]
 
-        #NOTE: 'status' session on different server and always on port 1, 
+        #NOTE: 'status' session on different server and always on port 1,
         # so assign localport to constant to avoid conflict
         self.STATUS_PORT       = ':1'
         self.LOCAL_PORT_START  = 5901
@@ -102,7 +102,7 @@ class LickVncLauncher(object):
     ## Start point (main)
     ##-------------------------------------------------------------------------
     def start(self):
-    
+
         ##---------------------------------------------------------------------
         ## Parse command line args and get config
         ##---------------------------------------------------------------------
@@ -119,40 +119,29 @@ class LickVncLauncher(object):
 
 
         self.how_check_local_port()
-        
+
         ##---------------------------------------------------------------------
         ## Determine instrument
         ##---------------------------------------------------------------------
         self.determine_instrument(self.args.account)
-        if not self.instrument: 
+        if not self.instrument:
             self.exit_app(f'Invalid instrument account: "{self.args.account}"')
 
 
         ##---------------------------------------------------------------------
         ## Validate ssh key or use alt method?
         ##---------------------------------------------------------------------
-        if self.args.nosshkey is False and self.config.get('nosshkey', None) is None:
-            self.validate_ssh_key()
-            if not self.ssh_key_valid:
-                self.log.error("\n\n\tCould not validate SSH key.\n\t"\
+
+        self.validate_ssh_key()
+        if not self.ssh_key_valid:
+            self.log.error("\n\n\tCould not validate SSH key.\n\t"\
                           "Contact sa@ucolick.org "\
                           "for other options to connect remotely.\n")
-                self.exit_app()
-        else:
-            while self.vnc_password is None:
-                vnc_password = getpass.getpass(f"Password for user {self.args.account}: ")
-                vnc_password = vnc_password.strip()
-                if vnc_password != '':
-                     self.vnc_password = vnc_password
+            self.exit_app()
+        if self.args.authonly is True:
+            self.log.info("SSH key validated\nWill exit as authonly selected")
+            self.exit_app()
 
-
-        ##---------------------------------------------------------------------
-        ## Determine VNC server
-        ##---------------------------------------------------------------------
-#        if self.ssh_key_valid:
-#            self.vncserver = self.get_vnc_server()
-#        if not self.vncserver:
-#            self.exit_app("Could not determine VNC server.")
 
 
         ##---------------------------------------------------------------------
@@ -196,8 +185,7 @@ class LickVncLauncher(object):
         atexit.register(self.exit_app, msg="App exit")
         self.prompt_menu()
         self.exit_app()
-        #todo: Do we need to call exit here explicitly?  App was not exiting on
-        # MacOs but does on linux.
+
 
 
     ##-------------------------------------------------------------------------
@@ -214,7 +202,7 @@ class LickVncLauncher(object):
                 if s.name == session_name:
                         session = s
                         break
-                        
+
         if not session:
             self.log.error(f"No server VNC session found for '{session_name}'.")
             self.print_sessions_found()
@@ -230,9 +218,9 @@ class LickVncLauncher(object):
         ## If authenticating, open SSH tunnel for appropriate ports
         if self.ssh_forward:
 
-            #determine account and password         
+            #determine account and password
             account  = self.ssh_account if self.ssh_key_valid else self.args.account
-            password = None if self.ssh_key_valid else self.vnc_password
+            password = None
 
             # determine if there is already a tunnel for this session
             local_port = None
@@ -258,10 +246,10 @@ class LickVncLauncher(object):
                 vncserver = 'localhost'
         else:
             local_port = port
-            
 
 
-            
+
+
         #If vncviewer is not defined, then prompt them to open manually and
         # return now
         if self.config['vncviewer'] in [None, 'None', 'none']:
@@ -298,7 +286,7 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     def get_args(self):
         self.args = create_parser()
-        
+
 
     ##-------------------------------------------------------------------------
     ## Get Configuration
@@ -470,7 +458,7 @@ class LickVncLauncher(object):
         #NOTE: Try up to 100 ports beyond
         if not local_port:
             for i in range(0,100):
-                if self.is_local_port_in_use(self.local_port): 
+                if self.is_local_port_in_use(self.local_port):
                     self.local_port += 1
                     continue
                 else:
@@ -495,7 +483,7 @@ class LickVncLauncher(object):
         command = ['ssh', '-l', username, '-L', forwarding, '-N', '-T', server]
         command.append('-oStrictHostKeyChecking=no')
         command.append('-oKexAlgorithms=+diffie-hellman-group1-sha1')
-        command.append('-oCompression=yes')        
+        command.append('-oCompression=yes')
         if ssh_pkey is not None:
             command.append('-i')
             command.append(ssh_pkey)
@@ -511,7 +499,7 @@ class LickVncLauncher(object):
 
         if proc.poll() is not None:
             raise RuntimeError('subprocess failed to execute ssh')
-        
+
         checks = 50
         while checks > 0:
             result = self.is_local_port_in_use(local_port)
@@ -523,10 +511,10 @@ class LickVncLauncher(object):
 
         if checks == 0:
             raise RuntimeError('ssh tunnel failed to open after 5 seconds')
-        
+
         in_use = [address_and_port, session_name, proc]
         self.ports_in_use[local_port] = in_use
-        
+
         return local_port
 
 
@@ -539,7 +527,7 @@ class LickVncLauncher(object):
             return
         except subprocess.CalledProcessError:
             self.log.debug("ss is not found")
-            
+
         try:
             cmd1 = subprocess.check_output(['which','lsof'])
             self.use_lsof = True
@@ -561,7 +549,7 @@ class LickVncLauncher(object):
             self.log.debug("ps is not found")
 
         return
-        
+
     ##-------------------------------------------------------------------------
     ##-------------------------------------------------------------------------
     def is_local_port_in_use(self, port):
@@ -583,7 +571,7 @@ class LickVncLauncher(object):
         if lines:
             self.log.debug(f"Port {port} is in use.")
             return True
-        else: 
+        else:
             return False
 
 
@@ -597,13 +585,12 @@ class LickVncLauncher(object):
         vncargs        = self.config.get('vncargs', None)
 
         cmd = [vncviewercmd]
-        if vncargs:  
-            vncargs = vncargs.split()           
+        if vncargs:
+            vncargs = vncargs.split()
             cmd = cmd + vncargs
-        if self.args.viewonly:
-            cmd.append('-ViewOnly')
-        #todo: make this config on/off so it doesn't break things 
-        if geometry: 
+
+        #todo: make this config on/off so it doesn't break things
+        if geometry:
             cmd.append(f'-geometry={geometry}')
         if vncviewercmd == "open":
             cmd.append(f'{vncprefix}{vncserver}:{port:4d}')
@@ -636,12 +623,12 @@ class LickVncLauncher(object):
 
             if soundplayer is None:
                 soundplayer = self.guess_soundplay()
-            
+
             #Do we need ssh tunnel for this?
             if self.ssh_forward:
 
                 account  = self.ssh_account if self.ssh_key_valid else self.args.account
-                password = None if self.ssh_key_valid else self.vnc_password
+                password = None
                 sound_port = self.open_ssh_tunnel(self.vncserver, account,
                                                   password, self.ssh_pkey,
                                                   sound_port, None,
@@ -660,7 +647,9 @@ class LickVncLauncher(object):
             self.log.debug(trace)
 
 
-
+    ##-------------------------------------------------------------------------
+    ## Play a test sound to see if sound works
+    ##-------------------------------------------------------------------------
     def play_test_sound(self):
         if self.config.get('nosound', False) is True:
             self.log.warning('Sounds are not enabled on this install.  See config file.')
@@ -671,11 +660,15 @@ class LickVncLauncher(object):
         soundplayer = soundplay.full_path(soundplayer)
 
         command = [soundplayer, '-l']
-        
+
         self.log.info('Calling: ' + ' '.join (command))
         test_sound_STDOUT = subprocess.check_output(command)
         for line in test_sound_STDOUT.decode().split('\n'):
             self.log.debug(f'  {line}')
+
+    ##-------------------------------------------------------------------------
+    ## Guess which soundplay to use if not specified
+    ##-------------------------------------------------------------------------
 
     def guess_soundplay(self):
         try:
@@ -690,65 +683,6 @@ class LickVncLauncher(object):
         except:
             return None
 
-    ##-------------------------------------------------------------------------
-    ## Authenticate through the firewall - needs to be rewritten 
-    ##-------------------------------------------------------------------------
-    def authenticate(self, authpass):
-
-        #todo: shorten timeout for mistyped password
-
-        self.log.info(f'Authenticating through firewall as:')
-        self.log.info(f' {self.firewall_user}@{self.firewall_address}:{self.firewall_port}')
-
-        try:
-            with telnetlib.Telnet(self.firewall_address, int(self.firewall_port)) as tn:
-                tn.read_until(b"User: ", timeout=5)
-                tn.write(f'{self.firewall_user}\n'.encode('ascii'))
-                tn.read_until(b"password: ", timeout=5)
-                tn.write(f'{authpass}\n'.encode('ascii'))
-                tn.read_until(b"Enter your choice: ", timeout=5)
-                tn.write('1\n'.encode('ascii'))
-                result = tn.read_all().decode('ascii')
-                if re.search('User authorized for standard services', result):
-                    self.log.info('User authorized for standard services')
-                    return True
-                else:
-                    self.log.error(result)
-                    return False
-        except:
-            self.log.error('Unable to authenticate through firewall')
-            trace = traceback.format_exc()
-            self.log.debug(trace)
-            return False
-
-
-    ##-------------------------------------------------------------------------
-    ## Close Authentication
-    ##-------------------------------------------------------------------------
-    def close_authentication(self, authpass):
-
-        if not self.firewall_opened:
-            return False
-
-        self.log.info('Signing off of firewall authentication')
-        try:
-            with telnetlib.Telnet(self.firewall_address, int(self.firewall_port)) as tn:
-                tn.read_until(b"User: ", timeout=5)
-                tn.write(f'{self.firewall_user}\n'.encode('ascii'))
-                tn.read_until(b"password: ", timeout=5)
-                tn.write(f'{authpass}\n'.encode('ascii'))
-                tn.read_until(b"Enter your choice: ", timeout=5)
-                tn.write('2\n'.encode('ascii'))
-                result = tn.read_all().decode('ascii')
-                if re.search('User was signed off from all services', result):
-                    self.log.info('User was signed off from all services')
-                    return True
-                else:
-                    self.log.error(result)
-                    return False
-        except:
-            self.log.error('Unable to close firewall authentication!')
-            return False
 
 
     ##-------------------------------------------------------------------------
@@ -757,7 +691,7 @@ class LickVncLauncher(object):
     def determine_instrument(self, account):
         if account is None:
             return None, None
-        
+
         instruments = {'apf' : 'apf',
                            'shane' : 'kast',
                            'nickel' : 'nickel'}
@@ -769,15 +703,15 @@ class LickVncLauncher(object):
 
         if account.lower() in instruments.keys():
             self.instrument = instruments[account.lower()]
-            
-        return 
+
+        return
 
 
     ##-------------------------------------------------------------------------
     ## Utility function for opening ssh client, executing command and closing
     ##-------------------------------------------------------------------------
     def do_ssh_cmd(self, cmd, server, account):
-            
+
         output = None
         self.log.debug(f'Trying SSH connect to {server} as {account}:')
         command = ['ssh', server, '-l', account, '-T']
@@ -785,23 +719,23 @@ class LickVncLauncher(object):
         if self.ssh_pkey is not None:
             command.append('-i')
             command.append(self.ssh_pkey)
-            
+
         command.append('-oStrictHostKeyChecking=no')
         command.append('-oKexAlgorithms=+diffie-hellman-group1-sha1')
-        command.append('-oCompression=yes')        
+        command.append('-oCompression=yes')
         command.append(cmd)
         self.log.debug('ssh command: ' + ' '.join (command))
 
-        
+
         pipe = subprocess.PIPE
         null = subprocess.DEVNULL
-        stdout = subprocess.STDOUT        
+        stdout = subprocess.STDOUT
         stdin = null
 
         proc = subprocess.Popen(command, stdin=stdin, stdout=pipe, stderr=stdout)
         if proc.poll() is not None:
             raise RuntimeError('subprocess failed to execute ssh')
-        
+
         try:
             stdout,stderr = proc.communicate(timeout=6)
         except subprocess.TimeoutExpired:
@@ -822,7 +756,7 @@ class LickVncLauncher(object):
         lines = stdout.split('\n')
 
         output = []
-        
+
         for ln in lines:
             if 'Warning: ' in ln:
                 self.log.debug('Removed warning from command output:')
@@ -844,7 +778,7 @@ class LickVncLauncher(object):
         if self.change_mod() is False:
             self.log.error(" Cannot validate SSH key for undefined telescope")
             return
-        
+
         self.ssh_key_valid = False
         cmd = 'whoami'
         server =  self.servers_to_try[self.tel] + '.ucolick.org'
@@ -886,7 +820,7 @@ class LickVncLauncher(object):
             rv = True
         except:
             self.log.error(f"Cannot set {fullpath} to the correct mode, ssh may fail")
-            
+
         return rv
 
     ##-------------------------------------------------------------------------
@@ -925,7 +859,7 @@ class LickVncLauncher(object):
 
         if self.tel is None:
             return vncserver
-        
+
         server = self.servers_to_try[self.tel] + ".ucolick.org"
         cmd = f"vncstatus {self.instrument}"
 
@@ -936,7 +870,7 @@ class LickVncLauncher(object):
             trace = traceback.format_exc()
             self.log.debug(trace)
             data = None
-            
+
         # parse data
         if data and len(data) > 3:
             mtch = re.search("Usage",data)
@@ -965,7 +899,7 @@ class LickVncLauncher(object):
             trace = traceback.format_exc()
             self.log.debug(trace)
             data = ''
-        
+
         if data:
             lns = data.split("\n")
             for ln in lns:
@@ -977,9 +911,9 @@ class LickVncLauncher(object):
                         self.log.error(f'{instrument} not supported on host {vncserver}')
                         break
                     desktop = fields[1].strip()
-                    name = ''.join(desktop.split()[1:]) 
+                    name = ''.join(desktop.split()[1:])
                     s = VNCSession(display=display, desktop=desktop, user=account)
-                    sessions.append(s)            
+                    sessions.append(s)
         self.log.debug(f'  Got {len(sessions)} sessions')
         for s in sessions:
             self.log.debug(str(s))
@@ -996,7 +930,7 @@ class LickVncLauncher(object):
                 remote_connection, desktop, process = self.ports_in_use.pop(p, None)
             except KeyError:
                 return
-            
+
             self.log.info(f" Closing SSH tunnel for port {p:d}, {desktop:s} "
                      f"on {remote_connection:s}")
             process.kill()
@@ -1031,7 +965,7 @@ class LickVncLauncher(object):
         screen_width, screen_height = [int(x) for x in out.split()]
         self.log.debug(f"Screen size: {screen_width}x{screen_height}")
 
-        #get num rows and cols 
+        #get num rows and cols
         #todo: assumming 2x2 always for now; make smarter
         num_win = len(self.sessions_found)
         cols = 2
@@ -1222,7 +1156,7 @@ class LickVncLauncher(object):
     ## Upload log file to Lick
     ##-------------------------------------------------------------------------
     def upload_log(self):
-        
+
         account = self.ssh_account
 
         logfile_handlers = [lh for lh in self.log.handlers if
@@ -1268,7 +1202,7 @@ class LickVncLauncher(object):
             self.log.info(f'  Uploaded {logfile.name}')
             self.log.info(f'  to {destination}')
 
-        
+
     ##-------------------------------------------------------------------------
     ## Terminate all vnc processes
     ##-------------------------------------------------------------------------
@@ -1303,19 +1237,19 @@ class LickVncLauncher(object):
         if msg != None: self.log.info(msg)
 
         #terminate soundplayer
-        if self.sound: 
+        if self.sound:
             self.sound.terminate()
 
-        # Close down ssh tunnels and firewall authentication
+        # Close down ssh tunnels 
         if self.ssh_forward:
             self.close_ssh_threads()
-            self.close_authentication(self.firewall_pass)
+
 
         #close vnc sessions
         self.kill_vnc_processes()
 
         self.exit = True
-        self.log.info("EXITING APP\n")        
+        self.log.info("EXITING APP\n")
         sys.exit(1)
 
 
@@ -1332,7 +1266,7 @@ class LickVncLauncher(object):
         print(f"* Email {supportEmail}\n")
         #todo: call number, website?
 
-        #Log error if we have a log object (otherwise dump error to stdout) 
+        #Log error if we have a log object (otherwise dump error to stdout)
         #and call exit_app function
         msg = traceback.format_exc()
         if self.log:
@@ -1362,16 +1296,11 @@ def create_parser():
     ## add flags
     parser.add_argument("--authonly", dest="authonly",
         default=False, action="store_true",
-        help="Authenticate through firewall, but do not start VNC sessions.")
+        help="Authenticate only")
     parser.add_argument("--nosound", dest="nosound",
         default=False, action="store_true",
         help="Skip start of soundplay application.")
-    parser.add_argument("--viewonly", dest="viewonly",
-        default=False, action="store_true",
-        help="Open VNC sessions in View Only mode (only for TigerVnC viewer)")
-    parser.add_argument("--nosshkey", dest="nosshkey",
-        default=False, action="store_true",
-        help=argparse.SUPPRESS)
+
 
     ## add arguments
     parser.add_argument("account", type=str, nargs='?', default='nickel',
@@ -1413,14 +1342,14 @@ def create_logger():
         logFormat = logging.Formatter(' %(levelname)8s: %(message)s')
         logFormat.converter = time.gmtime
         logConsoleHandler.setFormatter(logFormat)
-        
+
         log.addHandler(logConsoleHandler)
 
     except Exception as error:
         print(str(error))
         print(f"ERROR: Unable to create logger at {logFile}")
         print("Make sure you have write access to this directory.\n")
-        log.info("EXITING APP\n")        
+        log.info("EXITING APP\n")
         sys.exit(1)
 
 
@@ -1430,12 +1359,10 @@ def create_logger():
 if __name__ == '__main__':
 
     #catch all exceptions so we can exit gracefully
-    try:        
+    try:
         lvl = LickVncLauncher()
         create_logger()
         lvl.log = logging.getLogger('KRO')
         lvl.start()
     except Exception as error:
         lvl.handle_fatal_error(error)
-
-
