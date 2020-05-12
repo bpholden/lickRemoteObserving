@@ -26,7 +26,7 @@ Before you can connect to Lick remotely, we need to provide you with the firewal
 - Email `sla@ucolick.org` for the VPN certificate with:
    - Name of the PI
    - Date of observing nights
-   - Telescope 
+   - Telescope
 
 Once we receive your request, we will respond with instructions on
 obtaining the VPN verification. Your observing team will be emailed a
@@ -37,18 +37,18 @@ certificate for that observing run.
 
 We have extensive instructions for
 [Nickel Remote Operations](http://mthamilton.ucolick.org/techdocs/remoteObs/nickel/intro/)
-and 
+and
 [Shane Remote Operations](http://mthamilton.ucolick.org/techdocs/remoteObs/shane/intro/)
 
 # Hardware Setup
 
 ## Displays
 
-The primary hardware requirement for running Lick VNCs is screen space. 
+The primary hardware requirement for running Lick VNCs is screen space.
 
 We recommend you use the largest monitors you available. If you have
 access to a large HDMI TV and the appropriate cables, that is also a
-solution though it maybe less readable. 
+solution though it maybe less readable.
 
 ## Computer Recommendations
 
@@ -70,11 +70,11 @@ The following hardware configuration has been tested:
   - Linux Mint 19.3
 
 
-  
+
 
 The ability to use more than one monitor can be helpful. The Shane and
 the Nickel are setup to have 6 virtual desktops, and at least 3 are
-required for observing. 
+required for observing.
 
 # Software Installation
 
@@ -95,6 +95,8 @@ The software has been tested for macOS.
 
 - Install Anaconda python3
     - Download and run the latest installer: https://www.anaconda.com/distribution/
+    - Or download from : https://docs.conda.io/en/latest/miniconda.html
+    - **Note** If you have Anaconda or miniconda for Python 2, make sure you install Anaconda or miniconda for Python 3 separately!
     - Add python3 to user path (example below for ~/.bashrc with typical python install path):
     ```
     export PATH=/usr/local/anaconda3-7/bin:$PATH
@@ -112,14 +114,14 @@ The software has been tested for macOS.
 		apt install tigervnc-viewer
 		apt install tigervnc-common
 		```
-        - **Important!** If you are using TigerVNC, in the $HOME/.vnc directory, create a file `default.tigervnc` with these two lines: 
+        - **Important!** If you are using TigerVNC, in the $HOME/.vnc directory, create a file `default.tigervnc` with these two lines:
         ```
         TigerVNC Configuration file Version 1.0
-        RemoteResize=0 
+        RemoteResize=0
         ```
         - **On Linux:** (optional) Install wmctrl (Used for auto-positioning VNC windows)
             ```
-            sudo yum install epel-release 
+            sudo yum install epel-release
             sudo yum install wmctrl
             ```
     - **For macOS**
@@ -127,7 +129,7 @@ The software has been tested for macOS.
           [VNC Viewer](https://www.realvnc.com/en/connect/download/viewer/)
           is recommended (note, this is the free software, you do not
           need VNC Viewer Plus).
-		  
+
         - **On macOS**: It is also possible to use the built in VNC
           viewer on macOS, but we have seen a few instances where the
           screen freezes and the client needs to be closed and
@@ -136,7 +138,7 @@ The software has been tested for macOS.
           "open". This may not work under Catalina.
 
 	- [TightVNC](https://tightvnc.com) will work on most hosts, as it uses Java. In my
-      (BPH) experience it is slower. 
+      (BPH) experience it is slower.
 
 - Install VPN client
   - **For macOS**, install [Tunnelblick](https://tunnelblick.net/) by
@@ -201,12 +203,12 @@ Obtain the tblk file for your schedule observing run.
     configurations list on the left. It will ask if you want this
     installed for everyone or only you, select "Me". The hit the
     connect button to start the VPN.
-	
+
   - **For Linux**: Install the certificate using the appropriate
 	software, such as the Linux NetworkManager. If you do this, you
 	must execute the following command to prevent all traffic (such as
 	Zoom or your browswer) go through the remote observing machine.
-	
+
 	``nmcli connection modify Nickel20200507 ipv4.never-default yes``
 
 - **Configure Local VNC Viewer Software:** This is where one sets
@@ -217,7 +219,7 @@ Obtain the tblk file for your schedule observing run.
   value.  Options which should be passed to the vncviewer application
   are set in the `vncargs` value (defaults should be good for Tiger
   VNC). This goes in the file ``` local_config.yaml```
-  
+
     - **Important:** IF and ONLY IF you are using TigerVNC, make sure you have configured your client **not** to resize the sessions (see the note above).
     - **On Linux:** (optional) Save VNC session password (not available on macOS):
         - NOTE: This is for the final password prompt for each VNC window.
@@ -237,15 +239,15 @@ Obtain the tblk file for your schedule observing run.
   soundplay versions, contact `holden@ucolick.org` for help configuring
   this value.  Also, if you local machine's path to the `aplay`
   executable is non-standard, specify that in the `aplay` value.
-  
-	  
+
+
     - If your system is not compatible, or if you do not want it to
       have sounds, add a line to your `local_config.yaml` file:
       `nosound: True,` to avoid starting sounds.  This is important
       for sites which are using multiple computers for each set of VNC
       sessions.  Choose one to handle sounds, and set the `nosound:
       True,` option for the other.
-	  
+
 
 # Test your connection to Lick
 
@@ -297,4 +299,3 @@ folder.  Log files are created based on the UTC date.
 
 If you need assistance, please email `holden@ucolick.org` and attach the
 most recent log file from the logs folder.
-
