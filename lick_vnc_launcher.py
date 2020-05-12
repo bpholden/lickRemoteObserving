@@ -27,7 +27,7 @@ import yaml
 
 import soundplay
 
-__version__ = '0.92'
+__version__ = '0.93'
 
 
 class VNCSession(object):
@@ -1240,7 +1240,7 @@ class LickVncLauncher(object):
         if self.sound:
             self.sound.terminate()
 
-        # Close down ssh tunnels 
+        # Close down ssh tunnels
         if self.ssh_forward:
             self.close_ssh_threads()
 
