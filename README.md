@@ -154,10 +154,7 @@ The software has been tested for macOS.
 
 ## Download and Install Lick VNC software
 
-(NOTE: Examples below assuming a user named 'observer' and installing to home directory)
-
-
-To retreive the software, you can download it or clone it using git.
+To retrieve the software, you can download it or clone it using git.
 
 - [Click here to download the software as a zipfile](https://github.com/bpholden/lickRemoteObserving/archive/master.zip)
 
@@ -207,7 +204,7 @@ Obtain the tblk file for your schedule observing run.
   - **For Linux**: Install the certificate using the appropriate
 	software, such as the Linux NetworkManager. If you do this, you
 	must execute the following command to prevent all traffic (such as
-	Zoom or your browswer) go through the remote observing machine.
+	Zoom or your browser) go through the remote observing machine.
 
 	``nmcli connection modify Nickel20200507 ipv4.never-default yes``
 
@@ -263,7 +260,7 @@ cd ~/lickRemoteObserving
 It should print out a report which indicates that all four
 tests passed. Make sure there are no test failures.
 
-If there are test failures, email your logfile to `holden@ucolick.org`.
+If there are test failures, email your log file to `holden@ucolick.org`.
 Verbose debug information is logged to the `lickRemoteObserving/logs/`
 folder.  Log files are created based on the UTC date.
 
