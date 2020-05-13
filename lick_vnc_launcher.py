@@ -640,7 +640,7 @@ class LickVncLauncher(object):
                 if not sound_port:
                     return
                 else:
-                    vncserver = 'localhost'
+                    sound_server = 'localhost'
 
             self.sound = soundplay.soundplay()
             self.sound.connect(self.instrument, sound_server, sound_port,
