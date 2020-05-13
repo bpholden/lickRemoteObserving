@@ -78,6 +78,9 @@ class LickVncLauncher(object):
         self.servers_to_try = {'shane' : 'shimmy',
                                    'nickel' : 'noir',
                                    'apf' : 'frankfurt.apf'}
+        self.soundservers = {'kast' : 'shred',
+                                   'nickel' : 'noir',
+                                   'apf' : 'frankfurt.apf'}
 
         self.geometry = list()
 
@@ -616,10 +619,11 @@ class LickVncLauncher(object):
                 self.sound.terminate()
 
             #config vars
-            sound_port  = 9798
-            aplay       = self.config.get('aplay', None)
-            soundplayer = self.config.get('soundplayer', None)
-            vncserver   = self.vncserver
+            sound_port   = 9798
+            aplay        = self.config.get('aplay', None)
+            soundplayer  = self.config.get('soundplayer', None)
+            sound_server = self.soundservers[self.instrument]
+            sound_server = sound_server + ".ucolick.org"
 
             if soundplayer is None:
                 soundplayer = self.guess_soundplay()
@@ -629,7 +633,7 @@ class LickVncLauncher(object):
 
                 account  = self.ssh_account if self.ssh_key_valid else self.args.account
                 password = None
-                sound_port = self.open_ssh_tunnel(self.vncserver, account,
+                sound_port = self.open_ssh_tunnel(sound_server, account,
                                                   password, self.ssh_pkey,
                                                   sound_port, None,
                                                       session_name='soundplay')
@@ -639,7 +643,7 @@ class LickVncLauncher(object):
                     vncserver = 'localhost'
 
             self.sound = soundplay.soundplay()
-            self.sound.connect(self.instrument, vncserver, sound_port,
+            self.sound.connect(self.instrument, sound_server, sound_port,
                                aplay=aplay, player=soundplayer)
         except Exception:
             self.log.error('Unable to start soundplay.  See log for details.')
