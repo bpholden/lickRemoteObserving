@@ -12,7 +12,7 @@ log = logging.getLogger('KRO')
 class soundplay(object):
 
     def __init__(self):
-        
+
         #class vars
         self.proc = None
 
@@ -27,7 +27,10 @@ class soundplay(object):
             #massage inputs
             instrument = instrument.lower()
             port = str(port)
-            if server == None: server = self.getVncServer(instrument)
+            if server == None:
+                server = self.getSoundServer(instrument)
+            if server == None:
+                return False
             serverport = f'{server}:{port}'
             if aplay  == None: aplay  = 'afplay -v %v %s'
             if player == None: player = 'soundplay'
@@ -69,12 +72,19 @@ class soundplay(object):
         return lines
 
 
-    def getVncServer(self, instrument):
+    def getSoundServer(self, instrument):
         '''
         #todo: move this common function to shared module.  It can look for ssh key.  If not found, then it can prompt for password.
         '''
-        raise Exception("Not implemented yet. Must provide server name explicitly.")
 
+        soundservers = {'kast' : 'shred',
+                        'nickel' : 'noir',
+                        'apf' : 'frankfurt.apf'}
+
+        if instrument in soundservers.keys():
+            return soundservers[instrument]
+        else:
+            return None
 
     def terminate(self):
         if self.proc:
@@ -98,7 +108,7 @@ def create_logger():
         logFormat = logging.Formatter(' %(levelname)8s: %(message)s')
         logFormat.converter = time.gmtime
         logConsoleHandler.setFormatter(logFormat)
-        
+
         log.addHandler(logConsoleHandler)
 
     except Exception as error:
