@@ -635,8 +635,9 @@ class LickVncLauncher(object):
                 password = None
                 sound_port = self.open_ssh_tunnel(sound_server, account,
                                                   password, self.ssh_pkey,
-                                                  sound_port, None,
-                                                      session_name='soundplay')
+                                                  sound_port,
+                                                  local_port=sound_port,
+                                                    session_name='soundplay')
                 if not sound_port:
                     return
                 else:
