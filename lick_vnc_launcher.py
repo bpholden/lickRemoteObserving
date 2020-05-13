@@ -111,6 +111,8 @@ class LickVncLauncher(object):
         ##---------------------------------------------------------------------
         self.log.debug("\n***** PROGRAM STARTED *****\nCommand: "+' '.join(sys.argv))
         self.get_args()
+        if not self.args.account:
+            self.exit_app('A valid account (shane or nickel) must be specified.')
         self.get_config()
         self.check_config()
 
@@ -695,7 +697,7 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     def determine_instrument(self, account):
         if account is None:
-            return None, None
+            return
 
         instruments = {'apf' : 'apf',
                            'shane' : 'kast',
@@ -1308,7 +1310,7 @@ def create_parser():
 
 
     ## add arguments
-    parser.add_argument("account", type=str, nargs='?', default='nickel',
+    parser.add_argument("account", type=str, nargs='?', default='',
                         help="The user account.")
 
     ## add options
