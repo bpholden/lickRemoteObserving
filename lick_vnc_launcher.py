@@ -27,7 +27,7 @@ import yaml
 
 import soundplay
 
-__version__ = '0.94'
+__version__ = '0.95'
 
 
 class VNCSession(object):
