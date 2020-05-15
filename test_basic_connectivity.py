@@ -23,11 +23,29 @@ def test_vncviewer():
     vncviewer = lvl.config.get('vncviewer', None)
 
     if vncviewer in [None, '', 'vncviewer']:
-        # the line below will throw and error if which fails
+        # the line below will throw an error if which fails
         vncviewer = subprocess.check_output(['which', 'vncviewer']).strip()
     if vncviewer != 'open':
         assert os.path.exists(vncviewer)
-    
+
+def test_vncviewer_exec():
+    lvl.log.info('Testing config file: vncviewer')
+
+    vncviewer = lvl.config.get('vncviewer', None)
+    vncprefix = lvl.config.get('vncprefix', '')
+    vncargs   = lvl.config.get('vncargs', None)
+
+    cmd = [vncviewer]
+    if vncargs:
+        vncargs = vncargs.split()
+        cmd = cmd + vncargs
+
+    if vncviewer != 'open':
+        rv = subprocess.check_output(cmd)
+        assert rv is b''
+    else:
+        assert vncargs is None
+
 def test_port_lookup():
     lvl.log.info('Testing port lookup')
 
