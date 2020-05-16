@@ -49,18 +49,24 @@ class LickVncLauncher(object):
 
     def __init__(self):
         #init vars we need to shutdown app properly
-        self.config = None
-        self.sound = None
+        self.config  = None
+        self.sound   = None
         self.firewall_pass = None
-#         self.ssh_threads = None
-        self.ports_in_use = {}
-        self.vnc_threads  = []
+
+        self.ports_in_use  = {}
+        self.vnc_threads   = []
         self.vnc_processes = []
+
+        self.vncviewer = None
+        self.vncargs   = None
+        self.vncprefix = None
+
         self.do_authenticate = False
-        self.ssh_forward = True
-        self.firewall_opened = False
+        self.ssh_forward     = True
+
         self.instrument = None
-        self.tel = None
+        self.tel        = None
+
         self.vncserver = None
         self.ssh_key_valid = False
         self.exit = False
@@ -257,7 +263,7 @@ class LickVncLauncher(object):
 
         #If vncviewer is not defined, then prompt them to open manually and
         # return now
-        if self.config['vncviewer'] in [None, 'None', 'none']:
+        if self.vncviewer in [None, 'None', 'none']:
             self.log.info(f"\nNo VNC viewer application specified")
             self.log.info(f"Open your VNC viewer manually\n")
             return
@@ -355,10 +361,16 @@ class LickVncLauncher(object):
         #check for vncviewer
         #NOTE: Ok if not specified, we will tell them to open vncviewer manually
         #todo: check if valid cmd path?
-        self.vncviewerCmd = self.config.get('vncviewer', None)
-        if not self.vncviewerCmd:
+        self.vncviewer = self.config.get('vncviewer', None)
+        self.vncargs = self.config.get('vncargs', '')
+        self.vncprefix = self.config.get('vncprefix', None)
+        if not self.vncviewer:
             self.log.warning("Config parameter 'vncviewer' undefined.")
-            self.log.warning("You will need to open your vnc viewer manually.\n")
+            self.log.warning("You may need to open your vnc viewer manually.\n")
+            rv = self.guess_vncviewer()
+            if rv is None:
+                self.log.warning("No good guess!\n")
+
 
         #checks local port start config
         self.local_port = self.LOCAL_PORT_START
@@ -579,15 +591,36 @@ class LickVncLauncher(object):
         else:
             return False
 
+    ##-------------------------------------------------------------------------
+    ## Guess which vncviewerCmd to use if not specified
+    ##-------------------------------------------------------------------------
+
+    def guess_vncviewer(self):
+        try:
+            sysinfo = os.uname()
+            if sysinfo.sysname == 'Darwin':
+                self.vncviewer = 'open'
+                self.vncprefix = 'vnc://'
+                self.vncargs = None
+                # this should work
+                return True
+            elif sysinfo.sysname == 'Linux':
+                # we are out on a limb Here
+                self.vncviewer = 'vncviewer'
+                self.vncprefix = ''
+                self.vncargs = None
+                return False
+        except:
+            return False
 
     ##-------------------------------------------------------------------------
     ## Launch vncviewer
     ##-------------------------------------------------------------------------
     def launch_vncviewer(self, vncserver, port, geometry=None):
 
-        vncviewercmd   = self.config.get('vncviewer', 'vncviewer')
-        vncprefix      = self.config.get('vncprefix', '')
-        vncargs        = self.config.get('vncargs', None)
+        vncviewercmd   = self.vncviewer
+        vncprefix      = self.vncprefix
+        vncargs        = self.vncargs
 
         cmd = [vncviewercmd]
         if vncargs:
