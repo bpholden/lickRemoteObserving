@@ -21,10 +21,10 @@
   # if you  have a password file
   # vncargs: '-shared -truecolor -quality 4 -x11cursor  -encodings ZRLE -passwd /home/observer/.vnc/passwd',
 
-  ## For ssh tunnelling, a starting local port number is used and incremented 
+  ## For ssh tunnelling, a starting local port number is used and incremented
   ## for each port needed.  Default is 5901.
   # local_port_start: 5901,
-  
+
 
   ## Soundplay configs
   ## Name of soundplayer executable to use (see ./soundplayer/ folder)
@@ -32,7 +32,7 @@
   # soundplayer: 'soundplay-107050-8.6.3-macosx10.5-ix86+x86_64',
   ## Path to "aplay" command-line sound player.  Default assumed in path as 'aplay'.
   # aplay: '/usr/bin/play -q -v %v %s ',
-  # aplay: '/usr/bin/afplay -v %v $s '
+  # aplay: '/usr/bin/afplay -v %v $s ',
   ## Window size and positioning configs. Overrides calculated size and/or positioning.
   window_size: [1280, 800],
   window_positions: [[0, 0], [1280, 0], [0, 1280], [1280, 0]],
