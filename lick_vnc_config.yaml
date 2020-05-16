@@ -1,39 +1,38 @@
-{
-  ## This is the command to invoke on the local machine to launch a VNC client
-  ## Command will be formatted as [vncviewer] [vncargs] [address]:[port]
-  ## Example: Default setup for TigerVnC's vncviewer wither preferred arg options, with both Linux and Mac versions available
-  # vncviewer: 'vncviewer',
-  # vncviewer: '/Applications/TigerVNC Viewer 1.10.1.app/Contents/MacOS/TigerVNC Viewer',
-  #  vncprefix: '',
-  #  vncargs: '-Shared -FullColor -PreferredEncoding=ZRLE -AutoSelect=0',
-  ## Example: use VNCviewer for RealVNC vncviewer on macOS:
-  # vncviewer: '/Applications/VNC Viewer.app/Contents/MacOS/vncviewer',
-  # vncargs: '-Shared',
-  ## Example: use built in Screen Sharing app in macOS:
-  # vncviewer: 'open',
-  # vncprefix: 'vnc://',
-  ## Example using vncpasswd file:
-  # vncargs: '-passwd=/home/observer/.vnc/passwd',
+## This is the command to invoke on the local machine to launch a VNC client
+## Command will be formatted as [vncviewer] [vncargs] [address]:[port]
 
-  # Example for TightVNC - which seems much slower than VNCviewer
-  # vncviewer: 'vncviewer',
-  # vncargs: '-shared -truecolor -quality 4 -x11cursor -encodings ZRLE',
-  # if you  have a password file
-  # vncargs: '-shared -truecolor -quality 4 -x11cursor  -encodings ZRLE -passwd /home/observer/.vnc/passwd',
+## Example: Default setup for TigerVnC's vncviewer wither preferred arg options, with both Linux and Mac versions available
+# vncviewer: 'vncviewer'
+# vncviewer: '/Applications/TigerVNC Viewer 1.10.1.app/Contents/MacOS/TigerVNC Viewer'
+# vncargs: '-Shared -FullColor -PreferredEncoding=ZRLE -AutoSelect=0'
 
-  ## For ssh tunnelling, a starting local port number is used and incremented
-  ## for each port needed.  Default is 5901.
-  # local_port_start: 5901,
+## Example: use VNCviewer for RealVNC vncviewer on macOS:
+# vncviewer: '/Applications/VNC Viewer.app/Contents/MacOS/vncviewer'
+# vncargs: '-Shared'
+
+## Example: use built in Screen Sharing app in macOS:
+# vncviewer: 'open'
+# vncprefix: 'vnc://'
+
+# Example for TightVNC - which seems much slower than VNCviewer
+# vncviewer: 'vncviewer'
+# vncargs: '-shared -truecolor -quality 4 -x11cursor -encodings ZRLE'
+# if you  have a password file
+# vncargs: '-shared -truecolor -quality 4 -x11cursor  -encodings ZRLE -passwd /home/observer/.vnc/passwd'
+
+## For ssh tunnelling, a starting local port number is used and incremented
+## for each port needed.  Default is 5901.
+# local_port_start: 5901
 
 
-  ## Soundplay configs
-  ## Name of soundplayer executable to use (see ./soundplayer/ folder)
-  # soundplayer: 'soundplay-8.5.1-linux-x86_64',
-  # soundplayer: 'soundplay-107050-8.6.3-macosx10.5-ix86+x86_64',
-  ## Path to "aplay" command-line sound player.  Default assumed in path as 'aplay'.
-  # aplay: '/usr/bin/play -q -v %v %s ',
-  # aplay: '/usr/bin/afplay -v %v %s ',
-  ## Window size and positioning configs. Overrides calculated size and/or positioning.
-  window_size: [1280, 800],
-  window_positions: [[0, 0], [1280, 0], [0, 1280], [1280, 0]],
-}
+## Soundplay configs
+## Name of soundplayer executable to use (see ./soundplayer/ folder)
+# soundplayer: 'soundplay-8.5.1-linux-x86_64'
+# soundplayer: 'soundplay-107050-8.6.3-macosx10.5-ix86+x86_64'
+## Path to "aplay" command-line sound player.  Default assumed in path as 'aplay'.
+# aplay: '/usr/bin/play -q -v %v %s '
+# aplay: '/usr/bin/afplay -v %v %s '
+
+## Window size and positioning configs. Overrides calculated size and/or positioning.
+window_size: [1280, 800]
+window_positions: [[0, 0], [1280, 0], [0, 1280], [1280, 0]]
