@@ -363,7 +363,7 @@ class LickVncLauncher(object):
         #todo: check if valid cmd path?
         self.vncviewer = self.config.get('vncviewer', None)
         self.vncargs = self.config.get('vncargs', '')
-        self.vncprefix = self.config.get('vncprefix', None)
+        self.vncprefix = self.config.get('vncprefix', '')
         if not self.vncviewer:
             self.log.warning("Config parameter 'vncviewer' undefined.")
             self.log.warning("You may need to open your vnc viewer manually.\n")
