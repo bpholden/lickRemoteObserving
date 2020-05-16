@@ -32,7 +32,7 @@
   # soundplayer: 'soundplay-107050-8.6.3-macosx10.5-ix86+x86_64',
   ## Path to "aplay" command-line sound player.  Default assumed in path as 'aplay'.
   # aplay: '/usr/bin/play -q -v %v %s ',
-  # aplay: '/usr/bin/afplay -v %v $s ',
+  # aplay: '/usr/bin/afplay -v %v %s ',
   ## Window size and positioning configs. Overrides calculated size and/or positioning.
   window_size: [1280, 800],
   window_positions: [[0, 0], [1280, 0], [0, 1280], [1280, 0]],
