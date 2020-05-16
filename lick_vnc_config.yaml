@@ -29,7 +29,7 @@
 ## Name of soundplayer executable to use (see ./soundplayer/ folder)
 # soundplayer: 'soundplay-8.5.1-linux-x86_64'
 # soundplayer: 'soundplay-107050-8.6.3-macosx10.5-ix86+x86_64'
-## Path to "aplay" command-line sound player.
+## "aplay" is the path to command-line sound player.
 # Default for soundplay for macosx is afplay
 # Default for soundplay under Linux is play
 # Change the value of the aplay configuration variable to update this
