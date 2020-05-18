@@ -8,29 +8,33 @@ or
 ```./start_lick_viewers nickel```
 to enable the connection.
 
-## Outline
+# Outline
 
-- Email for certificate (see below)
+- Email who will observe and request the certificate
+- Install the software if you have not
+- Configure the software for your computer
 - Run Open VPN or Tunnelblick using certificate
 - Open a terminal
-- Go to directory with software
+- Test software and conncetion
+- Go to directory with software installed
 - ```./start_lick_viewers nickel``` or ```./start_lick_viewers shane```
 - Type the SSH password for each VNC window
 
-## Notify Lick of your intent to connect remotely
-Before you can connect to Lick remotely, we need to provide you with the firewall info and passwords.  As well, we need info about your remote observing station.
+# Notify Lick of your intent to connect remotely
+Before you can connect to Lick remotely, we need to provide you with the VPN info and passwords for the VNC.  As well, we need info about your remote observing station.
 
-- Email `sa@ucolick.org` with the following info about your remote site:
-    - Phone #
+- Email `sa@ucolick.org` with the following info about your remote site 48 hours in advance:
+    - Who will be observing
+    - Phone # in case a network failure
 
 - Email `sla@ucolick.org` for the VPN certificate with:
    - Name of the PI
    - Date of observing nights
-   - Telescope
+   - Telescope being used
 
 Once we receive your request, we will respond with instructions on
 obtaining the VPN verification. Your observing team will be emailed a
-certificate for that observing run.
+certificate(s) for that observing run.
 
 
 # Familiarize Yourself with Remote Operations
@@ -82,16 +86,16 @@ required for observing.
 
 Here is a list of what is required
 
-- Anaconda3 or miniconda3
+- Python 3 from Anaconda3 or miniconda3
 - OpenVPN or Tunnelblick
 - A VNC Client
-- A terminal client
+- A terminal client (xterm or iTerm or the Terminal)
 
 ## Install Software Dependencies
 
 NOTE: Examples below assuming sudo/root installation for all users and were originally written for linux (CentOS).  Modify as appropriate for your local OS.
 
-The software has been tested for macOS.
+The software has been tested for macOS and some Linux variants.
 
 - Install Anaconda python3
     - Download and run the latest installer: https://www.anaconda.com/distribution/
@@ -140,8 +144,12 @@ The software has been tested for macOS.
 	- [TightVNC](https://tightvnc.com) will work on most hosts, as it uses Java. In my
       (BPH) experience it is slower.
 
+  - **Note for Windows Subsystem for Linux** you will also need:
+      [X windows for Windows](https://sourceforge.net/projects/xming/)
+
+
 - Install VPN client
-  - **For macOS**, install [Tunnelblick](https://tunnelblick.net/) by
+  - **For macOS** [Tunnelblick](https://tunnelblick.net/) by
     downloading latest stable release
   - **For Linux** on Ubuntu flavors
 	  ```
@@ -149,10 +157,13 @@ The software has been tested for macOS.
 		apt install network-manager-openvpn
 		apt install network-manager-openvpn-gnome
 	```
-  - **From source (or Windows installs)**
+- **From source**
 	[OpenVPN](https://openvpn.net/community-downloads/)
 
-## Download and Install Lick VNC software
+- **Windows Subsystem for Linux**
+  [OpenVPN](https://openvpn.net/client-connect-vpn-for-windows/)
+
+## Download and Install Lick Remote Observing software
 
 To retrieve the software, you can download it or clone it using git.
 
@@ -184,7 +195,7 @@ Once you have downloaded the software:
     export PATH=/home/observer/lickRemoteObserving:$PATH
     ```
 
-## Configure Lick VNC software
+## Configure Lick Remote Observing software
 
 Edit the configuration file  ```local_config.yaml```.  Read the comments in the
 configuration file itself as they can guide you.  You may need to
@@ -206,7 +217,7 @@ Obtain the tblk file for your schedule observing run.
 	must execute the following command to prevent all traffic (such as
 	Zoom or your browser) go through the remote observing machine.
 
-	``nmcli connection modify Nickel20200507 ipv4.never-default yes``
+	```nmcli connection modify Nickel20200507 ipv4.never-default yes```
 
 - **Configure Local VNC Viewer Software:** This is where one sets
   `vncviewer` with the path and executable for the local VNC viewer
@@ -225,7 +236,7 @@ Obtain the tblk file for your schedule observing run.
             ```
             vncargs: '-passwd=/home/observer/.vnc/passwd',
             ```
-		- **On MacOS** (optional) If you use the MacOS builtin VNC
+	- **On MacOS** (optional) If you use the MacOS builtin VNC
           viewer, you can optionally save the password by clicking the
           box that says "Remember Password"
 
@@ -238,12 +249,8 @@ Obtain the tblk file for your schedule observing run.
   executable is non-standard, specify that in the `aplay` value.
 
 
-    - If your system is not compatible, or if you do not want it to
-      have sounds, add a line to your `local_config.yaml` file:
-      `nosound: True,` to avoid starting sounds.  This is important
-      for sites which are using multiple computers for each set of VNC
-      sessions.  Choose one to handle sounds, and set the `nosound:
-      True,` option for the other.
+-   If your system is not compatible with soundplay, or if you do not want it to have sounds, add a line to your `local_config.yaml` file: `nosound: True,` to avoid starting sounds.  This is important
+for sites which are using multiple computers for each set of VNC   sessions.  Choose one to handle sounds, and set the `nosound:  True,` option for the other.
 
 
 # Test your connection to Lick
@@ -291,8 +298,6 @@ To get help on available command line options:
 
 # Troubleshooting and common problems
 
-Verbose debug information is logged to the `lickRemoteObserving/logs/`
-folder.  Log files are created based on the UTC date.
+Verbose debug information is logged to the `lickRemoteObserving/logs/` folder.  Log files are created based on the UTC date.
 
-If you need assistance, please email `holden@ucolick.org` and attach the
-most recent log file from the logs folder.
+If you need assistance, please email `holden@ucolick.org` and attach the most recent log file from the logs folder.
