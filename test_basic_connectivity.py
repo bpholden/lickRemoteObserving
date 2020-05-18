@@ -6,9 +6,19 @@ from lick_vnc_launcher import create_logger, LickVncLauncher, create_parser
 import pytest
 
 # create lvl object
-create_logger()
-lvl = LickVncLauncher()
-lvl.log = logging.getLogger('KRO')
+try:
+    create_logger()
+except:
+    print("Cannot create logger!")
+try:
+    lvl = LickVncLauncher()
+except:
+    print("Cannot find LickVncLauncher library!")
+try:
+    lvl.log = logging.getLogger('KRO')
+except:
+    print("Cannot connect to logger!")
+
 lvl.log_system_info()
 lvl.args = create_parser()
 lvl.get_config()
@@ -20,32 +30,20 @@ servers_and_results = [('shimmy', 'shimmy.ucolick.org'),
 
 def test_vncviewer():
     lvl.log.info('Testing config file: vncviewer')
-    vncviewer = lvl.config.get('vncviewer', None)
+    vncviewer = lvl.vncviewer
 
     if vncviewer in [None, '', 'vncviewer']:
         # the line below will throw an error if which fails
-        vncviewer = subprocess.check_output(['which', 'vncviewer']).strip()
+        lvl.guess_vncviewer()
+        try:
+            vncviewer = subprocess.check_output(['which', 'vncviewer']).strip()
+        except:
+            lvl.log.error('Cannot find vncviewer and it is not defined in the config file.')
+            return
     if vncviewer != 'open':
         assert os.path.exists(vncviewer)
         lvl.log.info(f' Passed')
 
-def test_vncviewer_exec():
-    lvl.log.info('Testing config file: vncviewer execution')
-
-    vncviewer = lvl.config.get('vncviewer', None)
-    vncprefix = lvl.config.get('vncprefix', '')
-    vncargs   = lvl.config.get('vncargs', None)
-
-    cmd = [vncviewer]
-    if vncargs:
-        vncargs = vncargs.split()
-        cmd = cmd + vncargs
-
-    if vncviewer != 'open':
-        rv = subprocess.check_output(cmd)
-        assert rv is b''
-    else:
-        assert vncargs is None
 
 def test_port_lookup():
     lvl.log.info('Testing port lookup')
@@ -79,7 +77,6 @@ def test_connection_to_servers(server, result):
 
 if __name__ == "__main__":
     test_vncviewer()
-    test_vncviewer_exec()
     test_port_lookup()
     test_ssh_key()
     for k in servers_and_results:
