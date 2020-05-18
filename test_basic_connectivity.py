@@ -27,9 +27,10 @@ def test_vncviewer():
         vncviewer = subprocess.check_output(['which', 'vncviewer']).strip()
     if vncviewer != 'open':
         assert os.path.exists(vncviewer)
+        lvl.log.info(f' Passed')
 
 def test_vncviewer_exec():
-    lvl.log.info('Testing config file: vncviewer')
+    lvl.log.info('Testing config file: vncviewer execution')
 
     vncviewer = lvl.config.get('vncviewer', None)
     vncprefix = lvl.config.get('vncprefix', '')
@@ -52,17 +53,17 @@ def test_port_lookup():
     lvl.how_check_local_port()
     one_works = lvl.use_ps or lvl.use_ss or lvl.use_lsof
     assert one_works
-
+    lvl.log.info(f' Passed')
     assert lvl.is_local_port_in_use(lvl.LOCAL_PORT_START) is False
+    lvl.log.info(f' Passed')
 
 def test_ssh_key():
     lvl.log.info('Testing config file: ssh_pkey')
     lvl.tel = 'shane'
     lvl.validate_ssh_key()
     assert lvl.ssh_key_valid is True
+    lvl.log.info(f' Passed')
 
-
-@pytest.mark.parametrize("server,result", servers_and_results)
 def test_connection_to_servers(server, result):
 
     vnc_account = lvl.ssh_account
@@ -75,3 +76,11 @@ def test_connection_to_servers(server, result):
     assert output != ''
     assert output.strip() in [server, result]
     lvl.log.info(f' Passed')
+
+if __name__ == "__main__":
+    test_vncviewer()
+    test_vncviewer_exec()
+    test_port_lookup()
+    test_ssh_key()
+    for k in servers_and_results:
+        test_connection_to_servers(k[0],k[1])
