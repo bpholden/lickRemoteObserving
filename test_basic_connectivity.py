@@ -3,7 +3,6 @@ import subprocess
 import logging
 import getpass
 from lick_vnc_launcher import create_logger, LickVncLauncher, create_parser
-import pytest
 
 # create lvl object
 try:
