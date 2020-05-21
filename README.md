@@ -3,16 +3,22 @@
 These scripts are to be used by remote sites to connect to Lick for remote observing.
 
 When everything is properly configured, all you need to do is run
-```./start_lick_viewers shane```
+```
+conda activate KRO
+cd ~/lickRemoteObserving
+./start_lick_viewers shane
+```
 or
-```./start_lick_viewers nickel```
+```
+./start_lick_viewers nickel
+```
 to enable the connection.
 
 # Outline
 
 - Email who will observe and request the certificate
 - Install the software if you have not
-- Configure the software for your computer
+- Configure the software for your computer **can reuse Keck version**
 - Run Open VPN or Tunnelblick using certificate
 - Open a terminal
 - Test software and conncetion
@@ -86,10 +92,10 @@ required for observing.
 
 Here is a list of what is required
 
-- Python 3 from Anaconda3 or miniconda3
 - OpenVPN or Tunnelblick
 - A VNC Client
 - A terminal client (xterm or iTerm or the Terminal)
+- Python 3 from Anaconda3 or miniconda3
 
 ## Install Software Dependencies
 
@@ -97,14 +103,6 @@ NOTE: Examples below assuming sudo/root installation for all users and were orig
 
 The software has been tested for macOS and some Linux variants.
 
-- Install Anaconda python3
-    - Download and run the latest installer: https://www.anaconda.com/distribution/
-    - Or download from : https://docs.conda.io/en/latest/miniconda.html
-    - **Note** If you have Anaconda or miniconda for Python 2, make sure you install Anaconda or miniconda for Python 3 separately!
-    - Add python3 to user path (example below for ~/.bashrc with typical python install path):
-    ```
-    export PATH=/usr/local/anaconda3-7/bin:$PATH
-    ```
 - Install VNC viewer client
     - **For Linux**
         - **On Linux:** TigerVNC is recommended as the VNC client.
@@ -152,16 +150,31 @@ The software has been tested for macOS and some Linux variants.
   - **For macOS** [Tunnelblick](https://tunnelblick.net/) by
     downloading latest stable release
   - **For Linux** on Ubuntu flavors
-	  ```
-		apt install openvpn
-		apt install network-manager-openvpn
-		apt install network-manager-openvpn-gnome
-	```
+```
+apt install openvpn
+apt install network-manager-openvpn
+apt install network-manager-openvpn-gnome
+```
 - **From source**
 	[OpenVPN](https://openvpn.net/community-downloads/)
 
 - **Windows Subsystem for Linux**
   [OpenVPN](https://openvpn.net/client-connect-vpn-for-windows/)
+
+
+  - Install miniconda/Anaconda python3
+      - Download from : https://docs.conda.io/en/latest/miniconda.html
+      - Or download and run the latest installer: https://www.anaconda.com/distribution/
+      - **Note** If you have Anaconda or miniconda for Python 2, make sure you install Anaconda or miniconda for Python 3 separately!
+      - Add python3 to user path (example below for ~/.bashrc with typical python install path):
+       - macOS
+```
+export PATH=/Users/MyNAME/miniconda3/bin:$PATH
+```
+       - Linux
+```
+export PATH=/home/MyNAME/miniconda3 bin:$PATH
+```
 
 ## Download and Install Lick Remote Observing software
 
@@ -171,35 +184,40 @@ To retrieve the software, you can download it or clone it using git.
 
 
 - To clone this project from github:
-    ```
-    cd
-    git clone https://github.com/bpholden/lickRemoteObserving
-    cd ~/lickRemoteObserving
-    ```
+```
+cd ~
+git clone https://github.com/bpholden/lickRemoteObserving
+cd ~/lickRemoteObserving
+```
 
 Once you have downloaded the software:
 
-- Create configuration file: copy `lick_vnc_config.yaml` to `local_config.yaml`.
-    ```
-    cp lick_vnc_config.yaml local_config.yaml
-    ```
 
 - Create a KRO [conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html) using the provided environment.yaml file:
-    ```
-    cd ~/lickRemoteObserving
-    conda env create -f environment.yaml
-    ```
+```
+cd ~/lickRemoteObserving
+conda env create -f environment.yaml
+```
+
+- Create configuration file: copy `lick_vnc_config.yaml` to `local_config.yaml`.
+```
+cp lick_vnc_config.yaml local_config.yaml
+````
 
 - (optional) Add VNC start script to path:
-    ```
-    export PATH=/home/observer/lickRemoteObserving:$PATH
-    ```
+```
+export PATH=/home/observer/lickRemoteObserving:$PATH
+```
 
 ## Configure Lick Remote Observing software
 
 Edit the configuration file  ```local_config.yaml```.  Read the comments in the
 configuration file itself as they can guide you.  You may need to
 uncomment (remove the leading `#`) from lines you want to customize.
+**Note each line must not have a space **
+```
+vncviewer : 'vncviewer'
+```
 
 - **Configure OpenVPN:**
 Obtain the tblk file for your schedule observing run.
@@ -297,6 +315,9 @@ To get help on available command line options:
 
 
 # Troubleshooting and common problems
+
+- Older version of Anaconda or miniconda can cause a problem.
+- Make sure that there are no spaces at the start of lines in the local_config.yaml file.
 
 Verbose debug information is logged to the `lickRemoteObserving/logs/` folder.  Log files are created based on the UTC date.
 
