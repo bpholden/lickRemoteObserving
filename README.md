@@ -24,7 +24,7 @@ to enable the connection.
 - Test software and conncetion
 - Go to directory with software installed
 - ```./start_lick_viewers nickel``` or ```./start_lick_viewers shane```
-- Type the SSH password for each VNC window
+- Type the VNC password for each VNC window
 
 # Notify Lick of your intent to connect remotely
 Before you can connect to Lick remotely, we need to provide you with the VPN info and passwords for the VNC.  As well, we need info about your remote observing station.
@@ -167,11 +167,17 @@ apt install network-manager-openvpn-gnome
       - Or download and run the latest installer: https://www.anaconda.com/distribution/
       - **Note** If you have Anaconda or miniconda for Python 2, make sure you install Anaconda or miniconda for Python 3 separately!
       - Add python3 to user path (example below for ~/.bashrc with typical python install path):
-       - macOS
+
+      The first is for the macOS and the second is an example for Linux.
+
+
 ```
 export PATH=/Users/MyNAME/miniconda3/bin:$PATH
 ```
-       - Linux
+
+
+
+
 ```
 export PATH=/home/MyNAME/miniconda3 bin:$PATH
 ```
