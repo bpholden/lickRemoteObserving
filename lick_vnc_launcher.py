@@ -716,10 +716,8 @@ class LickVncLauncher(object):
             if sysinfo.sysname == 'Darwin':
                 return 'soundplay-107050-8.6.3-macosx10.5-ix86+x86_64'
             elif sysinfo.sysname == 'Linux':
-                if 'x86_64' in sysinfo.release:
-                    return 'soundplay-107098-8.6.3-linux-x86_64'
-                else:
-                    return 'soundplay-107098-8.6.3-linux-ix86'
+                return 'soundplay-107098-8.6.3-linux-x86_64'
+
         except:
             return None
 
