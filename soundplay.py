@@ -32,8 +32,14 @@ class soundplay(object):
             if server == None:
                 return False
             serverport = f'{server}:{port}'
-            if aplay  == None: aplay  = 'afplay -v %v %s'
             if player == None: player = 'soundplay'
+            if aplay  == None:
+                if soundplay == 'soundplay':
+                    aplay  = '/usr/bin/afplay -v %v %s'
+                if soundplay == 'soundplay-107050-8.6.3-macosx10.5-ix86+x86_64':
+                    aplay  = '/usr/bin/afplay -v %v %s'
+                else:
+                    aplay = '/usr/bin/play -q -v %v %s'
 
             #check existing soundplay process
             procs = self.check_existing_process(server, port, instrument)
