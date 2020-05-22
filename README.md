@@ -204,7 +204,7 @@ Once you have downloaded the software:
 cd ~/lickRemoteObserving
 conda env create -f environment.yaml
 ```
-
+Â
 - Create configuration file: copy `lick_vnc_config.yaml` to `local_config.yaml`.
 ```
 cp lick_vnc_config.yaml local_config.yaml
@@ -245,17 +245,17 @@ Obtain the tblk file for your schedule observing run.
 	examples below
 
 	```nmcli connection modify Nickel20200507 ipv4.never-default yes```
-	
+
 	or
-	
+
 	```nmcli connection modify ShaneB20200521--P1D ipv4.never-default yes```
-	
+
 	where the ```Nickel``` or ```Shane``` word is the name of the OpenVPN config file.
 	Alternatively this can be accomplished using the NetworkManager editor
 	GUI during or after the import of the OpenVPN config file by going to
-	
+
 	```IPv4 Settings > Routes... > Use this connection only for resources on its network```
-	
+
 	checking that checkbox, pressing ```OK```, and pressing ```Save```. After this the
 	new OpenVPN configuration should appear in the NetworkManager widget as
 	one of the ```VPN Connections```
