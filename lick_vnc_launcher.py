@@ -76,6 +76,10 @@ class LickVncLauncher(object):
         self.use_ss = False
         self.use_lsof = False
 
+        self.soundplayer = None
+        self.aplay = None
+        self.pv = None
+
         #ssh key constants
         self.ssh_pkey = 'lick_id_rsa'
         self.ssh_account = 'user'
@@ -655,13 +659,15 @@ class LickVncLauncher(object):
 
             #config vars
             sound_port   = 9798
-            aplay        = self.config.get('aplay', None)
-            soundplayer  = self.config.get('soundplayer', None)
+            self.aplay        = self.config.get('aplay', None)
+            self.soundplayer  = self.config.get('soundplayer', None)
             sound_server = self.soundservers[self.instrument]
             sound_server = sound_server + ".ucolick.org"
 
-            if soundplayer is None:
-                soundplayer = self.guess_soundplay()
+            if 'macos' in self.soundplayer :
+                self.pv = '0.01'
+            if self.soundplayer is None:
+                self.guess_soundplay()
 
             #Do we need ssh tunnel for this?
             if self.ssh_forward:
@@ -680,7 +686,8 @@ class LickVncLauncher(object):
 
             self.sound = soundplay.soundplay()
             self.sound.connect(self.instrument, sound_server, sound_port,
-                               aplay=aplay, player=soundplayer)
+                               aplay=self.aplay, player=self.soundplayer,
+                               pv=self.pv)
         except Exception:
             self.log.error('Unable to start soundplay.  See log for details.')
             trace = traceback.format_exc()
@@ -696,8 +703,8 @@ class LickVncLauncher(object):
             return
 
         # Build the soundplay test command.
-        soundplayer = self.config.get('soundplayer', None)
-        soundplayer = soundplay.full_path(soundplayer)
+        self.soundplayer = self.config.get('soundplayer', None)
+        soundplayer = soundplay.full_path(self.soundplayer)
 
         command = [soundplayer, '-l']
 
@@ -714,12 +721,13 @@ class LickVncLauncher(object):
         try:
             sysinfo = os.uname()
             if sysinfo.sysname == 'Darwin':
-                return 'soundplay-107050-8.6.3-macosx10.5-ix86+x86_64'
+                self.soundplayer = 'soundplay-107050-8.6.3-macosx10.5-ix86+x86_64'
+                self.pv = '0.01'
             elif sysinfo.sysname == 'Linux':
-                return 'soundplay-107098-8.6.3-linux-x86_64'
+                self.soundplayer = 'soundplay-107098-8.6.3-linux-x86_64'
 
         except:
-            return None
+            return
 
 
 
