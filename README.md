@@ -236,12 +236,29 @@ Obtain the tblk file for your schedule observing run.
     installed for everyone or only you, select "Me". The hit the
     connect button to start the VPN.
 
-  - **For Linux**: Install the certificate using the appropriate
-	software, such as the Linux NetworkManager. If you do this, you
-	must execute the following command to prevent all traffic (such as
-	Zoom or your browser) go through the remote observing machine.
+  - **For Linux**: Install the certificate using appropriate
+	commands, or the NetworkManager GUI.  If NetworkManager is used it will
+	by default try to route all traffic through the VPN. That will prevent network
+	connections to anywhere other than the MH VNC hosts, which means no Zoom,
+	no browser, no other network traffic. Tell NetworkManager not to
+	route all traffic through the VPN using a command like the
+	examples below
 
 	```nmcli connection modify Nickel20200507 ipv4.never-default yes```
+	
+	or
+	
+	```nmcli connection modify ShaneB20200521--P1D ipv4.never-default yes```
+	
+	where the ```Nickel``` or ```Shane``` word is the name of the OpenVPN config file.
+	Alternatively this can be accomplished using the NetworkManager editor
+	GUI during or after the import of the OpenVPN config file by going to
+	
+	```IPv4 Settings > Routes... > Use this connection only for resources on its network```
+	
+	checking that checkbox, pressing ```OK```, and pressing ```Save```. After this the
+	new OpenVPN configuration should appear in the NetworkManager widget as
+	one of the ```VPN Connections```
 
 - **Configure Local VNC Viewer Software:** This is where one sets
   `vncviewer` with the path and executable for the local VNC viewer
