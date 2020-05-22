@@ -17,7 +17,7 @@ class soundplay(object):
         self.proc = None
 
 
-    def connect(self, instrument, server=None, port=9798, aplay='aplay', player='soundplay'):
+    def connect(self, instrument, server=None, port=9798, aplay='aplay', player='soundplay',pv=None):
         '''
         Connect to sound server
         '''
@@ -33,13 +33,6 @@ class soundplay(object):
                 return False
             serverport = f'{server}:{port}'
             if player == None: player = 'soundplay'
-            if aplay  == None:
-                if soundplay == 'soundplay':
-                    aplay  = '/usr/bin/afplay -v %v %s'
-                if soundplay == 'soundplay-107050-8.6.3-macosx10.5-ix86+x86_64':
-                    aplay  = '/usr/bin/afplay -v %v %s'
-                else:
-                    aplay = '/usr/bin/play -q -v %v %s'
 
             #check existing soundplay process
             procs = self.check_existing_process(server, port, instrument)
@@ -54,6 +47,12 @@ class soundplay(object):
 
             #create command and open process and hold on to handle so we can terminate later
             cmd = [soundplayPath, '-s', serverport, '-T', instrument]
+            if aplay is not None:
+                cmd.append('-px')
+                cmd.append(aplay)
+            if pv is not None:
+                cmd.append('-pv')
+                cmd.append(pv)
             log.debug('Soundplay cmd: ' + str(cmd))
             self.proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         except Exception as error:
