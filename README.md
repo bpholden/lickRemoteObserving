@@ -205,10 +205,16 @@ cd ~/lickRemoteObserving
 conda env create -f environment.yaml
 ```
 Â
-- Create configuration file: copy `lick_vnc_config.yaml` to `local_config.yaml`.
+- Create configuration file:
+ - If you have a Mac and have used our software suggestions
 ```
-cp lick_vnc_config.yaml local_config.yaml
+cp mac_config.yaml local_config.yaml
 ````
+
+ - If you have a Linux host and have used our software suggestions
+ ```
+ cp linux_config.yaml local_config.yaml
+ ````
 
 - (optional) Add VNC start script to path:
 ```
