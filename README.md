@@ -216,6 +216,13 @@ cp mac_config.yaml local_config.yaml
  cp linux_config.yaml local_config.yaml
  ````
 
+ - If you want to double check, copy ```lick_vnc_config.yaml``` and follow the directions inside.
+
+ ```
+ cp lick_vnc_config.yaml local_config.yaml
+ ```
+
+
 - (optional) Add VNC start script to path:
 ```
 export PATH=/home/observer/lickRemoteObserving:$PATH
@@ -273,7 +280,7 @@ Obtain the tblk file for your schedule observing run.
   a prefix such as `vnc://` which can be set via the `vncprefix`
   value.  Options which should be passed to the vncviewer application
   are set in the `vncargs` value (defaults should be good for Tiger
-  VNC). This goes in the file ``` local_config.yaml```
+  VNC). This goes in the file ```local_config.yaml```
 
     - **Important:** IF and ONLY IF you are using TigerVNC, make sure you have configured your client **not** to resize the sessions (see the note above).
     - **On Linux:** (optional) Save VNC session password (not available on macOS):
