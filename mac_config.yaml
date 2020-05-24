@@ -1,0 +1,5 @@
+vncviewer: '/Applications/VNC Viewer.app/Contents/MacOS/vncviewer'
+vncargs: '-Shared'
+soundplayer: 'soundplay-107050-8.6.3-macosx10.5-ix86+x86_64'
+window_size: [1280, 800]
+window_positions: [[0, 0], [1280, 0], [0, 1280], [1280, 0]]
