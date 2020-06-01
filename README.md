@@ -10,7 +10,11 @@ cd ~/lickRemoteObserving
 ```
 or
 ```
-./start_lick_viewers nickel
+./start_nickel_viewer
+```
+or
+```
+./start_shane_viewer
 ```
 to enable the connection.
 
