@@ -233,7 +233,7 @@ export PATH=/home/observer/lickRemoteObserving:$PATH
 Edit the configuration file  ```local_config.yaml```.  Read the comments in the
 configuration file itself as they can guide you.  You may need to
 uncomment (remove the leading `#`) from lines you want to customize.
-**Note each line must not have a space **
+**Note each line must not have a space at the start!**
 ```
 vncviewer : 'vncviewer'
 ```
