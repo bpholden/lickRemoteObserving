@@ -18,6 +18,8 @@ or
 ```
 to enable the connection.
 
+You can just double click the corect script in the Finder on a Mac as well.
+
 # Outline
 
 - Email who will observe and request the certificate
