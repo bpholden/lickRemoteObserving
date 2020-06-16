@@ -42,7 +42,7 @@ class VNCSession(object):
         self.user = user
         self.pid = pid
 
-    def __str__(self):
+    def __repr__(self):
         return f"  {self.name:12s} {self.display:5s} {self.desktop:s}"
 
 class LickVncLauncher(object):
