@@ -121,7 +121,7 @@ class LickVncLauncher(object):
         ##---------------------------------------------------------------------
         self.log.debug("\n***** PROGRAM STARTED *****\nCommand: "+' '.join(sys.argv))
         self.get_args()
-        if not self.args.account:
+        if self.args.account not in ['shane','nickel','apf']:
             self.exit_app('A valid account (shane or nickel) must be specified.')
         self.get_config()
         self.check_config()
