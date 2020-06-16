@@ -132,6 +132,9 @@ class LickVncLauncher(object):
         self.log_system_info()
         self.check_version()
 
+        if self.args.test:
+            self.test_functions()
+            self.exit_app("Started in test mode, exiting after tests run.")
 
         self.how_check_local_port()
 
@@ -1387,6 +1390,9 @@ def create_parser():
     parser.add_argument("--nosound", dest="nosound",
         default=False, action="store_true",
         help="Skip start of soundplay application.")
+    parser.add_argument("--test", dest="test",
+        default=False, action="store_true",
+        help="Run only tests")
 
 
     ## add arguments
