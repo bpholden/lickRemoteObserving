@@ -842,7 +842,7 @@ class LickVncLauncher(object):
 
 
     ##-------------------------------------------------------------------------
-    ## Ensure that the ssh key file has the ride mode
+    ## Ensure that the ssh key file has the right mode
     ##-------------------------------------------------------------------------
     def change_mod(self):
         # find file
