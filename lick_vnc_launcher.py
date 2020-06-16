@@ -1294,6 +1294,78 @@ class LickVncLauncher(object):
         self.exit_app()
 
 
+    ##-------------------------------------------------------------------------
+    ## full set of tests
+    ##-------------------------------------------------------------------------
+    def test_functions(self):
+        self.test_vncviewer()
+        self.test_port_lookup()
+        self.test_ssh_key()
+        server = self.servers_to_try[self.args.account]
+        self.test_connection_to_servers(server)
+
+
+    ##-------------------------------------------------------------------------
+    ## test if the vncviewer exists
+    ##-------------------------------------------------------------------------
+    def test_vncviewer(self):
+        self.log.info('Testing config file: vncviewer')
+        vncviewer = self.vncviewer
+
+        if vncviewer in [None, '', 'vncviewer']:
+            # the line below will throw an error if which fails
+            self.guess_vncviewer()
+            try:
+                vncviewer = subprocess.check_output(['which', 'vncviewer']).strip()
+            except:
+                self.log.error('Cannot find vncviewer and it is not defined in the config file.')
+                return
+        if vncviewer != 'open':
+            assert os.path.exists(vncviewer)
+            self.log.info(f' Passed')
+
+
+    ##-------------------------------------------------------------------------
+    ## test port look up method
+    ##-------------------------------------------------------------------------
+    def test_port_lookup(self):
+        self.log.info('Testing port lookup')
+
+        self.how_check_local_port()
+        one_works = self.use_ps or self.use_ss or self.use_lsof
+        assert one_works
+        self.log.info(f' Passed')
+        assert self.is_local_port_in_use(self.LOCAL_PORT_START) is False
+        self.log.info(f' Passed')
+
+    ##-------------------------------------------------------------------------
+    ## test ssh key and validate it
+    ##-------------------------------------------------------------------------
+    def test_ssh_key(self):
+        self.log.info('Testing config file: ssh_pkey')
+        self.tel = 'shane'
+        self.validate_ssh_key()
+        assert self.ssh_key_valid is True
+        self.log.info(f' Passed')
+
+    ##-------------------------------------------------------------------------
+    ## test to see if you can connect to the servers
+    ##-------------------------------------------------------------------------
+    def test_connection_to_servers(self, server):
+
+        vnc_account = self.ssh_account
+        vnc_password = None
+        result = f'{server}.ucolick.org'
+        self.log.info(f'Testing SSH to {vnc_account}@{server}.ucolick.org')
+        output = self.do_ssh_cmd('hostname', result,
+                                vnc_account)
+        assert output is not None
+        assert output != ''
+        assert output.strip() in [server, result]
+        self.log.info(f' Passed')
+
+
+
 ##-------------------------------------------------------------------------
 ## Create argument parser
 ##-------------------------------------------------------------------------
