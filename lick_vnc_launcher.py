@@ -461,13 +461,6 @@ class LickVncLauncher(object):
                 print(f"  {p:10d} | {desktop:9s} | {remote_connection:s}")
 
 
-    ##-------------------------------------------------------------------------
-    ## Launch xterm
-    ##-------------------------------------------------------------------------
-    def launch_xterm(self, command, pw, title):
-        cmd = ['xterm', '-hold', '-title', title, '-e', f'"{command}"']
-        xterm = subprocess.call(cmd)
-
 
     ##-------------------------------------------------------------------------
     ## Open ssh tunnel
@@ -869,31 +862,7 @@ class LickVncLauncher(object):
 
         return rv
 
-    ##-------------------------------------------------------------------------
-    ## Get engv account for instrument
-    ##-------------------------------------------------------------------------
-    def get_engv_account(self, instrument):
-        self.log.info(f"Getting engv account for instrument {instrument} ...")
 
-        cmd = f'setenv INSTRUMENT {instrument}; kvncinfo -engineering'
-        try:
-            data = self.do_ssh_cmd(cmd, self.ssh_server,
-                                        self.ssh_account)
-        except Exception as e:
-            self.log.error('  Failed: ' + str(e))
-            trace = traceback.format_exc()
-            self.log.debug(trace)
-            data = None
-
-
-        engv = None
-        if data is not None and ' ' not in data:
-            engv = data
-
-        if engv: self.log.debug("engv account is: '{}'")
-        else   : self.log.error("Could not get engv account info.")
-
-        return engv
 
 
     ##-------------------------------------------------------------------------
