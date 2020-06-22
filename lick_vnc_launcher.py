@@ -1020,44 +1020,25 @@ class LickVncLauncher(object):
 
 
 
-    ##-------------------------------------------------------------------------
-    ## Determine VNC Server
-    ##-------------------------------------------------------------------------
-    def get_vnc_server(self):
-        self.log.info(f"Determining VNC sessions for '{self.instrument}'...")
-        vncserver = None
-
-        if self.tel is None:
-            return vncserver
-
-        server = self.servers_to_try[self.tel] + ".ucolick.org"
-        cmd = f"vncstatus {self.instrument}"
-
-        try:
-            data = self.do_ssh_cmd(cmd, server, self.ssh_account)
-        except Exception as e:
-            self.log.error('  Failed: ' + str(e))
-            trace = traceback.format_exc()
-            self.log.debug(trace)
-            data = None
-
-        # parse data
-        if data and len(data) > 3:
-            mtch = re.search("Usage",data)
-            if not mtch:
-                vncserver = server
-                self.log.info(f"Got VNC server: '{vncserver}'")
-
-
-        return vncserver
-
-
 
 
     ##-------------------------------------------------------------------------
     ## Determine VNC Sessions
     ##-------------------------------------------------------------------------
-    def get_vnc_sessions(self, vncserver, instrument, account, instr_account):
+    def get_vnc_sessions(self, vncserver, instrument, account):
+        '''
+        get_vnc_sessions(self, vncserver, instrument, account)
+
+        vncserver - instrument host for VNC sessions (based on telescope)
+        instrument - instrument for that telescope and observer
+        account - account on vncserver running the VNC sessions
+
+        Connects to vncserver through account using do_ssh_cmd.
+        Runs the remote task vncstatus and finds the VNC sessions associated
+        with the instrument
+
+        '''
+
         self.log.info(f"Connecting to {account}@{vncserver} to get VNC sessions list")
 
         sessions = []
