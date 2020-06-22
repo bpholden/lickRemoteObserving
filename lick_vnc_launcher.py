@@ -680,6 +680,14 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
 
     def guess_vncviewer(self):
+        '''
+        guess_vncviewer(self)
+
+        If the vncviewer is not defined by the config file, this
+        function will attempt guess it.
+
+        '''
+
         try:
             sysinfo = os.uname()
             if sysinfo.sysname == 'Darwin':
@@ -701,7 +709,14 @@ class LickVncLauncher(object):
     ## Launch vncviewer
     ##-------------------------------------------------------------------------
     def launch_vncviewer(self, vncserver, port, geometry=None):
+        '''
+        launch_vncviewer(self, vncserver, port, geometry=None)
 
+        vncserver - remote host to connect to and open the VNC session
+        port - remote port to connect for VNC session
+
+
+        '''
         vncviewercmd   = self.vncviewer
         vncprefix      = self.vncprefix
         vncargs        = self.vncargs
@@ -731,7 +746,15 @@ class LickVncLauncher(object):
     ## Start soundplay
     ##-------------------------------------------------------------------------
     def start_soundplay(self):
+        '''
+        start_soundplay(self)
 
+        Begins the soundplay connection, this is a separate object
+        referenced by self.sound
+        Uses the values from the configuration to determine the
+        correct executables to use.
+
+        '''
         try:
             #check for existing first and shutdown
             if self.sound:
@@ -778,6 +801,7 @@ class LickVncLauncher(object):
     ## Play a test sound to see if sound works
     ##-------------------------------------------------------------------------
     def play_test_sound(self):
+
         if self.config.get('nosound', False) is True:
             self.log.warning('Sounds are not enabled on this install.  See config file.')
             return
@@ -798,6 +822,11 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
 
     def guess_soundplay(self):
+        '''
+        guess_soundplay(self)
+
+        Guesses the sound play executable to use if it is not specified.
+        '''
         try:
             sysinfo = os.uname()
             if sysinfo.sysname == 'Darwin':
@@ -815,6 +844,17 @@ class LickVncLauncher(object):
     ## Determine Instrument
     ##-------------------------------------------------------------------------
     def determine_instrument(self, account):
+        '''
+
+        determine_instrument(self, account)
+
+        account - the name of the telescope to be connected to.
+
+        Determines which instrument account to look for based on the
+        telescope.
+
+        Will need to be updated to handle Shane AO.
+        '''
         if account is None:
             return
 
@@ -837,7 +877,16 @@ class LickVncLauncher(object):
     ## Utility function for opening ssh client, executing command and closing
     ##-------------------------------------------------------------------------
     def do_ssh_cmd(self, cmd, server, account, timeout=10):
+        '''
+        do_ssh_cmd(self, cmd, server, account, timeout=10)
 
+        cmd - command to execute on remote host
+        server  - remote host to ssh to
+        account - the account to use on the remote host
+        timeout - amount of time in seconds to wait
+
+
+        '''
         output = None
         self.log.debug(f'Trying SSH connect to {server} as {account}:')
         command = ['ssh', server, '-l', account, '-T']
@@ -896,6 +945,19 @@ class LickVncLauncher(object):
     ## Validate ssh key on remote vnc server
     ##-------------------------------------------------------------------------
     def validate_ssh_key(self):
+
+        '''
+        validate_ssh_key(self)
+
+        Checks if the ssh key is valid by connecting to a remote host
+        and running a simple command.
+
+        The hosts that are use to attempt to make conections are those
+        listed in the self.servers_to_try dictionary. The self.tel
+        determine which host.
+
+        '''
+
         self.log.info(f"Validating ssh key...")
         if self.tel is None:
             self.log.error(" Cannot validate SSH key for undefined telescope")
@@ -932,6 +994,12 @@ class LickVncLauncher(object):
     ## Ensure that the ssh key file has the right mode
     ##-------------------------------------------------------------------------
     def change_mod(self):
+        '''
+        change_mod(self)
+
+        Sets the mode of the ssh key to the correct values for ssh.
+
+        '''
         # find file
         rv = False
         cpath = os.path.dirname(os.path.abspath(__file__))
@@ -1027,6 +1095,14 @@ class LickVncLauncher(object):
     ## Close ssh threads
     ##-------------------------------------------------------------------------
     def close_ssh_thread(self, p):
+        '''
+        close_ssh_thread(self, p)
+
+        p - port to be closed
+
+        Closes ssh session on port p.
+
+        '''
         if p in self.ports_in_use.keys():
             try:
                 remote_connection, desktop, process = self.ports_in_use.pop(p, None)
@@ -1039,6 +1115,14 @@ class LickVncLauncher(object):
 
 
     def close_ssh_threads(self):
+        '''
+        close_ssh_threads(self)
+
+        Loops over open ports and closes them as needed.
+        Uses close_ssh_thread()
+
+        '''
+
         for p in list(self.ports_in_use.keys()):
             self.close_ssh_thread(p)
 
@@ -1047,6 +1131,13 @@ class LickVncLauncher(object):
     ## Calculate vnc windows size and position
     ##-------------------------------------------------------------------------
     def calc_window_geometry(self):
+        '''
+        calc_window_geometry(self)
+
+        Uses xdpyinfo to calclulate VNC window geometry.
+        Will log error if it cannot use that application.
+
+        '''
 
         self.log.debug(f"Calculating VNC window geometry...")
 
@@ -1103,7 +1194,13 @@ class LickVncLauncher(object):
     ## Position vncviewers
     ##-------------------------------------------------------------------------
     def position_vnc_windows(self):
+        '''
+        position_vnc_windows(self)
 
+        Postions the VNC windows. This only works if wmctrl is installed.
+
+
+        '''
         self.log.info(f"Positioning VNC windows...")
 
         try:
@@ -1152,7 +1249,14 @@ class LickVncLauncher(object):
     ## Prompt command line menu and wait for quit signal
     ##-------------------------------------------------------------------------
     def prompt_menu(self):
+        '''
+        prompt_menu(self)
 
+        Generates a menu of options for the user.
+        Watches command line input and, based on input, calls appropriate
+        function.
+
+        '''
         line_length = 52
         lines = [f"-"*(line_length-2),
                  f"          Lick Remote Observing (v{__version__})",
@@ -1230,6 +1334,13 @@ class LickVncLauncher(object):
     ## Check for latest version number on GitHub
     ##-------------------------------------------------------------------------
     def check_version(self):
+        '''
+        check_version(self)
+
+        Checks the version of the software being run against the
+        version in GitHub. Warns if they do not agree.
+
+        '''
         url = ('https://raw.githubusercontent.com/bpholden/'
                'lickRemoteObserving/master/lick_vnc_launcher.py')
         try:
@@ -1258,6 +1369,12 @@ class LickVncLauncher(object):
     ## Upload log file to Lick
     ##-------------------------------------------------------------------------
     def upload_log(self):
+        '''
+        upload_log(self)
+
+        If possible, copies local log file to user@vncserver
+
+        '''
 
         account = self.ssh_account
 
@@ -1308,8 +1425,19 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     ## Terminate all vnc processes
     ##-------------------------------------------------------------------------
-    def kill_vnc_processes(self, msg=None):
+    def kill_vnc_processes(self):
+        '''
 
+        kill_vnc_processes(self)
+
+        Uses list in self.vnc_processes and ends those sessions.
+        Each a subprocess.
+
+        These are the local VNC sessions, not the sessions running
+        on vncserver. Those are only managed locally on that host.
+
+
+        '''
         self.log.info('Terminating all VNC sessions.')
         try:
             #NOTE: poll() value of None means it still exists.
@@ -1330,7 +1458,12 @@ class LickVncLauncher(object):
     ## Common app exit point
     ##-------------------------------------------------------------------------
     def exit_app(self, msg=None):
+        '''
+        exit_app(self, msg=None)
 
+        Terminates sound, closes ssh connections, and ends VNC processes.
+
+        '''
         #hack for preventing this function from being called twice
         #todo: need to figure out how to use atexit with threads properly
         if self.exit: return
@@ -1359,7 +1492,12 @@ class LickVncLauncher(object):
     ## Handle fatal error
     ##-------------------------------------------------------------------------
     def handle_fatal_error(self, error):
+        '''
+        handle_fatal_error(self, error)
 
+        Trap exceptions and send them to author.
+
+        '''
         #helpful user error message
         supportEmail = 'holden@ucolick.org'
         print("\n****** PROGRAM ERROR ******\n")
@@ -1385,6 +1523,13 @@ class LickVncLauncher(object):
     ## full set of tests
     ##-------------------------------------------------------------------------
     def test_functions(self):
+        '''
+        test_functions(self)
+
+        Wrapper for running various test functions.
+        Currently does not test sound.
+
+        '''
         self.test_vncviewer()
         self.test_port_lookup()
         self.test_ssh_key()
@@ -1396,6 +1541,11 @@ class LickVncLauncher(object):
     ## test if the vncviewer exists
     ##-------------------------------------------------------------------------
     def test_vncviewer(self):
+        '''
+        Make sure application specified by config for viewing VNC
+        sessions exists.
+        Does NOT try to run it.
+        '''
         self.log.info('Testing config file: vncviewer')
         vncviewer = self.vncviewer
 
@@ -1416,6 +1566,17 @@ class LickVncLauncher(object):
     ## test port look up method
     ##-------------------------------------------------------------------------
     def test_port_lookup(self):
+        '''
+        test_port_lookup(self)
+
+        Test that an application selected for finding open ports
+        is available.
+        Then tests that application by running it.
+        Both tests must pass.
+
+        '''
+
+
         self.log.info('Testing port lookup')
 
         self.how_check_local_port()
@@ -1429,6 +1590,13 @@ class LickVncLauncher(object):
     ## test ssh key and validate it
     ##-------------------------------------------------------------------------
     def test_ssh_key(self):
+        '''
+        test_ssh_key(self)
+
+        Tests connection by trying to connect to the Shane.
+        Only runs a single remote application, no VNC required.
+
+        '''
         self.log.info('Testing config file: ssh_pkey')
         self.tel = 'shane'
         self.validate_ssh_key()
@@ -1439,7 +1607,14 @@ class LickVncLauncher(object):
     ## test to see if you can connect to the servers
     ##-------------------------------------------------------------------------
     def test_connection_to_servers(self, server):
+        '''
 
+        test_connection_to_servers(self, server)
+
+        Tests that the software can connect to the requested host.
+        Host specified by telescope command line argument (shane, nickel, etc.)
+
+        '''
         vnc_account = self.ssh_account
         vnc_password = None
         result = f'{server}.ucolick.org'
@@ -1457,6 +1632,12 @@ class LickVncLauncher(object):
 ## Create argument parser
 ##-------------------------------------------------------------------------
 def create_parser():
+    '''
+    create_parser()
+
+    Parses command line arguments.
+    '''
+
     ## create a parser object for understanding command-line arguments
     description = (f"Lick VNC Launcher (v{__version__}). This program is used "
                    f"by approved Lick Remote Observing sites to launch VNC "
@@ -1494,7 +1675,14 @@ def create_parser():
 ## Create logger
 ##-------------------------------------------------------------------------
 def create_logger():
+    '''
+    create_logger()
+    Makes a logging instance.
 
+    Currently this is a global variable, which is then attached to
+    the lick_vnc_launcher object.
+    
+    '''
     try:
         ## Create logger object
         log = logging.getLogger('KRO')
