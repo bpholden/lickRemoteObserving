@@ -516,25 +516,25 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     def open_ssh_tunnel(self, server, username, password, ssh_pkey, remote_port,
                         local_port=None, session_name='unknown'):
-    '''
-    open_ssh_tunnel(self, server, username, password, ssh_pkey, remote_port,
+        '''
+        open_ssh_tunnel(self, server, username, password, ssh_pkey, remote_port,
                         local_port=None, session_name='unknown')
 
-    One of the core functions, this sets up the SSH tunnel required to
-    forward the VNC or soundplay connection from the remote observing host to
-    the observers local machine.
+        One of the core functions, this sets up the SSH tunnel required to
+        forward the VNC or soundplay connection from the remote observing host to
+        the observers local machine.
 
-    server - host to make connection to
-    username - username for account to ssh to, always an observing account
-    password - if the ssh key requires a password
-    ssh_pkey - the public key for the username on server
-    remote_port - the port number for the connection, usually a VNC port or
-        the sound play port
-    local_port  - if None, grabs the next available local port not in use,
-        else uses the value passed in
-    session_name - the name of the session at the remote observing host
+        server - host to make connection to
+        username - username for account to ssh to, always an observing account
+        password - if the ssh key requires a password
+        ssh_pkey - the public key for the username on server
+        remote_port - the port number for the connection, usually a VNC port or
+            the sound play port
+        local_port  - if None, grabs the next available local port not in use,
+            else uses the value passed in
+        session_name - the name of the session at the remote observing host
 
-    '''
+        '''
         #get next local port if need be
         #NOTE: Try up to 100 ports beyond
         if not local_port:
@@ -1660,7 +1660,7 @@ def create_logger():
 
     Currently this is a global variable, which is then attached to
     the lick_vnc_launcher object.
-    
+
     '''
     try:
         ## Create logger object
