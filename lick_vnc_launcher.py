@@ -46,7 +46,15 @@ class VNCSession(object):
         return f"  {self.name:12s} {self.display:5s} {self.desktop:s}"
 
 class LickVncLauncher(object):
+    '''Fundamental object for starting, managing and closing VNC sessions to Lick.
+    The object has a number of methods but the basic construction should look like
+    this:
+            lvl = LickVncLauncher() # instantize object
+            create_logger()  # create a location for logging
+            lvl.log = logging.getLogger('KRO') # link log object to VNC object
+            lvl.start() # now start the whole process
 
+    '''
     def __init__(self):
         #init vars we need to shutdown app properly
         self.config  = None
@@ -115,7 +123,12 @@ class LickVncLauncher(object):
     ## Start point (main)
     ##-------------------------------------------------------------------------
     def start(self):
-
+        '''
+        start(self) - the whole event sequence, includes parsing of arguments
+        from command line, reading and checking the configuration,
+        making connections, managing them, and providing a menu of options
+        for the user.
+        '''
         ##---------------------------------------------------------------------
         ## Parse command line args and get config
         ##---------------------------------------------------------------------
@@ -210,7 +223,14 @@ class LickVncLauncher(object):
     ## Start VNC session
     ##-------------------------------------------------------------------------
     def start_vnc_session(self, session_name):
+        '''
+        start_vnc_session(self, session_name)
 
+        Makes a VNC session connection to a session named session_name.
+        The name must be in the list of allowed sessions stored in self.
+        Makes a ssh connection using the stored credentials to the host
+        stored in the self as self.vncserver.
+        '''
         self.log.info(f"Opening VNCviewer for '{session_name}'")
 
 #         try:
@@ -303,6 +323,11 @@ class LickVncLauncher(object):
     ## Get command line args
     ##-------------------------------------------------------------------------
     def get_args(self):
+        '''
+        get_args(self)
+
+        Sets the self.args value to return from create_parser()
+        '''
         self.args = create_parser()
 
 
@@ -310,7 +335,21 @@ class LickVncLauncher(object):
     ## Get Configuration
     ##-------------------------------------------------------------------------
     def get_config(self):
+        '''
+        get_config(self)
 
+        If the config option is passed an as argument,
+        this checks that file first.
+        If the config option is not passed, the config
+        file must be stored in one of two locations:
+
+        local_config.yaml
+        lick_vnc_config.yaml
+
+        Reads and parses the first file, if it exists, then the second.
+
+        The configuration is then attached to self.config
+        '''
         #define files to try loading in order of pref
         filenames=['local_config.yaml', 'lick_vnc_config.yaml']
 
@@ -364,7 +403,16 @@ class LickVncLauncher(object):
     ## Check Configuration
     ##-------------------------------------------------------------------------
     def check_config(self):
+        '''
+        check_config(self)
 
+        This checks the vnc arguments in the config, namely the
+        vncviewer
+        vncargs
+        vncprefix
+
+        If the appropriate files do exist, this will throw an warning.
+        '''
         #check for vncviewer
         #NOTE: Ok if not specified, we will tell them to open vncviewer manually
         #todo: check if valid cmd path?
@@ -401,7 +449,11 @@ class LickVncLauncher(object):
     ## Log basic system info
     ##-------------------------------------------------------------------------
     def log_system_info(self):
+        '''
+        log_system_info(self)
 
+        Logs basics about the host running the software.
+        '''
         try:
             self.log.debug(f'System Info: {os.uname()}')
         except:
@@ -442,7 +494,12 @@ class LickVncLauncher(object):
     ## List Open Tunnels
     ##-------------------------------------------------------------------------
     def list_tunnels(self):
+        '''
+        list_tunnels(self)
 
+        Lists the tunnels, handy for understanding why a VNC window or
+        a soundplay connection dissappeared.
+        '''
         if len(self.ports_in_use) == 0:
             print(f"No SSH tunnels opened by this program")
         else:
@@ -460,7 +517,25 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     def open_ssh_tunnel(self, server, username, password, ssh_pkey, remote_port,
                         local_port=None, session_name='unknown'):
+    '''
+    open_ssh_tunnel(self, server, username, password, ssh_pkey, remote_port,
+                        local_port=None, session_name='unknown')
 
+    One of the core functions, this sets up the SSH tunnel required to
+    forward the VNC or soundplay connection from the remote observing host to
+    the observers local machine.
+
+    server - host to make connection to
+    username - username for account to ssh to, always an observing account
+    password - if the ssh key requires a password
+    ssh_pkey - the public key for the username on server
+    remote_port - the port number for the connection, usually a VNC port or
+        the sound play port
+    local_port  - if None, grabs the next available local port not in use,
+        else uses the value passed in
+    session_name - the name of the session at the remote observing host
+
+    '''
         #get next local port if need be
         #NOTE: Try up to 100 ports beyond
         if not local_port:
@@ -528,6 +603,18 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     ##-------------------------------------------------------------------------
     def how_check_local_port(self):
+        '''
+        how_check_local_port(self)
+
+        This examines the output of various commands on the observers local
+        host.
+        The purpose is to find the correct command to find open ports.
+        Prefers in order ss,lsof, netstat.exe (Windows System for Linux)
+        and then ps.  ps does not always work the way one would like as
+        a process may not have an actual open port even if it claims the
+        port was open.
+        '''
+
         try:
             cmd0 = subprocess.check_output(['which', 'ss'])
             self.use_ss = True
@@ -560,7 +647,15 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     ##-------------------------------------------------------------------------
     def is_local_port_in_use(self, port):
+        '''
+        is_local_port_in_use(self, port)
 
+        port - the port number of interest
+
+        Checks if port is in use or open. Uses the method
+        determined by how_check_local_port()
+
+        '''
         if self.use_netstat:
             cmd = f'netstat.exe -an | grep ":{port}"'
         elif self.use_ss:
