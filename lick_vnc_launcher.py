@@ -421,28 +421,18 @@ class LickVncLauncher(object):
             self.log.debug(trace)
 
 
-    ##-------------------------------------------------------------------------
-    ## Get sessions to open
-    ##-------------------------------------------------------------------------
-    def get_sessions_requested(self, args):
-
-        #get sessions to open
-        #todo: use const SESSION_NAMES here
-        sessions = []
-
-        # create default sessions list if none provided
-        if len(sessions) == 0:
-            sessions = self.DEFAULT_SESSIONS
-
-        self.log.debug(f'Sessions to open: {sessions}')
-        return sessions
 
 
     ##-------------------------------------------------------------------------
     ## Print sessions found for instrument
     ##-------------------------------------------------------------------------
     def print_sessions_found(self):
+        '''
+        print_sessions_found(self)
 
+        Prints to stdout the sessions.
+
+        '''
         print(f"\nSessions found for account '{self.args.account}':")
         for s in self.sessions_found:
             print(f"  {s.name:12s} {s.display:5s} {s.desktop:s}")
