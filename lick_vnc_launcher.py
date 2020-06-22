@@ -182,8 +182,7 @@ class LickVncLauncher(object):
             # self.engv_account = self.get_engv_account(self.instrument)
             self.sessions_found = self.get_vnc_sessions(self.vncserver,
                                                         self.instrument,
-                                                        self.ssh_account,
-                                                        self.args.account)
+                                                        self.ssh_account)
 
         if self.args.authonly is False and\
                 (not self.sessions_found or len(self.sessions_found) == 0):
