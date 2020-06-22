@@ -15,7 +15,7 @@
 ##
 ## Example: RealVNC (macOS)
 # vncviewer: '/Applications/VNC Viewer.app/Contents/MacOS/vncviewer'
-# vncargs: '-Shared'
+# vncargs: '-Shared -FullColor'
 ##
 ## Example: use built in Screen Sharing app in macOS:
 # vncviewer: 'open'
