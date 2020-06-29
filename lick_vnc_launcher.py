@@ -1132,64 +1132,124 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     ## Calculate vnc windows size and position
     ##-------------------------------------------------------------------------
+    def get_display_info(self):
+        '''
+        get_display_info(self)
+
+        Determine the screen number and size
+
+        '''
+
+        self.log.debug('Determining display info')
+        self.geometry = list()
+        try:
+             xpdyinfo = subprocess.run('xdpyinfo', stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE, timeout=5)
+        except subprocess.TimeoutError as e:
+             # If xpdyinfo fails just log and keep going
+             self.log.debug('xpdyinfo failed')
+             self.log.debug(e)
+             return
+        stdout = xpdyinfo.stdout.decode()
+        if xpdyinfo.returncode != 0:
+             self.log.debug(f'xpdyinfo failed')
+             for line in stdout.split('\n'):
+                 self.log.debug(f"xdpyinfo: {line}")
+             stderr = xpdyinfo.stderr.decode()
+             for line in stderr.split('\n'):
+                 self.log.debug(f"xdpyinfo: {line}")
+             return None
+        find_nscreens = re.search('number of screens:\s+(\d+)', stdout)
+        nscreens = int(find_nscreens.group(1)) if find_nscreens is not None else 1
+        self.log.debug(f'Number of screens = {nscreens}')
+
+        find_dimensions = re.findall('dimensions:\s+(\d+)x(\d+)', stdout)
+        if len(find_dimensions) == 0:
+            self.log.debug(f'Could not find screen dimensions')
+            return None
+        # convert values from strings to int
+        self.screens = [[int(val) for val in line] for line in find_dimensions]
+        for screen in self.screens:
+            self.log.debug(f"Screen size: {screen[0]}x{screen[1]}")
+
+
     def calc_window_geometry(self):
+        '''If window positions are not set in config file, make a guess.
         '''
-        calc_window_geometry(self)
-
-        Uses xdpyinfo to calclulate VNC window geometry.
-        Will log error if it cannot use that application.
-
-        '''
-
-        self.log.debug(f"Calculating VNC window geometry...")
-
-        #get screen dimensions
-        #alternate command: xrandr |grep \* | awk '{print $1}'
-        cmd = "which xdpyinfo"
-        p0 = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
-        out = p0.communicate()[0].decode('utf-8')
-        if not out:
-            self.log.debug('Could not calc window geometry')
-            return
-        cmd = "xdpyinfo | grep dimensions | awk '{print $2}' | awk -Fx '{print $1, $2}'"
-        p1 = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
-        out = p1.communicate()[0].decode('utf-8')
-        if not out:
-            self.log.debug('Could not calc window geometry')
-            return
-        screen_width, screen_height = [int(x) for x in out.split()]
-        self.log.debug(f"Screen size: {screen_width}x{screen_height}")
-
-        #get num rows and cols
-        #todo: assumming 2x2 always for now; make smarter
-        num_win = len(self.sessions_found)
-        cols = 2
-        rows = 2
-
-        #window coord and size config overrides
         window_positions = self.config.get('window_positions', None)
-        window_size = self.config.get('window_size', None)
-
-        #get window width height
-        if window_size:
-            ww = window_size[0]
-            wh = window_size[1]
+        if window_positions is not None:
+            self.geometry = window_positions
         else:
-            ww = round(screen_width / cols)
-            wh = round(screen_height / rows)
-
-        #get x/y coords (assume two rows)
-        for row in range(0, rows):
-            for col in range(0, cols):
-                x = round(col * screen_width/cols)
-                y = round(row * screen_height/rows)
-                if window_positions:
-                    index = len(self.geometry) % len(window_positions)
-                    x = window_positions[index][0]
-                    y = window_positions[index][1]
-                self.geometry.append([ww, wh, x, y])
-
+            self.log.debug(f"Calculating VNC window geometry...")
+            num_win = len(self.sessions_requested)
+            cols = 2
+            rows = 2
+            screen = self.screens[0]
+            #get x/y coords (assume two rows)
+            for row in range(0, rows):
+                for col in range(0, cols):
+                    x = round(col * screen[0]/cols)
+                    y = round(row * screen[1]/rows)
+                    if window_positions is not None:
+                        index = len(self.geometry) % len(window_positions)
+                        x = window_positions[index][0]
+                        y = window_positions[index][1]
+                    self.geometry.append([x, y])
         self.log.debug('geometry: ' + str(self.geometry))
+
+    def position_vnc_windows(self):
+        '''Reposition the VNC windows to the preferred positions
+        '''
+        self.log.info("Re-reading config file")
+        self.get_config()
+        self.log.info(f"Positioning VNC windows...")
+        self.calc_window_geometry()
+
+        #get all x-window processes
+        #NOTE: using wmctrl (does not work for Mac)
+        #alternate option: xdotool?
+        cmd = ['wmctrl', '-l']
+        wmctrl_l = subprocess.run(cmd, stdout=subprocess.PIPE, timeout=5)
+        stdout = wmctrl_l.stdout.decode()
+        for line in stdout.split('\n'):
+            self.log.debug(f'wmctrl line: {line}')
+        if wmctrl_l.returncode != 0:
+            self.log.debug(f'wmctrl failed')
+            for line in stdout.split('\n'):
+                self.log.debug(f'wmctrl line: {line}')
+            stderr = wmctrl_l.stderr.decode()
+            for line in stderr.split('\n'):
+                self.log.debug(f'wmctrl line: {line}')
+            return None
+        win_ids = dict([x for x in zip(self.sessions_requested,
+                                [None for entry in self.sessions_requested])])
+        for line in stdout.split('\n'):
+            for thread in self.vnc_threads:
+                session = thread.name
+                if session in line:
+                    self.log.debug(f"Found {session} in {line}")
+                    win_id = line.split()[0]
+                    win_ids[session] = line.split()[0]
+
+        for i,thread in enumerate(self.vnc_threads):
+            session = thread.name
+            if win_ids.get(session, None) is not None:
+                index = i % len(self.geometry)
+                geom = self.geometry[index]
+                self.log.debug(f'{session} has geometry: {geom}')
+
+                cmd = ['wmctrl', '-i', '-r', win_ids[session], '-e',
+                       f'0,{geom[0]},{geom[1]},-1,-1']
+                self.log.debug(f"Positioning '{session}' with command: " + ' '.join(cmd))
+                wmctrl = subprocess.run(cmd, stdout=subprocess.PIPE, timeout=5)
+                if wmctrl.returncode != 0:
+                    return None
+                stdout = wmctrl.stdout.decode()
+#                 for line in stdout.split('\n'):
+#                     self.log.debug(f'wmctrl line: {line}')
+            else:
+                self.log.info(f"Could not find window process for VNC session '{session}'")
+
 
 
     ##-------------------------------------------------------------------------
