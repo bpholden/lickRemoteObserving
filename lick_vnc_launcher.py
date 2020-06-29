@@ -870,10 +870,10 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     ## Determine Instrument
     ##-------------------------------------------------------------------------
-    def determine_instrument(self, account):
+    def determine_tel_instrument(self, account):
         '''
 
-        determine_instrument(self, account)
+        determine_tel_instrument(self, account)
 
         account - the name of the telescope to be connected to.
 
