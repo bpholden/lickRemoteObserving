@@ -97,7 +97,7 @@ class LickVncLauncher(object):
         self.servers_to_try = {'shane' : 'shimmy',
                                    'nickel' : 'noir',
                                    'apf' : 'frankfurt.apf'}
-        self.soundservers = {'kast' : 'shimmy',
+        self.soundservers = {'shane' : 'shimmy',
                                    'nickel' : 'noir',
                                    'apf' : 'frankfurt.apf'}
 
