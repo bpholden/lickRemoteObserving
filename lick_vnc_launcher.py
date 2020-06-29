@@ -159,7 +159,7 @@ class LickVncLauncher(object):
         ##---------------------------------------------------------------------
         ## Determine instrument
         ##---------------------------------------------------------------------
-        self.determine_instrument(self.args.account)
+        self.determine_tel_instrument(self.args.account)
         if not self.instrument:
             self.exit_app(f'Invalid instrument account: "{self.args.account}"')
 
