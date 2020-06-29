@@ -184,9 +184,7 @@ class LickVncLauncher(object):
         ## Determine VNC Sessions
         ##---------------------------------------------------------------------
         if self.ssh_key_valid:
-            # self.engv_account = self.get_engv_account(self.instrument)
             self.sessions_found = self.get_vnc_sessions(self.vncserver,
-                                                        self.instrument,
                                                         self.ssh_account)
 
         if self.args.authonly is False and\
@@ -1051,12 +1049,11 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     ## Determine VNC Sessions
     ##-------------------------------------------------------------------------
-    def get_vnc_sessions(self, vncserver, instrument, account):
+    def get_vnc_sessions(self, vncserver, account):
         '''
         get_vnc_sessions(self, vncserver, instrument, account)
 
         vncserver - instrument host for VNC sessions (based on telescope)
-        instrument - instrument for that telescope and observer
         account - account on vncserver running the VNC sessions
 
         Connects to vncserver through account using do_ssh_cmd.
@@ -1068,7 +1065,7 @@ class LickVncLauncher(object):
         self.log.info(f"Connecting to {account}@{vncserver} to get VNC sessions list")
 
         sessions = []
-        cmd = f"vncstatus {instrument}"
+        cmd = f"vncstatus"
         try:
             data = self.do_ssh_cmd(cmd, vncserver, account)
         except Exception as e:
