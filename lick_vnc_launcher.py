@@ -465,6 +465,7 @@ class LickVncLauncher(object):
             self.log.debug(f'System hostname: {hostname}')
             # ip = socket.gethostbyname(hostname)
             # self.log.debug(f'System IP Address: {ip}')
+            self.log.info(f'Python: {sys.version}')
             self.log.info(f'Remote Observing Software Version = {__version__}')
         except :
             self.log.error("Unable to log system info.")
