@@ -474,6 +474,27 @@ class LickVncLauncher(object):
             self.log.debug(trace)
 
 
+    def get_vncviewer_properties(self):
+        '''Determine whether we are using TigerVNC
+        '''
+        vncviewercmd = self.config.get('vncviewer', 'vncviewer')
+        cmd = [vncviewercmd, '--help']
+        self.log.debug(f'Checking VNC viewer: {" ".join(cmd)}')
+        result = subprocess.run(cmd, capture_output=True)
+        output = result.stdout.decode() + '\n' + result.stderr.decode()
+        if re.search(r'TigerVNC', output):
+            self.log.info(f'We ARE using TigerVNC')
+            self.tigervnc = True
+        else:
+            self.log.debug(f'We ARE NOT using TigerVNC')
+            self.tigervnc = False
+
+        if re.search(r'[Gg]eometry', output):
+            self.log.info(f'Found geometry argument')
+            self.vncviewer_has_geometry = True
+        else:
+            self.log.debug(f'Could not find geometry argument')
+            self.vncviewer_has_geometry = False
 
 
     ##-------------------------------------------------------------------------
