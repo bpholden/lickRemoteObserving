@@ -68,6 +68,7 @@ class LickVncLauncher(object):
         self.vncviewer = None
         self.vncargs   = None
         self.vncprefix = None
+        self.tigervnc  = False
 
         self.do_authenticate = False
         self.ssh_forward     = True
@@ -101,6 +102,7 @@ class LickVncLauncher(object):
                                    'apf' : 'frankfurt.apf'}
 
         self.geometry = list()
+        self.vncviewer_has_geometry = False
 
         #default start sessions
         self.DEFAULT_SESSIONS = [
