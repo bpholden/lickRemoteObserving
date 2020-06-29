@@ -789,7 +789,7 @@ class LickVncLauncher(object):
             sound_port   = 9798
             self.aplay        = self.config.get('aplay', None)
             self.soundplayer  = self.config.get('soundplayer', None)
-            sound_server = self.soundservers[self.instrument]
+            sound_server = self.soundservers[self.tel]
             sound_server = sound_server + ".ucolick.org"
 
             if 'macos' in self.soundplayer :
