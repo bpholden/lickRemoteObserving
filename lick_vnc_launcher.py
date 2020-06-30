@@ -591,6 +591,9 @@ class LickVncLauncher(object):
         command = ['ssh', '-l', username, '-L', forwarding, '-N', '-T', server]
         command.append('-oStrictHostKeyChecking=no')
         command.append('-oCompression=yes')
+        if self.ssh_additional_kex is not None:
+            command.append('-oKexAlgorithms=' + self.ssh_additional_kex)
+            
         if ssh_pkey is not None:
             command.append('-i')
             command.append(ssh_pkey)
