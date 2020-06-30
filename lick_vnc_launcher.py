@@ -61,9 +61,10 @@ class LickVncLauncher(object):
         self.sound   = None
         self.firewall_pass = None
 
-        self.ports_in_use  = {}
-        self.vnc_threads   = []
-        self.vnc_processes = []
+        self.ports_in_use   = {}
+        self.vnc_threads    = []
+        self.vnc_processes  = []
+        self.sessions_found = []
 
         self.vncviewer = None
         self.vncargs   = None
@@ -1189,7 +1190,7 @@ class LickVncLauncher(object):
             self.geometry = window_positions
         else:
             self.log.debug(f"Calculating VNC window geometry...")
-            num_win = len(self.sessions_requested)
+            num_win = len(self.sessions_found)
             cols = 2
             rows = 2
             screen = self.screens[0]
@@ -1229,8 +1230,8 @@ class LickVncLauncher(object):
             for line in stderr.split('\n'):
                 self.log.debug(f'wmctrl line: {line}')
             return None
-        win_ids = dict([x for x in zip(self.sessions_requested,
-                                [None for entry in self.sessions_requested])])
+        win_ids = dict([x for x in zip(self.sessions_found,
+                                [None for entry in self.sessions_found])])
         for line in stdout.split('\n'):
             for thread in self.vnc_threads:
                 session = thread.name
