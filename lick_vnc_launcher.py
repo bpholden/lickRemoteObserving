@@ -78,6 +78,7 @@ class LickVncLauncher(object):
 
         self.vncserver = None
         self.ssh_key_valid = False
+        self.ssh_additional_kex = '+diffie-hellman-group1-sha1'
         self.exit = False
 
         self.use_ps = False
