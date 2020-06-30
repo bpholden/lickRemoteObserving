@@ -300,22 +300,12 @@ class LickVncLauncher(object):
             return
 
         #determine geometry
-        #NOTE: This doesn't work for mac so only trying for linux
-        geometry = ''
-        if 'linux' in platform.system().lower():
+        geometry = None
+        if self.vncviewer_has_geometry is None:
+            self.get_vncviewer_properties()
+        if self.vncviewer_has_geometry is True and len(self.geometry) > 0:
             i = len(self.vnc_threads) % len(self.geometry)
-            geom = self.geometry[i]
-            width  = geom[0]
-            height = geom[1]
-            xpos   = geom[2]
-            ypos   = geom[3]
-            # if width != None and height != None:
-            #     geometry += f'{width}x{height}'
-            if xpos != None and ypos != None:
-                geometry += f'+{xpos}+{ypos}'
-
-        if self.use_ps:
-            time.sleep(2)
+            geometry = self.geometry[i]
 
         ## Open vncviewer as separate thread
         self.vnc_threads.append(threading.Thread(target=self.launch_vncviewer,
