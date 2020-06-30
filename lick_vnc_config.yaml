@@ -28,7 +28,7 @@
 
 ## For ssh tunnelling, a starting local port number is used and incremented
 ## for each port needed.  Default is 5901.
-# local_port_start: 5901
+local_port_start: 5901
 
 
 ## Soundplay configs
@@ -43,5 +43,5 @@
 # aplay: '/usr/bin/afplay -v %v %s '
 
 ## Window size and positioning configs. Overrides calculated size and/or positioning.
-window_size: [1280, 800]
-window_positions: [[0, 0], [1280, 0], [0, 1280], [1280, 0]]
+# window_size: [1280, 800]
+# window_positions: [[0, 0], [1280, 0], [0, 1280], [1280, 0]]
