@@ -30,6 +30,9 @@
 ## for each port needed.  Default is 5901.
 local_port_start: 5901
 
+## When checking for ports in use, we need a command. If you need to specify
+## this, write the correct executable below
+# check_cmd: ss
 
 ## Soundplay configs
 ## Name of soundplayer executable to use (see ./soundplayer/ folder)
@@ -41,6 +44,10 @@ local_port_start: 5901
 # Change the value of the aplay configuration variable to update this
 # aplay: '/usr/bin/play -q -v %v %s '
 # aplay: '/usr/bin/afplay -v %v %s '
+## Finally soundplay only sends certain sounds based on the tags
+## The value below is the default and sends sounds from the 6 VNC desktops
+# soundplaytags: :1,:2,:3,:4,:5,:6
+
 
 ## Window size and positioning configs. Overrides calculated size and/or positioning.
 # window_size: [1280, 800]
