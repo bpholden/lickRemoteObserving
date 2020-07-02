@@ -25,6 +25,9 @@
 # vncargs: '-shared -truecolor -quality 4 -x11cursor -encodings ZRLE'
 # if you  have a password file
 # vncargs: '-shared -truecolor -quality 4 -x11cursor  -encodings ZRLE -passwd /home/observer/.vnc/passwd'
+## The following argument is needed for view only mode
+# vncviewonly: 1
+
 
 ## For ssh tunnelling, a starting local port number is used and incremented
 ## for each port needed.  Default is 5901.
