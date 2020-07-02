@@ -809,7 +809,7 @@ class LickVncLauncher(object):
                     sound_server = 'localhost'
 
             self.sound = soundplay.soundplay()
-            self.sound.connect(self.instrument, sound_server, sound_port,
+            self.sound.connect(self.soundplaytags, sound_server, sound_port,
                                aplay=self.aplay, player=self.soundplayer,
                                pv=self.pv)
         except Exception:
