@@ -160,11 +160,11 @@ class LickVncLauncher(object):
         self.how_check_local_port()
 
         ##---------------------------------------------------------------------
-        ## Determine instrument
+        ## Determine telescope
         ##---------------------------------------------------------------------
-        self.determine_tel_instrument(self.args.account)
+        self.determine_tel(self.args.account)
         if not self.tel:
-            self.exit_app(f'Invalid instrument account: "{self.args.account}"')
+            self.exit_app(f'Invalid telescope account: "{self.args.account}"')
 
 
         ##---------------------------------------------------------------------
@@ -494,7 +494,7 @@ class LickVncLauncher(object):
 
 
     ##-------------------------------------------------------------------------
-    ## Print sessions found for instrument
+    ## Print sessions found for telescope
     ##-------------------------------------------------------------------------
     def print_sessions_found(self):
         '''
@@ -862,19 +862,16 @@ class LickVncLauncher(object):
 
 
     ##-------------------------------------------------------------------------
-    ## Determine Instrument
+    ## Determine telescope
     ##-------------------------------------------------------------------------
-    def determine_tel_instrument(self, account):
+    def determine_tel(self, account):
         '''
 
-        determine_tel_instrument(self, account)
+        determine_tel(self, account)
 
         account - the name of the telescope to be connected to.
 
-        Determines which instrument account to look for based on the
-        telescope.
 
-        Will need to be updated to handle Shane AO.
         '''
         if account is None:
             return
@@ -1059,14 +1056,14 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     def get_vnc_sessions(self, vncserver, account):
         '''
-        get_vnc_sessions(self, vncserver, instrument, account)
+        get_vnc_sessions(self, vncserver, account)
 
-        vncserver - instrument host for VNC sessions (based on telescope)
+        vncserver - host for VNC sessions (based on telescope)
         account - account on vncserver running the VNC sessions
 
         Connects to vncserver through account using do_ssh_cmd.
         Runs the remote task vncstatus and finds the VNC sessions associated
-        with the instrument
+        with the telescope
 
         '''
 
@@ -1090,7 +1087,7 @@ class LickVncLauncher(object):
                     display = fields[0].strip()
                     if display == 'Usage':
                         # this should not happen
-                        self.log.error(f'{instrument} not supported on host {vncserver}')
+                        self.log.error(f'{self.tel} not supported on host {vncserver}')
                         break
                     desktop = fields[1].strip()
                     name = ''.join(desktop.split()[1:])
@@ -1710,7 +1707,7 @@ def create_parser():
     ## create a parser object for understanding command-line arguments
     description = (f"Lick VNC Launcher (v{__version__}). This program is used "
                    f"by approved Lick Remote Observing sites to launch VNC "
-                   f"sessions for the specified instrument account. For "
+                   f"sessions for the specified telescope account. For "
                    f"help or information on how to configure the code, please "
                    f"see the included README.md file or email "
                    f"holden@ucolick.org")
