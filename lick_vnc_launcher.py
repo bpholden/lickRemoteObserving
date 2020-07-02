@@ -163,7 +163,7 @@ class LickVncLauncher(object):
         ## Determine instrument
         ##---------------------------------------------------------------------
         self.determine_tel_instrument(self.args.account)
-        if not self.instrument:
+        if not self.tel:
             self.exit_app(f'Invalid instrument account: "{self.args.account}"')
 
 
@@ -887,9 +887,6 @@ class LickVncLauncher(object):
 
         if account.lower() in telescope:
             self.tel = account.lower()
-
-        if account.lower() in instruments.keys():
-            self.instrument = instruments[account.lower()]
 
         return
 
