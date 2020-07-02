@@ -138,7 +138,8 @@ class LickVncLauncher(object):
         ## Parse command line args and get config
         ##---------------------------------------------------------------------
         self.log.debug("\n***** PROGRAM STARTED *****\nCommand: "+' '.join(sys.argv))
-        self.get_args()
+
+        self.args = create_parser()
         if self.args.account not in ['shane','nickel','apf']:
             self.exit_app('A valid account (shane or nickel) must be specified.')
         self.get_config()
@@ -314,16 +315,6 @@ class LickVncLauncher(object):
         self.vnc_threads[-1].start()
         time.sleep(0.05)
 
-    ##-------------------------------------------------------------------------
-    ## Get command line args
-    ##-------------------------------------------------------------------------
-    def get_args(self):
-        '''
-        get_args(self)
-
-        Sets the self.args value to return from create_parser()
-        '''
-        self.args = create_parser()
 
 
     ##-------------------------------------------------------------------------
