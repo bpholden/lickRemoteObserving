@@ -1724,12 +1724,15 @@ def create_parser():
     parser.add_argument("--check", dest="check",default=None,
         help="How to check for open ports.")
 
+    parser.add_argument("--viewonly", dest="viewonly",default=False,
+        action='store_true',
+        help='Runs the VNC viewer in view only mode'
+    )
 
-    ## add arguments
     parser.add_argument("account", type=str, nargs='?', default='',
                         help="The user account.")
 
-    ## add options
+
     parser.add_argument("-c", "--config", dest="config", type=str,
         help="Path to local configuration file.")
 
