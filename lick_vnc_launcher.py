@@ -151,12 +151,13 @@ class LickVncLauncher(object):
 
         self.get_vncviewer_properties()
         self.get_display_info()
-
+        self.how_check_local_port()
+        
         if self.args.test:
             self.test_functions()
             self.exit_app("Started in test mode, exiting after tests run.")
 
-        self.how_check_local_port()
+
 
         ##---------------------------------------------------------------------
         ## Determine telescope
