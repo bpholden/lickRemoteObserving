@@ -152,7 +152,7 @@ class LickVncLauncher(object):
         self.get_vncviewer_properties()
         self.get_display_info()
         self.how_check_local_port()
-        
+
         if self.args.test:
             self.test_functions()
             self.exit_app("Started in test mode, exiting after tests run.")
@@ -1635,8 +1635,7 @@ class LickVncLauncher(object):
 
         self.log.info('Testing port lookup')
 
-        self.how_check_local_port()
-        one_works = self.use_ps or self.use_ss or self.use_lsof
+        one_works = self.check_cmd is not None
         assert one_works
         self.log.info(f' Passed')
         assert self.is_local_port_in_use(self.LOCAL_PORT_START) is False
