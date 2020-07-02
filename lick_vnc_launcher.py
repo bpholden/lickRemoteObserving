@@ -652,7 +652,7 @@ class LickVncLauncher(object):
                 cmd = subprocess.check_output(['which', self.check_cmd])
                 return
             except:
-                self.log.debug("{self.args.check} is not found")
+                self.log.debug(f"{self.args.check} is not found")
 
         for tst_cmd in ("ss","lsof","netstat.exe","ps"):
             try:
@@ -660,7 +660,7 @@ class LickVncLauncher(object):
                 self.check_cmd = tst_cmd
                 return
             except subprocess.CalledProcessError:
-                self.log.debug("{tst_cmd} is not found")
+                self.log.debug(f"{tst_cmd} is not found")
 
 
         return
