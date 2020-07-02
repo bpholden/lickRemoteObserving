@@ -74,27 +74,28 @@ class LickVncLauncher(object):
         self.do_authenticate = False
         self.ssh_forward     = True
 
-        self.instrument = None
+
         self.tel        = None
 
-        self.vncserver = None
-        self.ssh_key_valid = False
+        self.vncserver  = None
+        #ssh key constants
+        self.ssh_pkey           = 'lick_id_rsa'
+        self.ssh_account        = 'user'
+        self.ssh_server         = 'shimmy.ucolick.org'
         self.ssh_additional_kex = '+diffie-hellman-group1-sha1'
+
         self.exit = False
 
-        self.use_ps = False
+        self.use_ps      = False
         self.use_netstat = False
-        self.use_ss = False
-        self.use_lsof = False
+        self.use_ss      = False
+        self.use_lsof    = False
 
-        self.soundplayer = None
-        self.aplay = None
-        self.pv = None
+        self.soundplayer   = None
+        self.soundplaytags = ":1,:2,:3,:4,:5,:6"
+        self.aplay         = None
+        self.pv            = None
 
-        #ssh key constants
-        self.ssh_pkey = 'lick_id_rsa'
-        self.ssh_account = 'user'
-        self.ssh_server  = 'shimmy.ucolick.org'
 
         self.servers_to_try = {'shane' : 'shimmy',
                                    'nickel' : 'noir',
