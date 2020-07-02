@@ -632,8 +632,8 @@ class LickVncLauncher(object):
 
         self.check_cmd = self.config.get('check_cmd', None)
 
-        if self.check_cmd is not None:
-            self.check_cmd = self.args.check_cmd
+        if self.check_cmd is None:
+            self.check_cmd = self.args.check
 
         if self.check_cmd in ("ps","ss","lsof","netstat.exe"):
             try:
