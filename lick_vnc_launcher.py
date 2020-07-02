@@ -86,10 +86,8 @@ class LickVncLauncher(object):
 
         self.exit = False
 
-        self.use_ps      = False
-        self.use_netstat = False
-        self.use_ss      = False
-        self.use_lsof    = False
+        self.check_cmd      = ''
+        self.check_cmd_args = ''
 
         self.soundplayer   = None
         self.soundplaytags = ":1,:2,:3,:4,:5,:6"
@@ -632,32 +630,27 @@ class LickVncLauncher(object):
         port was open.
         '''
 
-        try:
-            cmd0 = subprocess.check_output(['which', 'ss'])
-            self.use_ss = True
-            return
-        except subprocess.CalledProcessError:
-            self.log.debug("ss is not found")
+        self.check_cmd = self.config.get('check_cmd', None)
 
-        try:
-            cmd1 = subprocess.check_output(['which','lsof'])
-            self.use_lsof = True
-            return
-        except subprocess.CalledProcessError:
-            self.log.debug("lsof is not found")
+        if self.check_cmd is not None:
+            self.check_cmd = self.args.check_cmd
 
-        try:
-            cmd2 = subprocess.check_output(['which','netstat.exe'])
-            self.use_netstat = True
-            return
-        except subprocess.CalledProcessError:
-            self.log.debug("netstat is not found")
+        if self.check_cmd in ("ps","ss","lsof","netstat.exe"):
+            try:
+                cmd = subprocess.check_output(['which', self.check_cmd])
+                self.check_cmd = self.args.check
+                return
+            except:
+                self.log.debug("{self.args.check} is not found")
 
-        try:
-            cmd3 = subprocess.check_output(['which', 'ps'])
-            self.use_ps = True
-        except subprocess.CalledProcessError:
-            self.log.debug("ps is not found")
+        for tst_cmd in ("ss","lsof","netstat.exe","ps"):
+            try:
+                cmd = subprocess.check_output(['which', tst_cmd])
+                self.check_cmd = tst_cmd
+                return
+            except subprocess.CalledProcessError:
+                self.log.debug("{tst_cmd} is not found")
+
 
         return
 
@@ -673,13 +666,13 @@ class LickVncLauncher(object):
         determined by how_check_local_port()
 
         '''
-        if self.use_netstat:
+        if self.check_cmd is 'netstat.exe':
             cmd = f'netstat.exe -an | grep ":{port}"'
-        elif self.use_ss:
+        elif self.check_cmd is 'ss':
             cmd = f'ss -l | grep ":{port}"'
-        elif self.use_lsof:
+        elif self.check_cmd is 'lsof':
             cmd = f'lsof -i -P -n | grep LISTEN | grep ":{port} (LISTEN)" | grep -v grep'
-        elif self.use_ps:
+        elif self.check_cnd is 'ps':
             cmd = f'ps aux | grep "{port}:" | grep -v grep'
 
         self.log.debug(f'Checking for port {port} in use: ' + cmd)
@@ -1725,8 +1718,8 @@ def create_parser():
         default=":1,:2,:3,:4,:5,:6",
         help='Soundplay tags, defaults to ":1,:2,:3,:4,:5,:6"')
 
-    parser.add_argument("--search", dest="search",
-        help="How to search for open ports.")
+    parser.add_argument("--check", dest="check",default=None,
+        help="How to check for open ports.")
 
 
     ## add arguments
