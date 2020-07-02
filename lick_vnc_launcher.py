@@ -1724,7 +1724,9 @@ def create_parser():
     parser.add_argument("--test", dest="test",
         default=False, action="store_true",
         help="Run only tests")
-
+    parser.add_argument("--tags", dest="tags",
+        default=":1,:2,:3,:4,:5,:6",
+        help='Soundplay tags, defaults to ":1,:2,:3,:4,:5,:6"'')
 
     ## add arguments
     parser.add_argument("account", type=str, nargs='?', default='',
