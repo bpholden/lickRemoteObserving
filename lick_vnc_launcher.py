@@ -430,6 +430,12 @@ class LickVncLauncher(object):
                 self.log.warning(f"SSH private key path does not exist: {self.ssh_pkey}")
                 sys.exit()
 
+        soundplaytags = self.config.get('soundplaytags', None)
+        if soundplaytags is None:
+            self.soundplaytags = self.args.tags
+        else:
+            self.soundplaytags = soundplaytags
+
 
     ##-------------------------------------------------------------------------
     ## Log basic system info
