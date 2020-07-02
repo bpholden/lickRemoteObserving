@@ -1728,6 +1728,10 @@ def create_parser():
         default=":1,:2,:3,:4,:5,:6",
         help='Soundplay tags, defaults to ":1,:2,:3,:4,:5,:6"'')
 
+    parser.add_argument("--search", dest="search",
+        help="How to search for open ports.")
+
+
     ## add arguments
     parser.add_argument("account", type=str, nargs='?', default='',
                         help="The user account.")
