@@ -638,7 +638,6 @@ class LickVncLauncher(object):
         if self.check_cmd in ("ps","ss","lsof","netstat.exe"):
             try:
                 cmd = subprocess.check_output(['which', self.check_cmd])
-                self.check_cmd = self.args.check
                 return
             except:
                 self.log.debug("{self.args.check} is not found")
