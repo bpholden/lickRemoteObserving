@@ -672,7 +672,7 @@ class LickVncLauncher(object):
             cmd = f'ss -l | grep ":{port}"'
         elif self.check_cmd is 'lsof':
             cmd = f'lsof -i -P -n | grep LISTEN | grep ":{port} (LISTEN)" | grep -v grep'
-        elif self.check_cnd is 'ps':
+        elif self.check_cmd is 'ps':
             cmd = f'ps aux | grep "{port}:" | grep -v grep'
 
         self.log.debug(f'Checking for port {port} in use: ' + cmd)
