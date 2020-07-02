@@ -654,7 +654,7 @@ class LickVncLauncher(object):
             self.use_netstat = True
             return
         except subprocess.CalledProcessError:
-            self.log.debug("lsof is not found")
+            self.log.debug("netstat is not found")
 
         try:
             cmd3 = subprocess.check_output(['which', 'ps'])
