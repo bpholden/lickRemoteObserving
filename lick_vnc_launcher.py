@@ -465,11 +465,15 @@ class LickVncLauncher(object):
             trace = traceback.format_exc()
             self.log.debug(trace)
 
-
+    #------------------------------------------------------------------------
+    # get some basic properties of the vncviewer 
+    #------------------------------------------------------------------------
     def get_vncviewer_properties(self):
         '''Determine whether we are using TigerVNC
         '''
         vncviewercmd = self.config.get('vncviewer', 'vncviewer')
+        viewonly = self.config.get('vncviewonly',0)
+
         cmd = [vncviewercmd, '--help']
         self.log.debug(f'Checking VNC viewer: {" ".join(cmd)}')
         result = subprocess.run(cmd, capture_output=True)
