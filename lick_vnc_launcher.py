@@ -468,13 +468,18 @@ class LickVncLauncher(object):
             self.log.debug(trace)
 
     #------------------------------------------------------------------------
-    # get some basic properties of the vncviewer 
+    # get some basic properties of the vncviewer
     #------------------------------------------------------------------------
     def get_vncviewer_properties(self):
         '''Determine whether we are using TigerVNC
         '''
         vncviewercmd = self.config.get('vncviewer', 'vncviewer')
         viewonly = self.config.get('vncviewonly',0)
+        if viewonly == 1:
+            self.vncviewonly = True
+        if self.args.viewonly:
+            self.vncviewonly = True
+
 
         cmd = [vncviewercmd, '--help']
         self.log.debug(f'Checking VNC viewer: {" ".join(cmd)}')
@@ -737,6 +742,11 @@ class LickVncLauncher(object):
         vncviewercmd   = self.vncviewer
         vncprefix      = self.vncprefix
         vncargs        = self.vncargs
+
+        if self.tigervnc and self.vncviewonly:
+            vncargs += ' -ViewOnly=1'
+        elif self.vncviewer == '/Applications/VNC Viewer.app/Contents/MacOS/vncviewer' and self.vncviewonly:
+            vncargs += ' SendPointerEvents=0'
 
         cmd = [vncviewercmd]
         if vncargs:
