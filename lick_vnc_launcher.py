@@ -66,10 +66,12 @@ class LickVncLauncher(object):
         self.vnc_processes  = []
         self.sessions_found = []
 
-        self.vncviewer = None
-        self.vncargs   = None
-        self.vncprefix = None
-        self.tigervnc  = False
+        self.vncviewer    = None
+        self.vncargs      = None
+        self.vncprefix    = None
+        self.vncviewonly  = False
+        self.tigervnc     = False
+
 
         self.do_authenticate = False
         self.ssh_forward     = True
