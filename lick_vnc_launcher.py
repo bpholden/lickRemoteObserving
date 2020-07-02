@@ -686,7 +686,7 @@ class LickVncLauncher(object):
         elif self.check_cmd == 'ps':
             cmd = f'ps aux | grep "{port}:" | grep -v grep'
 
-        self.log.debug(f'Checking for port {port} in use: ' + cmd)
+        self.log.debug(f'Checking for port {port} in use: {cmd}')
         proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
         data = proc.communicate()[0]
         data = data.decode("utf-8").strip()
