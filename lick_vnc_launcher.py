@@ -86,8 +86,8 @@ class LickVncLauncher(object):
 
         self.exit = False
 
-        self.check_cmd      = ''
-        self.check_cmd_args = ''
+        self.check_cmd      = None
+        self.check_cmd_args = None
 
         self.soundplayer   = None
         self.soundplaytags = ":1,:2,:3,:4,:5,:6"
