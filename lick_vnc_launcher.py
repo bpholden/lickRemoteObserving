@@ -106,6 +106,7 @@ class LickVncLauncher(object):
 
         self.geometry = list()
         self.vncviewer_has_geometry = False
+        self.screens = [[0,0]]
 
         #default start sessions
         self.DEFAULT_SESSIONS = [
