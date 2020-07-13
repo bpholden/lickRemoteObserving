@@ -29,6 +29,69 @@ import soundplay
 
 __version__ = '1.00'
 
+##-------------------------------------------------------------------------
+## Start from command line
+##-------------------------------------------------------------------------
+def main():
+    #catch all exceptions so we can exit gracefully
+    try:
+        lvl = LickVncLauncher() # create the main object
+        create_logger() #
+        lvl.log = logging.getLogger('KRO')
+        lvl.start()
+    except Exception as error:
+        lvl.handle_fatal_error(error)
+
+##-------------------------------------------------------------------------
+## Create logger
+##-------------------------------------------------------------------------
+def create_logger():
+    '''
+    create_logger()
+    Makes a logging instance.
+
+    Currently this is a global variable, which is then attached to
+    the lick_vnc_launcher object.
+
+    '''
+    try:
+        ## Create logger object
+        log = logging.getLogger('KRO')
+        log.setLevel(logging.DEBUG)
+
+        #create log file and log dir if not exist
+        ymd = datetime.datetime.utcnow().date().strftime('%Y%m%d')
+        pathlib.Path('logs/').mkdir(parents=True, exist_ok=True)
+
+        #file handler (full debug logging)
+        logFile = f'logs/lick-remote-log-utc-{ymd}.txt'
+        logFileHandler = logging.FileHandler(logFile)
+        logFileHandler.setLevel(logging.DEBUG)
+        logFormat = logging.Formatter('%(asctime)s UT - %(levelname)s: %(message)s')
+        logFormat.converter = time.gmtime
+        logFileHandler.setFormatter(logFormat)
+        log.addHandler(logFileHandler)
+
+        #stream/console handler (info+ only)
+        logConsoleHandler = logging.StreamHandler()
+        logConsoleHandler.setLevel(logging.INFO)
+        logFormat = logging.Formatter(' %(levelname)8s: %(message)s')
+        logFormat.converter = time.gmtime
+        logConsoleHandler.setFormatter(logFormat)
+
+        log.addHandler(logConsoleHandler)
+
+    except Exception as error:
+        print(str(error))
+        print(f"ERROR: Unable to create logger at {logFile}")
+        print("Make sure you have write access to this directory.\n")
+        log.info("EXITING APP\n")
+        sys.exit(1)
+
+
+##-------------------------------------------------------------------------
+## Class definitions
+##-------------------------------------------------------------------------
 
 class VNCSession(object):
     '''An object to contain information about a VNC session.
@@ -122,6 +185,7 @@ class LickVncLauncher(object):
         # so assign localport to constant to avoid conflict
         self.STATUS_PORT       = ':1'
         self.LOCAL_PORT_START  = 5901
+
 
 
 
@@ -1758,63 +1822,7 @@ def create_parser():
     #parse
     return parser.parse_args()
 
-##-------------------------------------------------------------------------
-## Create logger
-##-------------------------------------------------------------------------
-def create_logger():
-    '''
-    create_logger()
-    Makes a logging instance.
 
-    Currently this is a global variable, which is then attached to
-    the lick_vnc_launcher object.
-
-    '''
-    try:
-        ## Create logger object
-        log = logging.getLogger('KRO')
-        log.setLevel(logging.DEBUG)
-
-        #create log file and log dir if not exist
-        ymd = datetime.datetime.utcnow().date().strftime('%Y%m%d')
-        pathlib.Path('logs/').mkdir(parents=True, exist_ok=True)
-
-        #file handler (full debug logging)
-        logFile = f'logs/lick-remote-log-utc-{ymd}.txt'
-        logFileHandler = logging.FileHandler(logFile)
-        logFileHandler.setLevel(logging.DEBUG)
-        logFormat = logging.Formatter('%(asctime)s UT - %(levelname)s: %(message)s')
-        logFormat.converter = time.gmtime
-        logFileHandler.setFormatter(logFormat)
-        log.addHandler(logFileHandler)
-
-        #stream/console handler (info+ only)
-        logConsoleHandler = logging.StreamHandler()
-        logConsoleHandler.setLevel(logging.INFO)
-        logFormat = logging.Formatter(' %(levelname)8s: %(message)s')
-        logFormat.converter = time.gmtime
-        logConsoleHandler.setFormatter(logFormat)
-
-        log.addHandler(logConsoleHandler)
-
-    except Exception as error:
-        print(str(error))
-        print(f"ERROR: Unable to create logger at {logFile}")
-        print("Make sure you have write access to this directory.\n")
-        log.info("EXITING APP\n")
-        sys.exit(1)
-
-
-##-------------------------------------------------------------------------
-## Start from command line
-##-------------------------------------------------------------------------
 if __name__ == '__main__':
-
-    #catch all exceptions so we can exit gracefully
-    try:
-        lvl = LickVncLauncher()
-        create_logger()
-        lvl.log = logging.getLogger('KRO')
-        lvl.start()
-    except Exception as error:
-        lvl.handle_fatal_error(error)
+    # do actual work
+    main()
