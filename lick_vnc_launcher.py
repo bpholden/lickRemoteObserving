@@ -13,7 +13,6 @@ import getpass
 import logging
 import math
 import pathlib
-import platform
 import socket
 import subprocess
 import telnetlib
@@ -23,7 +22,6 @@ import traceback
 import warnings
 
 import yaml
-
 
 import soundplay
 
