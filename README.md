@@ -192,7 +192,7 @@ export PATH=/home/MyNAME/miniconda3 bin:$PATH
 
 To retrieve the software, you can download it or clone it using git.
 
-- [Click here to download the software as a zipfile](https://github.com/bpholden/lickRemoteObserving/archive/master.zip)
+- [Click here to download the software as a zipfile](https://github.com/bpholden/lickRemoteObserving/archive/v1.00.zip)
 
 
 - To clone this project from github:
