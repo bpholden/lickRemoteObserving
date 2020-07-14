@@ -1221,6 +1221,12 @@ class LickVncLauncher(object):
         try:
             xpdyinfo = subprocess.run('xdpyinfo', stdout=subprocess.PIPE,
                                        stderr=subprocess.PIPE, timeout=5)
+
+        except subprocess.TimeoutExpired as e:
+            # If xpdyinfo fails just log and keep going
+            self.log.debug('xpdyinfo failed')
+            self.log.debug(e)
+            return
         except TimeoutError as e:
             # If xpdyinfo fails just log and keep going
             self.log.debug('xpdyinfo failed')
