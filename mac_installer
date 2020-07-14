@@ -1,5 +1,5 @@
 #!/bin/bash
-curl -L -o ~/Downloads/master.zip https://codeload.github.com/bpholden/lickRemoteObserving/zip/master
+#curl -L -o ~/Downloads/master.zip https://codeload.github.com/bpholden/lickRemoteObserving/zip/master
 curl -L -o ~/Downloads/Miniconda3-latest-MacOSX-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
 curl -L -o ~/Downloads/VNC-Viewer-6.20.529-MacOSX-x86_64.dmg https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-6.20.529-MacOSX-x86_64.dmg
 curl -L -o ~/Downloads/Tunnelblick_3.8.2a_build_5481.dmg https://github.com/Tunnelblick/Tunnelblick/releases/download/v3.8.2a/Tunnelblick_3.8.2a_build_5481.dmg
