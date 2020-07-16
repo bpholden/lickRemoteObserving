@@ -1,8 +1,13 @@
 #!/bin/bash
-
-/usr/bin/curl -L -o ~/Downloads/master.zip https://codeload.github.com/bpholden/lickRemoteObserving/zip/master
-/usr/bin/curl -L -o ~/Downloads/Miniconda3-latest-MacOSX-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
-/usr/bin/curl -L -o ~/Downloads/VNC-Viewer-latest-MacOSX-x86_64.dmg https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-6.20.529-MacOSX-x86_64.dmg
-/usr/bin/curl -L -o ~/Downloads/Tunnelblick.dmg https://tunnelblick.net/release/Latest_Tunnelblick_Stable.dmg
-chmod 755 ~/Downloads/Miniconda3-latest-MacOSX-x86_64.sh
+curlex=/usr/bin/curl
+if [ -x $curlex ]; then
+  /usr/bin/curl -L -o ~/Downloads/master.zip https://codeload.github.com/bpholden/lickRemoteObserving/zip/master
+  /usr/bin/curl -L -o ~/Downloads/Miniconda3-latest-MacOSX-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+  /usr/bin/curl -L -o ~/Downloads/VNC-Viewer-latest-MacOSX-x86_64.dmg https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-6.20.529-MacOSX-x86_64.dmg
+  /usr/bin/curl -L -o ~/Downloads/Tunnelblick.dmg https://tunnelblick.net/release/Latest_Tunnelblick_Stable.dmg
+  chmod 755 ~/Downloads/Miniconda3-latest-MacOSX-x86_64.sh
+fi
+if [ ! -x $curlex ]; then
+  echo /usr/bin/curl is not a program, need to download stuff by hand using a browser
+fi
 #source ~/Downloads/Miniconda3-latest-MacOSX-x86_64.sh
