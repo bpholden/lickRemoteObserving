@@ -161,6 +161,12 @@ apt install openvpn
 apt install network-manager-openvpn
 apt install network-manager-openvpn-gnome
 ```
+  - **For Linux** on RedHat 7 and 8 flavors
+```
+yum install openvpn
+apt install NetworkManager-openvpn
+apt install NetworkManager-openvpn-gnome
+```
 - **From source**
 	[OpenVPN](https://openvpn.net/community-downloads/)
 
