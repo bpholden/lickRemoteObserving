@@ -39,7 +39,7 @@ Before you can connect to Lick remotely, we need to provide you with the VPN inf
     - Who will be observing
     - Phone # in case a network failure
 
-- Email `sla@ucolick.org` for the VPN certificate with:
+- Email `lick-home-obs@ucolick.org` for the VPN certificate with:
    - Name of the PI
    - Date of observing nights
    - Telescope being used
