@@ -4,7 +4,6 @@ These scripts are to be used by remote sites to connect to Lick for remote obser
 
 When everything is properly configured, all you need to do is run
 ```
-conda activate KRO
 cd ~/lickRemoteObserving
 ./start_lick_viewers shane
 ```
