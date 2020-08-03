@@ -245,7 +245,7 @@ vncviewer : 'vncviewer'
 ```
 
 - **Configure OpenVPN:**
-Obtain the tblk file for your schedule observing run.
+Obtain the OpenVPN (ovpn) file for your schedule observing run.
 
   - **For macOS**: Open the Tunnelblick and click on the
     ```VPN Details``` menu item. When the window for Tunnelblick
@@ -318,6 +318,7 @@ for sites which are using multiple computers for each set of VNC   sessions.  Ch
 
 From the directory where the Lick VNC software is installed
 (e.g. `~/lickRemoteObserving/`), run ```test_connection```
+**This will only work ONCE A VPN connection is made.**
 
 ```
 cd ~/lickRemoteObserving
