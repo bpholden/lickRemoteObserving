@@ -5,14 +5,11 @@ These scripts are to be used by remote sites to connect to Lick for remote obser
 When everything is properly configured, all you need to do is run
 ```
 cd ~/lickRemoteObserving
-./start_lick_viewers shane
-```
-or
-```
 ./start_nickel_viewer
 ```
 or
 ```
+cd ~/lickRemoteObserving
 ./start_shane_viewer
 ```
 to enable the connection.
