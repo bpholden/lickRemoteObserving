@@ -14,7 +14,7 @@ cd ~/lickRemoteObserving
 ```
 to enable the connection.
 
-You can just double click the corect script in the Finder on a Mac as well.
+You can just double click the correct script in the Finder on a Mac as well.
 
 # Outline
 
@@ -25,7 +25,7 @@ You can just double click the corect script in the Finder on a Mac as well.
 - Open a terminal
 - Test software and conncetion
 - Go to directory with software installed
-- ```./start_lick_viewers nickel``` or ```./start_lick_viewers shane```
+- ```./start_shane_viewers``` or ```./start_nickel_viewers```
 - Type the VNC password for each VNC window
 
 # Notify Lick of your intent to connect remotely
