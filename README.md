@@ -23,7 +23,7 @@ You can just double click the correct script in the Finder on a Mac as well.
 - Configure the software for your computer **can reuse Keck version**
 - Run Open VPN or Tunnelblick using certificate
 - Open a terminal
-- Test software and conncetion
+- Test software and connection
 - Go to directory with software installed
 - ```./start_shane_viewers``` or ```./start_nickel_viewers```
 - Type the VNC password for each VNC window
