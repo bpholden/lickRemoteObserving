@@ -1029,7 +1029,7 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     ## Validate ssh key on remote vnc server
     ##-------------------------------------------------------------------------
-    def validate_ssh_key(self):
+    def validate_connection(self):
 
         '''
         validate_ssh_key(self)
@@ -1043,13 +1043,13 @@ class LickVncLauncher(object):
 
         '''
 
-        self.log.info(f"Validating ssh key...")
+        self.log.info(f"Validating connection...")
         if self.tel is None:
-            self.log.error(" Cannot validate SSH key for undefined telescope")
+            self.log.error(" Cannot conncetion key for undefined telescope")
             return
 
         if self.change_mod() is False:
-            self.log.error(" Cannot validate SSH key for undefined telescope")
+            self.log.error(" Cannot connection key for undefined telescope")
             return
 
         self.ssh_key_valid = False
@@ -1083,9 +1083,9 @@ class LickVncLauncher(object):
                 self.vncserver = server
 
         if self.ssh_key_valid:
-            self.log.info("  SSH key OK")
+            self.log.info("  Connection  OK")
         else:
-            self.log.error("  SSH key invalid")
+            self.log.error("  Connection failed - check VPN connection, is it running?")
 
 
     ##-------------------------------------------------------------------------
