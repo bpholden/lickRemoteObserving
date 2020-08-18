@@ -236,7 +236,7 @@ class LickVncLauncher(object):
         ## Validate ssh key or use alt method?
         ##---------------------------------------------------------------------
 
-        self.validate_ssh_key()
+        self.validate_connection()
         if not self.ssh_key_valid:
             self.log.error("\n\n\tCould not validate SSH key.\n\t"\
                           "Contact sa@ucolick.org "\
@@ -1032,7 +1032,7 @@ class LickVncLauncher(object):
     def validate_connection(self):
 
         '''
-        validate_ssh_key(self)
+        validate_connection(self)
 
         Checks if the ssh key is valid by connecting to a remote host
         and running a simple command.
@@ -1735,17 +1735,17 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     ## test ssh key and validate it
     ##-------------------------------------------------------------------------
-    def test_ssh_key(self):
+    def test_connection(self):
         '''
-        test_ssh_key(self)
+        test_connection(self)
 
         Tests connection by trying to connect to the Shane.
         Only runs a single remote application, no VNC required.
 
         '''
-        self.log.info('Testing config file: ssh_pkey')
+        self.log.info('Testing config file: ssh_pkey and VPN connnection')
         self.tel = 'shane'
-        self.validate_ssh_key()
+        self.validate_connection()
         assert self.ssh_key_valid is True
         self.log.info(f' Passed')
 
