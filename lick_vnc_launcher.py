@@ -236,15 +236,11 @@ class LickVncLauncher(object):
         ##---------------------------------------------------------------------
 
         self.validate_connection()
-        if not self.ssh_key_valid:
-            self.log.error("\n\n\tCould not validate SSH key.\n\t"\
+        if not self.connection_valid:
+            self.log.error("\n\n\tCould not validate connection, is your VPN working?\n\t"\
                           "Contact sa@ucolick.org "\
-                          "for other options to connect remotely.\n")
+                          "if the VPN is on but this test fails.\n")
             self.exit_app()
-        if self.args.authonly is True:
-            self.log.info("SSH key validated\nWill exit as authonly selected")
-            self.exit_app()
-
 
 
         ##---------------------------------------------------------------------
@@ -1026,7 +1022,7 @@ class LickVncLauncher(object):
 
         return stdout
     ##-------------------------------------------------------------------------
-    ## Validate ssh key on remote vnc server
+    ## Validate connection
     ##-------------------------------------------------------------------------
     def validate_connection(self):
 
