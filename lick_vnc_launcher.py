@@ -1047,12 +1047,72 @@ class LickVncLauncher(object):
             self.log.error(" Cannot connection key for undefined telescope")
             return
 
+        self.connection_valid = False
+
+        cmds = ['/usr/sbin/netstat','/sbin/ip']
+        correct_cmd = None
+        for cmd in cmds:
+            if correct_cmd is None:
+                try:
+                    data = subprocess.check_output(['which', cmd])
+                    self.log.info(f'  Command {cmd} found')
+                except Exception as e:
+                    self.log.debug('  Failed to find command ' +str(cmd) + ' ' + str(e))
+                    data = None
+                if data:
+                    correct_cmd = cmd
+
+        flags = ''
+        if correct_cmd == '/usr/sbin/netstat':
+            flags = '-nr'
+        if correct_cmd == '/sbin/ip':
+            flags = 'route'
+        if correct_cmd:
+            cmd = f"{correct_cmd} {flags} | grep 128.114.176"
+            proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+            data = proc.communicate()[0]
+            data = data.decode("utf-8").strip()
+            lines = data.split('\n') if data else list()
+            if len(lines) > 0:
+                self.connection_valid = True
+
+
+        if self.connection_valid:
+            self.log.info(" Connection  OK")
+        else:
+            self.log.error("  Connection failed - check VPN connection, is it running?")
+
+    ##-------------------------------------------------------------------------
+    ## Validate ssh key - this should always work
+    ##-------------------------------------------------------------------------
+    def validate_ssh_key(self):
+
+        '''
+        validate_ssh_key(self)
+
+        Checks if the ssh key is valid by connecting to a remote host
+        and running a simple command.
+
+        The hosts that are use to attempt to make conections are those
+        listed in the self.servers_to_try dictionary. The self.tel
+        determine which host.
+
+        '''
+
+        self.log.info(f"Validating ssh key...")
+        if self.tel is None:
+            self.log.error(" Cannot ssh to an undefined telescope")
+            return
+
+        if self.change_mod() is False:
+            self.log.error(" Cannot ensure that the key has the correct user mode")
+            return
+
         self.ssh_key_valid = False
         cmd = 'whoami'
         server =  self.servers_to_try[self.tel] + '.ucolick.org'
         try:
-            data = self.do_ssh_cmd(cmd, server,
-                                    self.ssh_account)
+            data = self.do_ssh_cmd(cmd, server, self.ssh_account)
         except Exception as e:
             self.log.error('  Failed: ' + str(e))
             trace = traceback.format_exc()
@@ -1062,12 +1122,10 @@ class LickVncLauncher(object):
 
         if data == self.ssh_account:
             self.ssh_key_valid = True
-            self.vncserver = server
         else:
             self.ssh_additional_kex = None
             try:
-                data = self.do_ssh_cmd(cmd, server,
-                                        self.ssh_account)
+                data = self.do_ssh_cmd(cmd, server, self.ssh_account)
             except Exception as e:
                 self.log.error('  Failed: ' + str(e))
                 trace = traceback.format_exc()
@@ -1078,9 +1136,9 @@ class LickVncLauncher(object):
                 self.vncserver = server
 
         if self.ssh_key_valid:
-            self.log.info("  Connection  OK")
+            self.log.info(" SSH key OK")
         else:
-            self.log.error("  Connection failed - check VPN connection, is it running?")
+            self.log.error("  Connection failed - ssh key not OK")
 
 
     ##-------------------------------------------------------------------------
@@ -1674,6 +1732,7 @@ class LickVncLauncher(object):
         '''
         self.test_vncviewer()
         self.test_port_lookup()
+        self.test_connection()
         self.test_ssh_key()
         server = self.servers_to_try[self.args.account]
         self.test_connection_to_servers(server)
@@ -1728,19 +1787,34 @@ class LickVncLauncher(object):
         self.log.info(f' Passed')
 
     ##-------------------------------------------------------------------------
-    ## test ssh key and validate it
+    ## test connection
     ##-------------------------------------------------------------------------
     def test_connection(self):
         '''
         test_connection(self)
 
-        Tests connection by trying to connect to the Shane.
+        Runs local executable to see if the route to MH exists.
+
+        '''
+        self.log.info('Testing config file: VPN connnection')
+        self.tel = 'shane'
+        self.validate_connection()
+        assert self.connection_valid is True
+        self.log.info(f' Passed')
+    ##-------------------------------------------------------------------------
+    ## test ssh key and validate it
+    ##-------------------------------------------------------------------------
+    def test_ssh_key(self):
+        '''
+        test_ssh_key(self)
+
+        Tests connection by trying to ssh connect to the Shane.
         Only runs a single remote application, no VNC required.
 
         '''
-        self.log.info('Testing config file: ssh_pkey and VPN connnection')
+        self.log.info('Testing config file: ssh_pkey')
         self.tel = 'shane'
-        self.validate_connection()
+        self.validate_ssh_key()
         assert self.ssh_key_valid is True
         self.log.info(f' Passed')
 
