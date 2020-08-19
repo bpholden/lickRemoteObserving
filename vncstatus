@@ -1,0 +1,44 @@
+#!/usr/bin/python
+from __future__ import print_function
+import subprocess
+import re 
+
+cmd = 'ps -C Xvnc -o args'
+cmdargs = cmd.split()
+data = subprocess.check_output(cmdargs)
+
+lines = data.split("\n")
+names = []
+numbers = []
+for ln in lines:
+    if ln == 'COMMAND':
+        continue
+    # oh boy! parsing!
+    # the format of the args are executable, desktop args as key value pairs
+    # keys start with a '-'
+    curargs = ln.split()
+    if len(curargs) < 3:
+        continue
+    desktop = curargs[1]
+
+    mtch = re.search("\:(\d+)",desktop)
+    if mtch:
+        numbers.append(mtch.group(1))
+
+    nextargs = False
+    name = '' 
+    for n in range(2,len(curargs)):
+        mtch = re.search("\A-",curargs[n])
+        if curargs[n] == '-desktop':
+            nextargs = True
+            name = ''
+        elif nextargs and mtch is None:
+            nmtch = re.search("\:\d+",curargs[n])
+            if nmtch is None:
+                name = name +' ' + curargs[n]
+        elif nextargs and mtch :
+            names.append(name)
+            nextargs = False
+    
+for n in range(0,len(numbers)):
+    print ( numbers[n], names[n])
