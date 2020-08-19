@@ -133,7 +133,6 @@ class LickVncLauncher(object):
         self.vncviewonly  = False
         self.tigervnc     = False
 
-
         self.do_authenticate = False
         self.ssh_forward     = True
 
