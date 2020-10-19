@@ -1176,11 +1176,11 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     ## Determine VNC Sessions
     ##-------------------------------------------------------------------------
-    def get_vnc_sessions(self, vncserver, account):
+    def get_vnc_sessions(self, account):
         '''
-        get_vnc_sessions(self, vncserver, account)
+        get_vnc_sessions(self, account)
 
-        vncserver - host for VNC sessions (based on telescope)
+
         account - account on vncserver running the VNC sessions
 
         Connects to vncserver through account using do_ssh_cmd.
