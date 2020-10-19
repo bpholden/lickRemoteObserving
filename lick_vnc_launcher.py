@@ -242,13 +242,17 @@ class LickVncLauncher(object):
                           "if the VPN is on but this test fails.\n")
             self.exit_app()
 
-
+        self.validate_ssh_key()
+        if not self.ssh_key_valid:
+            self.log.error("\n\n\tSSH key is no longer valid\n\t"\
+                "Contact sa@ucolick.org "\
+                "if the VPN is on but this test fails.\n")
+            self.exit_app()
         ##---------------------------------------------------------------------
         ## Determine VNC Sessions
         ##---------------------------------------------------------------------
-        if self.ssh_key_valid:
-            self.sessions_found = self.get_vnc_sessions(self.vncserver,
-                                                        self.ssh_account)
+
+        self.sessions_found = self.get_vnc_sessions(self.ssh_account)
 
         if self.args.authonly is False and\
                 (not self.sessions_found or len(self.sessions_found) == 0):
@@ -1188,6 +1192,11 @@ class LickVncLauncher(object):
         with the telescope
 
         '''
+
+        self.vncserver = self.servers_to_try[self.tel]
+        self.vncserver += '.ucolick.org'
+
+        vncserver = self.vncserver
 
         self.log.info(f"Connecting to {account}@{vncserver} to get VNC sessions list")
 
