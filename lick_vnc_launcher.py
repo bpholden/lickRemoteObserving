@@ -232,7 +232,7 @@ class LickVncLauncher(object):
 
 
         ##---------------------------------------------------------------------
-        ## Validate ssh key or use alt method?
+        ## Validate connection and ssh key
         ##---------------------------------------------------------------------
 
         self.validate_connection()
