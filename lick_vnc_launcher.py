@@ -155,12 +155,12 @@ class LickVncLauncher(object):
         self.pv            = None
 
 
-        self.servers_to_try = {'shane' : 'shimmy',
-                                   'nickel' : 'noir',
-                                   'apf' : 'frankfurt.apf'}
-        self.soundservers = {'shane' : 'shimmy',
-                                   'nickel' : 'noir',
-                                   'apf' : 'frankfurt.apf'}
+        self.servers_to_try = {'shane' : 'shimmy.ucolick.org',
+                                   'nickel' : 'noir.ucolick.org',
+                                   'apf' : 'frankfurt.apf.ucolick.org'}
+        self.soundservers = {'shane' : 'shimmy.ucolick.org',
+                                   'nickel' : 'noir.ucolick.org',
+                                   'apf' : 'frankfurt.apf.ucolick.org'}
 
         self.geometry = list()
         self.vncviewer_has_geometry = False
@@ -852,7 +852,7 @@ class LickVncLauncher(object):
             self.aplay        = self.config.get('aplay', None)
             self.soundplayer  = self.config.get('soundplayer', None)
             sound_server = self.soundservers[self.tel]
-            sound_server = sound_server + ".ucolick.org"
+            sound_server = sound_server
 
             if 'macos' in self.soundplayer :
                 self.pv = '0.01'
@@ -1110,7 +1110,7 @@ class LickVncLauncher(object):
 
         self.ssh_key_valid = False
         cmd = 'whoami'
-        server =  self.servers_to_try[self.tel] + '.ucolick.org'
+        server =  self.servers_to_try[self.tel]
         try:
             data = self.do_ssh_cmd(cmd, server, self.ssh_account)
         except Exception as e:
@@ -1190,8 +1190,6 @@ class LickVncLauncher(object):
         '''
 
         self.vncserver = self.servers_to_try[self.tel]
-        self.vncserver += '.ucolick.org'
-
         vncserver = self.vncserver
 
         self.log.info(f"Connecting to {account}@{vncserver} to get VNC sessions list")
@@ -1837,8 +1835,8 @@ class LickVncLauncher(object):
         '''
         vnc_account = self.ssh_account
         vnc_password = None
-        result = f'{server}.ucolick.org'
-        self.log.info(f'Testing SSH to {vnc_account}@{server}.ucolick.org')
+        result = f'{server}'
+        self.log.info(f'Testing SSH to {vnc_account}@{server}')
         output = self.do_ssh_cmd('hostname', result,
                                 vnc_account)
         assert output is not None
