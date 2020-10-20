@@ -1049,8 +1049,6 @@ class LickVncLauncher(object):
             self.log.error(" Cannot connection key for undefined telescope")
             return
 
-        self.connection_valid = False
-
         cmds = ['/usr/sbin/netstat','/sbin/ip']
         correct_cmd = None
         for cmd in cmds:
