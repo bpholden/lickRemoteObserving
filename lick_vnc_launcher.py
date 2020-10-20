@@ -120,28 +120,26 @@ class LickVncLauncher(object):
         #init vars we need to shutdown app properly
         self.config  = None
         self.sound   = None
-        self.firewall_pass = None
+        self.tel        = None
 
         self.ports_in_use   = {}
         self.vnc_threads    = []
         self.vnc_processes  = []
         self.sessions_found = []
 
+        self.vncserver  = None
         self.vncviewer    = None
         self.vncargs      = None
         self.vncprefix    = None
         self.vncviewonly  = False
         self.tigervnc     = False
 
-        self.do_authenticate = False
-        self.ssh_forward     = True
+        self.ssh_forward      = True
+        self.connection_valid = False
 
-
-        self.tel        = None
-
-        self.vncserver  = None
         #ssh key constants
         self.ssh_pkey           = 'lick_id_rsa'
+        self.ssh_key_valid      = False
         self.ssh_account        = 'user'
         self.ssh_server         = 'shimmy.ucolick.org'
         self.ssh_additional_kex = '+diffie-hellman-group1-sha1'
