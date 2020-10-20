@@ -1068,7 +1068,7 @@ class LickVncLauncher(object):
         if correct_cmd == '/sbin/ip':
             flags = 'route'
         if correct_cmd:
-            cmd = f"{correct_cmd} {flags} | grep 128.114.176"
+            cmd = f"{correct_cmd} {flags} | grep 128.114"
             proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
             data = proc.communicate()[0]
             data = data.decode("utf-8").strip()
