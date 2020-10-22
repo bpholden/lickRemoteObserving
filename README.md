@@ -206,7 +206,7 @@ Once you have downloaded the software:
 cd ~/lickRemoteObserving
 conda env create -f environment.yaml
 ```
-Â
+
 - Create configuration file:
  - If you have a Mac and have used our software suggestions
 ```
