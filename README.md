@@ -157,12 +157,12 @@ apt install openvpn
 apt install network-manager-openvpn
 apt install network-manager-openvpn-gnome
 ```
-- **From source**
+- From source
 	[OpenVPN](https://openvpn.net/community-downloads/)
 
 - **Windows Subsystem for Linux**
-  [OpenVPN](https://openvpn.net/client-connect-vpn-for-windows/)
-
+  - [OpenVPN](https://openvpn.net/client-connect-vpn-for-windows/)
+  - [Xming](https://sourceforge.net/projects/xming/) strongly suggested
 
   - Install miniconda/Anaconda python3
       - Download from : https://docs.conda.io/en/latest/miniconda.html
