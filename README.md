@@ -147,6 +147,15 @@ The software has been tested for macOS and some Linux variants.
   - **Note for Windows Subsystem for Linux** you will also need:
       [X windows for Windows](https://sourceforge.net/projects/xming/)
 
+      and
+
+      [VcXsrc](https://sourceforge.net/projects/vcxsrv/)
+
+      After installing both:
+      - Set the display variable in terminal with "export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0"
+      - Start VcXsrv by executing the Xlaunch executable.  On the window where you can select options ("Extra settings") check the box for "Disable access control" and enter "-ac" in the "Additional parameters for VcXsrv" text box.
+      - Launch xterm from your WSL terminal with "xterm"
+
 
 - Install VPN client
   - **For macOS** [Tunnelblick](https://tunnelblick.net/) by
