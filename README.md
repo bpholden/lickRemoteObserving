@@ -145,11 +145,9 @@ The software has been tested for macOS and some Linux variants.
       (BPH) experience it is slower.
 
   - **Note for Windows Subsystem for Linux** you will also need:
-      [X windows for Windows](https://sourceforge.net/projects/xming/)
-
-      and
-
-      [VcXsrc](https://sourceforge.net/projects/vcxsrv/)
+    - [OpenVPN](https://openvpn.net/client-connect-vpn-for-windows/)
+    - [X windows for Windows](https://sourceforge.net/projects/xming/)
+    - [VcXsrc](https://sourceforge.net/projects/vcxsrv/)
 
       After installing both:
       - Set the display variable in terminal with "export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0"
@@ -170,14 +168,15 @@ apt install network-manager-openvpn-gnome
 	[OpenVPN](https://openvpn.net/community-downloads/)
 
 - **Windows Subsystem for Linux**
-  - [OpenVPN](https://openvpn.net/client-connect-vpn-for-windows/)
-  - [Xming](https://sourceforge.net/projects/xming/) strongly suggested
+  [OpenVPN](https://openvpn.net/client-connect-vpn-for-windows/)
 
-  - Install miniconda/Anaconda python3
-      - Download from : https://docs.conda.io/en/latest/miniconda.html
-      - Or download and run the latest installer: https://www.anaconda.com/distribution/
-      - **Note** If you have Anaconda or miniconda for Python 2, make sure you install Anaconda or miniconda for Python 3 separately!
-      - Add python3 to user path (example below for ~/.bashrc with typical python install path):
+
+
+- Install miniconda/Anaconda python3
+  - Download from : https://docs.conda.io/en/latest/miniconda.html
+  - Or download and run the latest installer: https://www.anaconda.com/distribution/
+  - **Note** If you have Anaconda or miniconda for Python 2, make sure you install Anaconda or miniconda for Python 3 separately!
+  - Add python3 to user path (example below for ~/.bashrc with typical python install path):
 
       The first is for the macOS and the second is an example for Linux.
 
