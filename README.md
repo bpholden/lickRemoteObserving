@@ -144,8 +144,7 @@ The software has been tested for macOS and some Linux variants.
 	- [TightVNC](https://tightvnc.com) will work on most hosts, as it uses Java. In my
       (BPH) experience it is slower.
 
-  - **Note for Windows Subsystem for Linux** you will also need:
-    - [OpenVPN](https://openvpn.net/client-connect-vpn-for-windows/)
+  - **Note for Windows Subsystem for Linux** you will also need besides a VNC viewer:
     - [X windows for Windows](https://sourceforge.net/projects/xming/)
     - [VcXsrc](https://sourceforge.net/projects/vcxsrv/)
 
@@ -158,17 +157,16 @@ The software has been tested for macOS and some Linux variants.
 - Install VPN client
   - **For macOS** [Tunnelblick](https://tunnelblick.net/) by
     downloading latest stable release
+  - From source
+	[OpenVPN](https://openvpn.net/community-downloads/)
+  - **Windows Subsystem for Linux**
+  [OpenVPN](https://openvpn.net/client-connect-vpn-for-windows/)
   - **For Linux** on Ubuntu flavors
 ```
 apt install openvpn
 apt install network-manager-openvpn
 apt install network-manager-openvpn-gnome
 ```
-- From source
-	[OpenVPN](https://openvpn.net/community-downloads/)
-
-- **Windows Subsystem for Linux**
-  [OpenVPN](https://openvpn.net/client-connect-vpn-for-windows/)
 
 
 
