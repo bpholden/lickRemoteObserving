@@ -169,6 +169,12 @@ apt install network-manager-openvpn-gnome
 ```
 
 
+  - On Ubuntu, a way to install the VPN is to run the command below. **Note** you still have to start it, but this will setup everything.
+```
+nmcli connection import type openvpn file <file.ovpn>
+```
+
+
 
 - Install miniconda/Anaconda python3
   - Download from : https://docs.conda.io/en/latest/miniconda.html
