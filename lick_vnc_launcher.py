@@ -1215,8 +1215,8 @@ class LickVncLauncher(object):
                         self.log.error(f'{self.tel} not supported on host {vncserver}')
                         break
                     desktop = fields[1].strip()
-                    name = ''.join(desktop.split()[1:])
-                    s = VNCSession(display=display, desktop=desktop, user=account)
+                    name = ln.strip()
+                    s = VNCSession(name=name,display=display, desktop=desktop, user=account)
                     sessions.append(s)
         self.log.debug(f'  Got {len(sessions)} sessions')
         for s in sessions:
