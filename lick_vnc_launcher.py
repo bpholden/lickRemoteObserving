@@ -266,7 +266,7 @@ class LickVncLauncher(object):
         self.vnc_threads  = []
         self.vnc_processes = []
         for s in self.sessions_found:
-            self.start_vnc_session(s.name)
+            self.start_vnc_session(s.display)
 
 
         ##---------------------------------------------------------------------
@@ -289,30 +289,30 @@ class LickVncLauncher(object):
     ##-------------------------------------------------------------------------
     ## Start VNC session
     ##-------------------------------------------------------------------------
-    def start_vnc_session(self, session_name):
+    def start_vnc_session(self, session_display):
         '''
-        start_vnc_session(self, session_name)
+        start_vnc_session(self, session_display)
 
-        Makes a VNC session connection to a session named session_name.
+        Makes a VNC session connection to a session named session_display.
         The name must be in the list of allowed sessions stored in self.
         Makes a ssh connection using the stored credentials to the host
         stored in the self as self.vncserver.
         '''
-        self.log.info(f"Opening VNCviewer for '{session_name}'")
+
 
 #         try:
         #get session data by name
         session = None
         for s in self.sessions_found:
-                if s.name == session_name:
+                if s.display == session_display:
                         session = s
                         break
 
         if not session:
-            self.log.error(f"No server VNC session found for '{session_name}'.")
+            self.log.error(f"No server VNC session found for '{session_display}'.")
             self.print_sessions_found()
             return
-
+        self.log.info(f"Opening VNCviewer for '{session.desktop}'")
         #determine vncserver (only different for "status")
         vncserver = self.vncserver
 
@@ -330,7 +330,7 @@ class LickVncLauncher(object):
             # determine if there is already a tunnel for this session
             local_port = None
             for p in self.ports_in_use.keys():
-                if session_name == self.ports_in_use[p][1]:
+                if session_display == self.ports_in_use[p][1]:
                     local_port = p
                     self.log.info(f"Found existing SSH tunnel on port {port}")
                     vncserver = 'localhost'
@@ -341,7 +341,7 @@ class LickVncLauncher(object):
                 try:
                     local_port = self.open_ssh_tunnel(vncserver, account, password,
                                                     self.ssh_pkey, port, None,
-                                                    session_name=session_name)
+                                                    session_name=session_display)
                 except:
                     self.log.error(f"Failed to open SSH tunnel for "
                               f"{account}@{vncserver}:{port}")
@@ -1216,7 +1216,7 @@ class LickVncLauncher(object):
                         break
                     desktop = fields[1].strip()
                     name = ln.strip()
-                    s = VNCSession(name=name,display=display, desktop=desktop, user=account)
+                    s = VNCSession(name=name, display=display, desktop=desktop, user=account)
                     sessions.append(s)
         self.log.debug(f'  Got {len(sessions)} sessions')
         for s in sessions:
@@ -1528,7 +1528,7 @@ class LickVncLauncher(object):
                 self.log.debug(f'Recieved command "{cmd}"')
                 desktop = int(nmatch.group(1)) - 1
                 if desktop >= 0 and desktop < 6:
-                    self.start_vnc_session(self.sessions_found[desktop].name)
+                    self.start_vnc_session(self.sessions_found[desktop].display)
                 else:
                     self.log.error(f'Unrecognized desktop: "{cmd}"')
             else:
