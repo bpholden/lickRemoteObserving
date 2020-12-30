@@ -870,7 +870,7 @@ class LickVncLauncher(object):
 
             if self.soundplayer is None:
                 self.guess_soundplay()
-            if 'macos' in self.soundplayer :
+            if self.soundplayer is not None and 'macos' in self.soundplayer :
                 self.pv = '0.01'
 
             #Do we need ssh tunnel for this?
