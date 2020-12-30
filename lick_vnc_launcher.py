@@ -249,11 +249,12 @@ class LickVncLauncher(object):
         ##---------------------------------------------------------------------
         ## Determine VNC Sessions
         ##---------------------------------------------------------------------
+        if self.args.authonly:
+            self.exit_app("Connection can be made.")
 
         self.sessions_found = self.get_vnc_sessions(self.ssh_account)
 
-        if self.args.authonly is False and\
-                (not self.sessions_found or len(self.sessions_found) == 0):
+        if not self.sessions_found or len(self.sessions_found) == 0:
             self.exit_app('No VNC sessions found')
 
 
