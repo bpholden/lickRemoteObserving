@@ -492,6 +492,19 @@ class LickVncLauncher(object):
                 self.log.warning(f"SSH private key path does not exist: {self.ssh_pkey}")
                 sys.exit()
 
+        self.aplay        = self.config.get('aplay', None)
+        self.soundplayer  = self.config.get('soundplayer', None)
+        sysinfo = os.uname()
+        if sysinfo.sysname == 'Darwin' and 'linux' in self.soundplayer :
+            self.log.warning(f"Running {self.soundplayer} is incompatible with a {sysinfo.sysname} host")
+            self.soundplayer = 'soundplay-107050-8.6.3-macosx10.5-ix86+x86_64'
+            self.log.warning(f"Reseting to {self.soundplayer} ")
+            self.pv = '0.01'
+        elif sysinfo.sysname == 'Linux' and 'macos' in self.soundplayer:
+            self.log.warning(f"Running {self.soundplayer} is incompatible with a {sysinfo.sysname} host")
+            self.soundplayer = 'soundplay-107098-8.6.3-linux-x86_64'
+            self.log.warning(f"Reseting to {self.soundplayer} ")
+
         soundplaytags = self.config.get('soundplaytags', None)
         if soundplaytags is None:
             self.soundplaytags = self.args.tags
@@ -851,8 +864,6 @@ class LickVncLauncher(object):
 
             #config vars
             sound_port   = 9798
-            self.aplay        = self.config.get('aplay', None)
-            self.soundplayer  = self.config.get('soundplayer', None)
             sound_server = self.soundservers[self.tel]
             sound_server = sound_server
 
