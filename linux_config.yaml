@@ -1,6 +1,4 @@
 vncviewer: 'vncviewer'
 vncargs: '-Shared -FullColor -PreferredEncoding=ZRLE -AutoSelect=0'
-soundplayer: 'soundplay-107098-8.6.3-linux-x86_64'
-aplay: '/usr/bin/play -q -v %v %s '
 ## if you are having problems with connections, uncoment the line below
 #check_cmd: ps
