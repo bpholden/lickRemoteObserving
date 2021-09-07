@@ -173,7 +173,7 @@ apt install network-manager-openvpn-gnome
 ```
 nmcli connection import type openvpn file <file.ovpn>
 ```
-
+  This can also be installed using the graphic user interface. Ubuntu has a system control icon, it looks like a square connected to two other squares below it and is in the upper right. Clicking on that will give a settings option. Click on settings and networking to go to the NetworkManager. That will let you add a file for the VPN configuration. There is an important change that must be made to the file's setup, see below. Without that change, activating the VPN will eliminate the network connection entirely.
 
 
 - Install miniconda/Anaconda python3
