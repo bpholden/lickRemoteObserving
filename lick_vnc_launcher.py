@@ -25,7 +25,7 @@ import yaml
 
 import soundplay
 
-__version__ = '1.13'
+__version__ = '1.2'
 
 ##-------------------------------------------------------------------------
 ## Start from command line
@@ -240,12 +240,6 @@ class LickVncLauncher(object):
                           "if the VPN is on but this test fails.\n")
             self.exit_app()
 
-        self.validate_ssh_key()
-        if not self.ssh_key_valid:
-            self.log.error("\n\n\tSSH key is no longer valid\n\t"\
-                "Contact sa@ucolick.org "\
-                "if the VPN is on but this test fails.\n")
-            self.exit_app()
         ##---------------------------------------------------------------------
         ## Determine VNC Sessions
         ##---------------------------------------------------------------------
@@ -1215,6 +1209,7 @@ class LickVncLauncher(object):
             data = ''
 
         if data:
+            self.ssh_key_valid = True
             lns = data.split("\n")
             for ln in lns:
                 if ln[0] != "#":
