@@ -990,13 +990,8 @@ class LickVncLauncher(object):
             command.append('-i')
             command.append(self.ssh_pkey)
 
-        command.append('-oStrictHostKeyChecking=no')
-        command.append('-oCompression=yes')
-        if self.ssh_additional_kex is not None:
-            command.append('-oKexAlgorithms=' + self.ssh_additional_kex)
         command.append(cmd)
         self.log.debug('ssh command: ' + ' '.join (command))
-
 
         pipe = subprocess.PIPE
         null = subprocess.DEVNULL
@@ -1010,9 +1005,10 @@ class LickVncLauncher(object):
         try:
             stdout,stderr = proc.communicate(timeout=timeout)
         except subprocess.TimeoutExpired:
+            proc.kill()
+            stdout,stderr = proc.communicate(timeout=timeout)
             self.log.error('  Timeout')
-            return
-
+            
         if proc.returncode != 0:
             message = '  command failed with error ' + str(proc.returncode)
             self.log.error(message)
@@ -1056,11 +1052,11 @@ class LickVncLauncher(object):
 
         self.log.info(f"Validating connection...")
         if self.tel is None:
-            self.log.error(" Cannot conncetion key for undefined telescope")
+            self.log.error(" Cannot conncet with undefined telescope")
             return
 
         if self.change_mod() is False:
-            self.log.error(" Cannot connection key for undefined telescope")
+            self.log.error(" Cannot ensure that the ssh key has the correct permissions")
             return
 
         cmds = ['/usr/sbin/netstat','/sbin/ip']
