@@ -1005,9 +1005,10 @@ class LickVncLauncher(object):
         try:
             stdout,stderr = proc.communicate(timeout=timeout)
         except subprocess.TimeoutExpired:
+            proc.kill()
+            stdout,stderr = proc.communicate(timeout=timeout)
             self.log.error('  Timeout')
-            return
-
+            
         if proc.returncode != 0:
             message = '  command failed with error ' + str(proc.returncode)
             self.log.error(message)
