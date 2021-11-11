@@ -990,13 +990,8 @@ class LickVncLauncher(object):
             command.append('-i')
             command.append(self.ssh_pkey)
 
-        command.append('-oStrictHostKeyChecking=no')
-        command.append('-oCompression=yes')
-        if self.ssh_additional_kex is not None:
-            command.append('-oKexAlgorithms=' + self.ssh_additional_kex)
         command.append(cmd)
         self.log.debug('ssh command: ' + ' '.join (command))
-
 
         pipe = subprocess.PIPE
         null = subprocess.DEVNULL
