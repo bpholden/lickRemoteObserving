@@ -1044,6 +1044,10 @@ class LickVncLauncher(object):
 
         '''
 
+        if self.args.vpn or self.config['novpn']:
+            self.connection_valid = True
+            return
+        
         self.log.info(f"Validating connection...")
         if self.tel is None:
             self.log.error(" Cannot conncet with undefined telescope")
@@ -1823,7 +1827,7 @@ def create_parser():
 
     parser.add_argument("--check", dest="check",default=None,
         help="How to check for open ports.")
-    parser.add_argument("--novpn", dest="vpn",default=True,
+    parser.add_argument("--novpn", dest="vpn",default=False,
                             action="store_true",help="Turn off VPN check.")
 
     parser.add_argument("--viewonly", dest="viewonly",default=False,
