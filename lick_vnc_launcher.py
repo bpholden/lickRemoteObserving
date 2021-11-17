@@ -25,7 +25,7 @@ import yaml
 
 import soundplay
 
-__version__ = '1.13'
+__version__ = '1.2'
 
 ##-------------------------------------------------------------------------
 ## Start from command line
@@ -240,12 +240,6 @@ class LickVncLauncher(object):
                           "if the VPN is on but this test fails.\n")
             self.exit_app()
 
-        self.validate_ssh_key()
-        if not self.ssh_key_valid:
-            self.log.error("\n\n\tSSH key is no longer valid\n\t"\
-                "Contact sa@ucolick.org "\
-                "if the VPN is on but this test fails.\n")
-            self.exit_app()
         ##---------------------------------------------------------------------
         ## Determine VNC Sessions
         ##---------------------------------------------------------------------
@@ -1050,6 +1044,10 @@ class LickVncLauncher(object):
 
         '''
 
+        if self.args.vpn or self.config['novpn']:
+            self.connection_valid = True
+            return
+        
         self.log.info(f"Validating connection...")
         if self.tel is None:
             self.log.error(" Cannot conncet with undefined telescope")
@@ -1093,65 +1091,6 @@ class LickVncLauncher(object):
             self.log.error("  Connection failed - check VPN connection, is it running?")
 
     ##-------------------------------------------------------------------------
-    ## Validate ssh key - this should always work
-    ##-------------------------------------------------------------------------
-    def validate_ssh_key(self):
-
-        '''
-        validate_ssh_key(self)
-
-        Checks if the ssh key is valid by connecting to a remote host
-        and running a simple command.
-
-        The hosts that are use to attempt to make conections are those
-        listed in the self.servers_to_try dictionary. The self.tel
-        determine which host.
-
-        '''
-
-        self.log.info(f"Validating ssh key...")
-        if self.tel is None:
-            self.log.error(" Cannot ssh to an undefined telescope")
-            return
-
-        if self.change_mod() is False:
-            self.log.error(" Cannot ensure that the key has the correct user mode")
-            return
-
-        self.ssh_key_valid = False
-        cmd = 'whoami'
-        server =  self.servers_to_try[self.tel]
-        try:
-            data = self.do_ssh_cmd(cmd, server, self.ssh_account)
-        except Exception as e:
-            self.log.error('  Failed: ' + str(e))
-            trace = traceback.format_exc()
-            self.log.debug(trace)
-            data = None
-
-
-        if data == self.ssh_account:
-            self.ssh_key_valid = True
-        else:
-            self.ssh_additional_kex = None
-            try:
-                data = self.do_ssh_cmd(cmd, server, self.ssh_account)
-            except Exception as e:
-                self.log.error('  Failed: ' + str(e))
-                trace = traceback.format_exc()
-                self.log.debug(trace)
-                data = None
-            if data == self.ssh_account:
-                self.ssh_key_valid = True
-                self.vncserver = server
-
-        if self.ssh_key_valid:
-            self.log.info(" SSH key OK")
-        else:
-            self.log.error("  Connection failed - ssh key not OK")
-
-
-    ##-------------------------------------------------------------------------
     ## Ensure that the ssh key file has the right mode
     ##-------------------------------------------------------------------------
     def change_mod(self):
@@ -1177,11 +1116,6 @@ class LickVncLauncher(object):
             self.log.error(f"Cannot set {fullpath} to the correct mode, ssh may fail")
 
         return rv
-
-
-
-
-
 
     ##-------------------------------------------------------------------------
     ## Determine VNC Sessions
@@ -1215,6 +1149,7 @@ class LickVncLauncher(object):
             data = ''
 
         if data:
+            self.ssh_key_valid = True
             lns = data.split("\n")
             for ln in lns:
                 if ln[0] != "#":
@@ -1892,6 +1827,8 @@ def create_parser():
 
     parser.add_argument("--check", dest="check",default=None,
         help="How to check for open ports.")
+    parser.add_argument("--novpn", dest="vpn",default=False,
+                            action="store_true",help="Turn off VPN check.")
 
     parser.add_argument("--viewonly", dest="viewonly",default=False,
         action='store_true',
