@@ -28,6 +28,8 @@
 ## The following argument is needed for view only mode
 # vncviewonly: 1
 
+# this will turn off the VPN check
+# novpn: True
 
 ## For ssh tunnelling, a starting local port number is used and incremented
 ## for each port needed.  Default is 5901.
