@@ -25,7 +25,7 @@ import yaml
 
 import soundplay
 
-__version__ = '1.2'
+__version__ = '1.21'
 
 ##-------------------------------------------------------------------------
 ## Start from command line
@@ -978,7 +978,7 @@ class LickVncLauncher(object):
         '''
         output = None
         self.log.debug(f'Trying SSH connect to {server} as {account}:')
-        command = ['ssh', server, '-l', account, '-T']
+        command = ['ssh', server, '-l', account, '-T', '-x']
 
         if self.ssh_pkey is not None:
             command.append('-i')
