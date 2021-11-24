@@ -25,7 +25,7 @@ import yaml
 
 import soundplay
 
-__version__ = '1.21'
+__version__ = '1.23'
 
 ##-------------------------------------------------------------------------
 ## Start from command line
@@ -468,7 +468,7 @@ class LickVncLauncher(object):
             if rv is None:
                 self.log.warning("No good guess!\n")
 
-
+        self.novpn = self.config.get('novpn', False)
         #checks local port start config
         self.local_port = self.LOCAL_PORT_START
         lps = self.config.get('local_port_start', None)
@@ -1044,7 +1044,7 @@ class LickVncLauncher(object):
 
         '''
 
-        if self.args.vpn or self.config['novpn']:
+        if self.args.vpn or self.novpn:
             self.connection_valid = True
             return
         
