@@ -30,7 +30,7 @@
 
 # this will turn off the VPN check
 # novpn: True
-novpn: False
+
 
 ## For ssh tunnelling, a starting local port number is used and incremented
 ## for each port needed.  Default is 5901.
