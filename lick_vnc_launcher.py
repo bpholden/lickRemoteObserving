@@ -1413,7 +1413,7 @@ class LickVncLauncher(object):
                  f"          Lick Remote Observing (v{__version__})",
                  f"                        MENU",
                  f"-"*(line_length-2),
-                 f"  l               List sessions available",
+                 f"  l               List VNC sessions available",
                  f"  [desktop number]  Open VNC session by number (1-6)",
                  f"  w               Position VNC windows",
                  f"  s               Soundplayer restart",
