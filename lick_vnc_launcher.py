@@ -1057,6 +1057,8 @@ class LickVncLauncher(object):
             self.log.error(" Cannot ensure that the ssh key has the correct permissions")
             return
 
+
+        # note fix 
         cmds = ['/usr/sbin/netstat','/sbin/ip']
         correct_cmd = None
         for cmd in cmds:
@@ -1681,7 +1683,6 @@ class LickVncLauncher(object):
         self.test_vncviewer()
         self.test_port_lookup()
         self.test_connection()
-        self.test_ssh_key()
         server = self.servers_to_try[self.args.account]
         self.test_connection_to_servers(server)
 
