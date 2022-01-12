@@ -25,7 +25,7 @@ import yaml
 
 import soundplay
 
-__version__ = '1.23'
+__version__ = '1.24'
 
 ##-------------------------------------------------------------------------
 ## Start from command line
@@ -1057,6 +1057,8 @@ class LickVncLauncher(object):
             self.log.error(" Cannot ensure that the ssh key has the correct permissions")
             return
 
+
+        # note fix 
         cmds = ['/usr/sbin/netstat','/sbin/ip']
         correct_cmd = None
         for cmd in cmds:
@@ -1413,7 +1415,7 @@ class LickVncLauncher(object):
                  f"          Lick Remote Observing (v{__version__})",
                  f"                        MENU",
                  f"-"*(line_length-2),
-                 f"  l               List sessions available",
+                 f"  l               List VNC sessions available",
                  f"  [desktop number]  Open VNC session by number (1-6)",
                  f"  w               Position VNC windows",
                  f"  s               Soundplayer restart",
@@ -1681,7 +1683,6 @@ class LickVncLauncher(object):
         self.test_vncviewer()
         self.test_port_lookup()
         self.test_connection()
-        self.test_ssh_key()
         server = self.servers_to_try[self.args.account]
         self.test_connection_to_servers(server)
 
@@ -1748,22 +1749,6 @@ class LickVncLauncher(object):
         self.tel = 'shane'
         self.validate_connection()
         assert self.connection_valid is True
-        self.log.info(f' Passed')
-    ##-------------------------------------------------------------------------
-    ## test ssh key and validate it
-    ##-------------------------------------------------------------------------
-    def test_ssh_key(self):
-        '''
-        test_ssh_key(self)
-
-        Tests connection by trying to ssh connect to the Shane.
-        Only runs a single remote application, no VNC required.
-
-        '''
-        self.log.info('Testing config file: ssh_pkey')
-        self.tel = 'shane'
-        self.validate_ssh_key()
-        assert self.ssh_key_valid is True
         self.log.info(f' Passed')
 
     ##-------------------------------------------------------------------------
