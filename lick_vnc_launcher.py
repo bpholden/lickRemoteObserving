@@ -1749,22 +1749,6 @@ class LickVncLauncher(object):
         self.validate_connection()
         assert self.connection_valid is True
         self.log.info(f' Passed')
-    ##-------------------------------------------------------------------------
-    ## test ssh key and validate it
-    ##-------------------------------------------------------------------------
-    def test_ssh_key(self):
-        '''
-        test_ssh_key(self)
-
-        Tests connection by trying to ssh connect to the Shane.
-        Only runs a single remote application, no VNC required.
-
-        '''
-        self.log.info('Testing config file: ssh_pkey')
-        self.tel = 'shane'
-        self.validate_ssh_key()
-        assert self.ssh_key_valid is True
-        self.log.info(f' Passed')
 
     ##-------------------------------------------------------------------------
     ## test to see if you can connect to the servers
