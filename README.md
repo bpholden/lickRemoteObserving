@@ -285,7 +285,8 @@ Obtain the OpenVPN (ovpn) file for your schedule observing run.
 
 	checking that checkbox, pressing ```OK```, and pressing ```Save```. After this the
 	new OpenVPN configuration should appear in the NetworkManager widget as
-	one of the ```VPN Connections```
+	one of the ```VPN Connections``` If you have the option to make
+	DNS and Routes Automatic, leave those ON. 
 
 - **Configure Local VNC Viewer Software:** This is where one sets
   `vncviewer` with the path and executable for the local VNC viewer
