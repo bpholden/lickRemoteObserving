@@ -25,7 +25,7 @@ import yaml
 
 import soundplay
 
-__version__ = '1.23'
+__version__ = '1.24'
 
 ##-------------------------------------------------------------------------
 ## Start from command line
