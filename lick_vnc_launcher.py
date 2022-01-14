@@ -83,7 +83,7 @@ def create_logger():
         print(str(error))
         print(f"ERROR: Unable to create logger at {logFile}")
         print("Make sure you have write access to this directory.\n")
-        log.info("EXITING APP\n")
+        log.info("Exiting\n")
         sys.exit(1)
 
 
@@ -230,7 +230,7 @@ class LickVncLauncher(object):
 
 
         ##---------------------------------------------------------------------
-        ## Validate connection and ssh key
+        ## Validate VPN connection
         ##---------------------------------------------------------------------
 
         self.validate_connection()
@@ -1634,7 +1634,7 @@ class LickVncLauncher(object):
         self.kill_vnc_processes()
 
         self.exit = True
-        self.log.info("EXITING APP\n")
+        self.log.info("Exiting\n")
         sys.exit(1)
 
 
@@ -1650,11 +1650,9 @@ class LickVncLauncher(object):
         '''
         #helpful user error message
         supportEmail = 'holden@ucolick.org'
-        print("\n****** PROGRAM ERROR ******\n")
         print("Error message: " + str(error) + "\n")
         print("If you need troubleshooting assistance:")
         print(f"* Email {supportEmail}\n")
-        #todo: call number, website?
 
         #Log error if we have a log object (otherwise dump error to stdout)
         #and call exit_app function
