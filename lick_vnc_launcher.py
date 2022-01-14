@@ -25,7 +25,7 @@ import yaml
 
 import soundplay
 
-__version__ = '1.24'
+__version__ = '1.25'
 
 ##-------------------------------------------------------------------------
 ## Start from command line
@@ -83,7 +83,7 @@ def create_logger():
         print(str(error))
         print(f"ERROR: Unable to create logger at {logFile}")
         print("Make sure you have write access to this directory.\n")
-        log.info("EXITING APP\n")
+        log.info("Exiting\n")
         sys.exit(1)
 
 
@@ -230,7 +230,7 @@ class LickVncLauncher(object):
 
 
         ##---------------------------------------------------------------------
-        ## Validate connection and ssh key
+        ## Validate VPN connection
         ##---------------------------------------------------------------------
 
         self.validate_connection()
@@ -1002,14 +1002,19 @@ class LickVncLauncher(object):
             proc.kill()
             stdout,stderr = proc.communicate(timeout=timeout)
             self.log.error('  Timeout')
-            
-        if proc.returncode != 0:
-            message = '  command failed with error ' + str(proc.returncode)
-            self.log.error(message)
+            return None
 
         stdout = stdout.decode()
         stdout = stdout.strip()
         self.log.debug(f"Output: '{stdout}'")
+        
+        if proc.returncode != 0:
+            message = '  command failed with error ' + str(proc.returncode)
+            self.log.error(message)
+            if 'Host key verification failed' in stdout:
+                message = f'The entry into .ssh/known_hosts for {server} is old and needs to be removed, edit that file and try to ssh by hand.' 
+                self.log.error(message)
+            return None
 
         # The first line might be a warning about accepting a ssh host key.
         # Check for that, and get rid of it from the output.
@@ -1148,23 +1153,28 @@ class LickVncLauncher(object):
             self.log.error('  Failed: ' + str(e))
             trace = traceback.format_exc()
             self.log.debug(trace)
-            data = ''
+            self.exit_app('Failed at obtaining list of VNC sessions, see log.')
 
-        if data:
-            self.ssh_key_valid = True
-            lns = data.split("\n")
-            for ln in lns:
-                if ln[0] != "#":
-                    fields = ln.split('-')
-                    display = fields[0].strip()
-                    if display == 'Usage':
-                        # this should not happen
-                        self.log.error(f'{self.tel} not supported on host {vncserver}')
-                        break
-                    desktop = fields[1].strip()
-                    name = ln.strip()
-                    s = VNCSession(name=name, display=display, desktop=desktop, user=account)
-                    sessions.append(s)
+        if data is None:
+            self.exit_app('Failed at obtaining list of VNC sessions, see log.')
+
+        self.ssh_key_valid = True
+        lns = data.split("\n")
+        for ln in lns:
+            if ln[0] == "#":
+                continue
+            fields = ln.split('-')
+            display = fields[0].strip()
+            if display == 'Usage':
+                # this should not happen
+                self.log.error(f'{self.tel} not supported on host {vncserver}')
+                break
+                
+            desktop = fields[1].strip()
+            name = ln.strip()
+            s = VNCSession(name=name, display=display, desktop=desktop, user=account)
+            sessions.append(s)
+                
         self.log.debug(f'  Got {len(sessions)} sessions')
         for s in sessions:
             self.log.debug(str(s))
@@ -1634,7 +1644,7 @@ class LickVncLauncher(object):
         self.kill_vnc_processes()
 
         self.exit = True
-        self.log.info("EXITING APP\n")
+        self.log.info("Exiting\n")
         sys.exit(1)
 
 
@@ -1650,11 +1660,9 @@ class LickVncLauncher(object):
         '''
         #helpful user error message
         supportEmail = 'holden@ucolick.org'
-        print("\n****** PROGRAM ERROR ******\n")
         print("Error message: " + str(error) + "\n")
         print("If you need troubleshooting assistance:")
         print(f"* Email {supportEmail}\n")
-        #todo: call number, website?
 
         #Log error if we have a log object (otherwise dump error to stdout)
         #and call exit_app function
