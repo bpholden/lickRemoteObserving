@@ -214,11 +214,13 @@ cd ~/lickRemoteObserving
 Once you have downloaded the software:
 
 
-- Create a KRO [conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html) using the provided environment.yaml file:
+- If you have NOT installed the Keck remote observing software, create a KRO [conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html) using the provided environment.yaml file:
 ```
 cd ~/lickRemoteObserving
 conda env create -f environment.yaml
 ```
+
+- If you HAVE installed the Keck remote observing software, you can use that conda environment with this set of scripts.
 
 - Create configuration file:
  - If you have a Mac and have used our software suggestions
@@ -287,7 +289,7 @@ Obtain the OpenVPN (ovpn) file for your schedule observing run.
 	checking that checkbox, pressing ```OK```, and pressing ```Save```. After this the
 	new OpenVPN configuration should appear in the NetworkManager widget as
 	one of the ```VPN Connections``` If you have the option to make
-	DNS and Routes Automatic, leave those ON. 
+	DNS and Routes Automatic, leave those ON.
 
 - **Configure Local VNC Viewer Software:** This is where one sets
   `vncviewer` with the path and executable for the local VNC viewer
