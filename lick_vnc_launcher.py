@@ -536,6 +536,83 @@ class LickVncLauncher(object):
             trace = traceback.format_exc()
             self.log.debug(trace)
 
+    ##-------------------------------------------------------------------------
+    ## Figure out how to ping
+    ##-------------------------------------------------------------------------
+            
+    def get_ping_cmd(self):
+        '''Assemble the local ping command.
+        '''
+        # Figure out local ping command
+        try:
+            ping = subprocess.check_output(['which', 'ping'])
+            ping = ping.decode()
+            ping = ping.strip()
+            self.ping_cmd = [ping]
+        except subprocess.CalledProcessError as e:
+            self.log.error("Ping command not available")
+            self.log.error(e)
+            return None
+
+        os = platform.system()
+        os = os.lower()
+        # One ping only
+        # Wait up to 2 seconds for a response.
+        if os == 'linux':
+            self.ping_cmd.extend(['-c', '1', '-w', 'wait'])
+        elif os == 'darwin':
+            self.ping_cmd.extend(['-c', '1', '-W', 'wait000'])
+        else:
+            # Don't understand how ping works on this platform.
+            self.ping_cmd = None
+        self.log.debug(f'Got ping command: {self.ping_cmd[:-2]}')
+
+    ##-------------------------------------------------------------------------
+    ## Ping hosts
+    ##-------------------------------------------------------------------------
+
+    def ping(self, address, wait=5):
+        '''Ping a server to determine if it is accessible.
+        '''
+        if self.ping_cmd is None:
+            self.log.warning('No ping command defined')
+            return None
+        # Run ping
+        ping_cmd = [x.replace('wait', f'{int(wait)}') for x in self.ping_cmd]
+        ping_cmd.append(address)
+        self.log.debug(' '.join(ping_cmd))
+        output = subprocess.run(ping_cmd,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+        if output.returncode != 0:
+            self.log.debug("Ping command failed")
+            self.log.debug(f"STDOUT: {output.stdout.decode()}")
+            self.log.debug(f"STDERR: {output.stderr.decode()}")
+            return False
+        else:
+            self.log.debug("Ping command succeeded")
+            self.log.debug(f"STDOUT: {output.stdout.decode()}")
+            self.log.debug(f"STDERR: {output.stderr.decode()}")
+            return True
+
+    ##-------------------------------------------------------------------------
+    ## Test if localhost is defined - because sometime it is not
+    ##-------------------------------------------------------------------------
+    def test_localhost(self):
+        '''The localhost needs to be defined (e.g. 127.0.0.1)
+        '''
+        failcount = 0
+        self.log.info('Checking localhost')
+        if self.ping_cmd is None:
+            self.log.warning('No ping command defined.  Unable to test localhost.')
+            return 0
+        if self.ping('localhost') is False:
+            self.log.error(f"localhost appears not to be configured")
+            self.log.error(f"Your /etc/hosts file may need to be updated")
+            failcount += 1
+
+        return failcount
+
     #------------------------------------------------------------------------
     # get some basic properties of the vncviewer
     #------------------------------------------------------------------------
