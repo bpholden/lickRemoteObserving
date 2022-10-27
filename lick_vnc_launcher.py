@@ -1898,7 +1898,7 @@ def create_parser():
     parser.add_argument("--check", dest="check",default=None,
         help="How to check for open ports.")
     parser.add_argument("--novpn", dest="vpn",default=False,
-                            action="store_true",help="Turn off VPN check.")
+                            action="store_true",help="Turn off VPN check to allow the software to run without a VPN.")
 
     parser.add_argument("--viewonly", dest="viewonly",default=False,
         action='store_true',
