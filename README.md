@@ -201,7 +201,7 @@ export PATH=/home/MyNAME/miniconda3 bin:$PATH
 To retrieve the software, you can download it or clone it using git.
 
 
-- [Click here to download the software as a zipfile](https://github.com/bpholden/lickRemoteObserving/archive/refs/tags/v1.25.zip)
+- [Click here to download the software as a zipfile](https://github.com/bpholden/lickRemoteObserving/archive/refs/tags/v1.26.zip)
 
 
 - To clone this project from github:
@@ -369,7 +369,7 @@ usage: lick_vnc_launcher.py [-h] [--authonly] [--nosound] [--test]
                             [--viewonly] [-c CONFIG]
                             [account]
 
-Lick VNC Launcher (v1.25). This program is used by approved Lick Remote
+Lick VNC Launcher (v1.26). This program is used by approved Lick Remote
 Observing sites to launch VNC sessions for the specified telescope account.
 For help or information on how to configure the code, please see the included
 README.md file or email holden@ucolick.org
