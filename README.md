@@ -287,7 +287,7 @@ Obtain the OpenVPN (ovpn) file for your schedule observing run.
 	checking that checkbox, pressing ```OK```, and pressing ```Save```. After this the
 	new OpenVPN configuration should appear in the NetworkManager widget as
 	one of the ```VPN Connections``` If you have the option to make
-	DNS and Routes Automatic, leave those ON. 
+	DNS and Routes Automatic, leave those ON.
 
 - **Configure Local VNC Viewer Software:** This is where one sets
   `vncviewer` with the path and executable for the local VNC viewer
@@ -360,6 +360,35 @@ cd ~/lickRemoteObserving
 To get help on available command line options:
 ```
 ./start_lick_viewers --help
+```
+
+That will output the following:
+```
+usage: lick_vnc_launcher.py [-h] [--authonly] [--nosound] [--test]
+                            [--tags TAGS] [--check CHECK] [--novpn]
+                            [--viewonly] [-c CONFIG]
+                            [account]
+
+Lick VNC Launcher (v1.25). This program is used by approved Lick Remote
+Observing sites to launch VNC sessions for the specified telescope account.
+For help or information on how to configure the code, please see the included
+README.md file or email holden@ucolick.org
+
+positional arguments:
+  account               The user account.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --authonly            Authenticate only
+  --nosound             Skip start of soundplay application.
+  --test                Run only tests
+  --tags TAGS           Soundplay tags, defaults to ":1,:2,:3,:4,:5,:6"
+  --check CHECK         How to check for open ports.
+  --novpn               Turn off VPN check to allow the software to run
+                        without a VPN.
+  --viewonly            Runs the VNC viewer in view only mode
+  -c CONFIG, --config CONFIG
+                        Path to local configuration file.
 ```
 
 **NOTE:** Be sure to exit the script by using the 'q' quit option or
