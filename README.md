@@ -117,6 +117,7 @@ The software has been tested for macOS and some Linux variants.
 		```
 		apt install tigervnc-viewer
 		apt install tigervnc-common
+    apt install tigervnc-tools
 		```
         - **Important!** If you are using TigerVNC, in the $HOME/.vnc directory, create a file `default.tigervnc` with these two lines:
         ```
