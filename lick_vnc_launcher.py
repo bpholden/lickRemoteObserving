@@ -25,7 +25,7 @@ import yaml
 
 import soundplay
 
-__version__ = '1.24'
+__version__ = '1.25'
 
 ##-------------------------------------------------------------------------
 ## Start from command line
@@ -83,7 +83,7 @@ def create_logger():
         print(str(error))
         print(f"ERROR: Unable to create logger at {logFile}")
         print("Make sure you have write access to this directory.\n")
-        log.info("EXITING APP\n")
+        log.info("Exiting\n")
         sys.exit(1)
 
 
@@ -230,7 +230,7 @@ class LickVncLauncher(object):
 
 
         ##---------------------------------------------------------------------
-        ## Validate connection and ssh key
+        ## Validate VPN connection
         ##---------------------------------------------------------------------
 
         self.validate_connection()
@@ -535,6 +535,83 @@ class LickVncLauncher(object):
             self.log.error("Unable to log system info.")
             trace = traceback.format_exc()
             self.log.debug(trace)
+
+    ##-------------------------------------------------------------------------
+    ## Figure out how to ping
+    ##-------------------------------------------------------------------------
+            
+    def get_ping_cmd(self):
+        '''Assemble the local ping command.
+        '''
+        # Figure out local ping command
+        try:
+            ping = subprocess.check_output(['which', 'ping'])
+            ping = ping.decode()
+            ping = ping.strip()
+            self.ping_cmd = [ping]
+        except subprocess.CalledProcessError as e:
+            self.log.error("Ping command not available")
+            self.log.error(e)
+            return None
+
+        os = platform.system()
+        os = os.lower()
+        # One ping only
+        # Wait up to 2 seconds for a response.
+        if os == 'linux':
+            self.ping_cmd.extend(['-c', '1', '-w', 'wait'])
+        elif os == 'darwin':
+            self.ping_cmd.extend(['-c', '1', '-W', 'wait000'])
+        else:
+            # Don't understand how ping works on this platform.
+            self.ping_cmd = None
+        self.log.debug(f'Got ping command: {self.ping_cmd[:-2]}')
+
+    ##-------------------------------------------------------------------------
+    ## Ping hosts
+    ##-------------------------------------------------------------------------
+
+    def ping(self, address, wait=5):
+        '''Ping a server to determine if it is accessible.
+        '''
+        if self.ping_cmd is None:
+            self.log.warning('No ping command defined')
+            return None
+        # Run ping
+        ping_cmd = [x.replace('wait', f'{int(wait)}') for x in self.ping_cmd]
+        ping_cmd.append(address)
+        self.log.debug(' '.join(ping_cmd))
+        output = subprocess.run(ping_cmd,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+        if output.returncode != 0:
+            self.log.debug("Ping command failed")
+            self.log.debug(f"STDOUT: {output.stdout.decode()}")
+            self.log.debug(f"STDERR: {output.stderr.decode()}")
+            return False
+        else:
+            self.log.debug("Ping command succeeded")
+            self.log.debug(f"STDOUT: {output.stdout.decode()}")
+            self.log.debug(f"STDERR: {output.stderr.decode()}")
+            return True
+
+    ##-------------------------------------------------------------------------
+    ## Test if localhost is defined - because sometime it is not
+    ##-------------------------------------------------------------------------
+    def test_localhost(self):
+        '''The localhost needs to be defined (e.g. 127.0.0.1)
+        '''
+        failcount = 0
+        self.log.info('Checking localhost')
+        if self.ping_cmd is None:
+            self.log.warning('No ping command defined.  Unable to test localhost.')
+            return 0
+        if self.ping('localhost') is False:
+            self.log.error(f"localhost appears not to be configured")
+            self.log.error(f"Your /etc/hosts file may need to be updated")
+            failcount += 1
+
+        return failcount
 
     #------------------------------------------------------------------------
     # get some basic properties of the vncviewer
@@ -1002,14 +1079,19 @@ class LickVncLauncher(object):
             proc.kill()
             stdout,stderr = proc.communicate(timeout=timeout)
             self.log.error('  Timeout')
-            
-        if proc.returncode != 0:
-            message = '  command failed with error ' + str(proc.returncode)
-            self.log.error(message)
+            return None
 
         stdout = stdout.decode()
         stdout = stdout.strip()
         self.log.debug(f"Output: '{stdout}'")
+        
+        if proc.returncode != 0:
+            message = '  command failed with error ' + str(proc.returncode)
+            self.log.error(message)
+            if 'Host key verification failed' in stdout:
+                message = f'The entry into .ssh/known_hosts for {server} is old and needs to be removed, edit that file and try to ssh by hand.' 
+                self.log.error(message)
+            return None
 
         # The first line might be a warning about accepting a ssh host key.
         # Check for that, and get rid of it from the output.
@@ -1148,23 +1230,28 @@ class LickVncLauncher(object):
             self.log.error('  Failed: ' + str(e))
             trace = traceback.format_exc()
             self.log.debug(trace)
-            data = ''
+            self.exit_app('Failed at obtaining list of VNC sessions, see log.')
 
-        if data:
-            self.ssh_key_valid = True
-            lns = data.split("\n")
-            for ln in lns:
-                if ln[0] != "#":
-                    fields = ln.split('-')
-                    display = fields[0].strip()
-                    if display == 'Usage':
-                        # this should not happen
-                        self.log.error(f'{self.tel} not supported on host {vncserver}')
-                        break
-                    desktop = fields[1].strip()
-                    name = ln.strip()
-                    s = VNCSession(name=name, display=display, desktop=desktop, user=account)
-                    sessions.append(s)
+        if data is None:
+            self.exit_app('Failed at obtaining list of VNC sessions, see log.')
+
+        self.ssh_key_valid = True
+        lns = data.split("\n")
+        for ln in lns:
+            if ln[0] == "#":
+                continue
+            fields = ln.split('-')
+            display = fields[0].strip()
+            if display == 'Usage':
+                # this should not happen
+                self.log.error(f'{self.tel} not supported on host {vncserver}')
+                break
+                
+            desktop = fields[1].strip()
+            name = ln.strip()
+            s = VNCSession(name=name, display=display, desktop=desktop, user=account)
+            sessions.append(s)
+                
         self.log.debug(f'  Got {len(sessions)} sessions')
         for s in sessions:
             self.log.debug(str(s))
@@ -1634,7 +1721,7 @@ class LickVncLauncher(object):
         self.kill_vnc_processes()
 
         self.exit = True
-        self.log.info("EXITING APP\n")
+        self.log.info("Exiting\n")
         sys.exit(1)
 
 
@@ -1650,11 +1737,9 @@ class LickVncLauncher(object):
         '''
         #helpful user error message
         supportEmail = 'holden@ucolick.org'
-        print("\n****** PROGRAM ERROR ******\n")
         print("Error message: " + str(error) + "\n")
         print("If you need troubleshooting assistance:")
         print(f"* Email {supportEmail}\n")
-        #todo: call number, website?
 
         #Log error if we have a log object (otherwise dump error to stdout)
         #and call exit_app function
@@ -1813,7 +1898,7 @@ def create_parser():
     parser.add_argument("--check", dest="check",default=None,
         help="How to check for open ports.")
     parser.add_argument("--novpn", dest="vpn",default=False,
-                            action="store_true",help="Turn off VPN check.")
+                            action="store_true",help="Turn off VPN check to allow the software to run without a VPN.")
 
     parser.add_argument("--viewonly", dest="viewonly",default=False,
         action='store_true',
