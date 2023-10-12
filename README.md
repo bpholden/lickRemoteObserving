@@ -201,7 +201,7 @@ export PATH=/home/MyNAME/miniconda3 bin:$PATH
 To retrieve the software, you can download it or clone it using git.
 
 
-- [Click here to download the software as a zipfile](https://github.com/bpholden/lickRemoteObserving/archive/refs/tags/v1.29.zip)
+- [Click here to download the software as a zipfile](https://github.com/bpholden/lickRemoteObserving/archive/refs/tags/v1.30.zip)
 
 
 - To clone this project from github:
