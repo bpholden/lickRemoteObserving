@@ -4,6 +4,6 @@ channels:
 dependencies:
   - python>=3.9
   - yaml
-  - pyyaml=5.1.2
+  - pyyaml
   - requests
   - packaging
