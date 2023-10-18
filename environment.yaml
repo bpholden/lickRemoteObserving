@@ -2,7 +2,7 @@ name: KRO
 channels:
   - conda-forge
 dependencies:
-  - python=3.7
+  - python>=3.9
   - yaml
   - pyyaml=5.1.2
   - requests

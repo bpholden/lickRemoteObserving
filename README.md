@@ -66,13 +66,13 @@ solution though it maybe less readable.
 
 The following hardware configuration has been tested:
 
-- Computer: MacBook 13" Pro (5 yrs old)
+- Computer: MacBook 13" Pro (2015)
     - CPU: Intel Core i7 CPU
     - RAM: 16GB
 	- an old Samsung 24" 1920x1200 that was lying around
 	- Running Mojave (10.14)
 
-- Computer: MacBook 13" Pro (7yrs old)
+- Computer: MacBook 13" Pro (2013)
   - CPU: Intel Core i5 CPU
   - RAM: 8 GB
   - Running Sierra (10.12)
@@ -202,7 +202,7 @@ export PATH=/home/MyNAME/miniconda3 bin:$PATH
 To retrieve the software, you can download it or clone it using git.
 
 
-- [Click here to download the software as a zipfile](https://github.com/bpholden/lickRemoteObserving/archive/refs/tags/v1.26.zip)
+- [Click here to download the software as a zipfile](https://github.com/bpholden/lickRemoteObserving/archive/refs/tags/v1.27.zip)
 
 
 - To clone this project from github:
@@ -215,11 +215,13 @@ cd ~/lickRemoteObserving
 Once you have downloaded the software:
 
 
-- Create a KRO [conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html) using the provided environment.yaml file:
+- If you have NOT installed the Keck remote observing software, create a KRO [conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html) using the provided environment.yaml file:
 ```
 cd ~/lickRemoteObserving
 conda env create -f environment.yaml
 ```
+
+- If you HAVE installed the Keck remote observing software, you can use that conda environment with this set of scripts.
 
 - Create configuration file:
  - If you have a Mac and have used our software suggestions
