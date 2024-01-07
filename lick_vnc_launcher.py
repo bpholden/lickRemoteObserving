@@ -10,7 +10,6 @@ import argparse
 import atexit
 import datetime
 import logging
-import math
 import pathlib
 import socket
 import subprocess
@@ -22,7 +21,7 @@ import yaml
 
 import soundplay
 
-__version__ = '1.29'
+__version__ = '1.31'
 
 ##-------------------------------------------------------------------------
 ## Start from command line

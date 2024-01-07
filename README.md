@@ -117,6 +117,7 @@ The software has been tested for macOS and some Linux variants.
 		```
 		apt install tigervnc-viewer
 		apt install tigervnc-common
+    apt install tigervnc-tools
 		```
         - **Important!** If you are using TigerVNC, in the $HOME/.vnc directory, create a file `default.tigervnc` with these two lines:
         ```
@@ -201,7 +202,7 @@ export PATH=/home/MyNAME/miniconda3 bin:$PATH
 To retrieve the software, you can download it or clone it using git.
 
 
-- [Click here to download the software as a zipfile](https://github.com/bpholden/lickRemoteObserving/archive/refs/tags/v1.30.zip)
+- [Click here to download the software as a zipfile](https://github.com/bpholden/lickRemoteObserving/archive/refs/tags/v1.31.zip)
 
 
 - To clone this project from github:

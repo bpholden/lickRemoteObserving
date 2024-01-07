@@ -17,9 +17,6 @@
 # vncviewer: '/Applications/VNC Viewer.app/Contents/MacOS/vncviewer'
 # vncargs: '-Shared -FullColor'
 ##
-## Example: use built in Screen Sharing app in macOS:
-# vncviewer: 'open'
-# vncprefix: 'vnc://'
 ## Example for TightVNC (note can be slow)
 # vncviewer: 'vncviewer'
 # vncargs: '-shared -truecolor -quality 4 -x11cursor -encodings ZRLE'
