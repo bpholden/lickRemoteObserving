@@ -21,7 +21,7 @@ import yaml
 
 import soundplay
 
-__version__ = '1.31'
+__version__ = '1.32'
 
 ##-------------------------------------------------------------------------
 ## Start from command line
@@ -1578,7 +1578,7 @@ class LickVncLauncher(object):
 
         '''
         url = ('https://raw.githubusercontent.com/bpholden/'
-               'lickRemoteObserving/master/lick_vnc_launcher.py')
+               'lickRemoteObserving/release/lick_vnc_launcher.py')
         try:
             import requests
             from packaging import version
