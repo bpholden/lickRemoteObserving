@@ -21,12 +21,15 @@ import yaml
 
 import soundplay
 
-__version__ = '1.32'
+__version__ = '1.33'
 
 ##-------------------------------------------------------------------------
 ## Start from command line
 ##-------------------------------------------------------------------------
 def main():
+    '''
+    main()
+    '''
     #catch all exceptions so we can exit gracefully
     try:
         lvl = LickVncLauncher() # create the main object
@@ -58,26 +61,26 @@ def create_logger():
         pathlib.Path('logs/').mkdir(parents=True, exist_ok=True)
 
         #file handler (full debug logging)
-        logFile = f'logs/lick-remote-log-utc-{ymd}.txt'
-        logFileHandler = logging.FileHandler(logFile)
-        logFileHandler.setLevel(logging.DEBUG)
-        logFormat = logging.Formatter('%(asctime)s UT - %(levelname)s: %(message)s')
-        logFormat.converter = time.gmtime
-        logFileHandler.setFormatter(logFormat)
-        log.addHandler(logFileHandler)
+        log_file = f'logs/lick-remote-log-utc-{ymd}.txt'
+        log_fileHandler = logging.FileHandler(log_file)
+        log_fileHandler.setLevel(logging.DEBUG)
+        log_format = logging.Formatter('%(asctime)s UT - %(levelname)s: %(message)s')
+        log_format.converter = time.gmtime
+        log_fileHandler.setFormatter(log_format)
+        log.addHandler(log_fileHandler)
 
         #stream/console handler (info+ only)
-        logConsoleHandler = logging.StreamHandler()
-        logConsoleHandler.setLevel(logging.INFO)
-        logFormat = logging.Formatter(' %(levelname)8s: %(message)s')
-        logFormat.converter = time.gmtime
-        logConsoleHandler.setFormatter(logFormat)
+        log_consoleHandler = logging.StreamHandler()
+        log_consoleHandler.setLevel(logging.INFO)
+        log_format = logging.Formatter(' %(levelname)8s: %(message)s')
+        log_format.converter = time.gmtime
+        log_consoleHandler.setFormatter(log_format)
 
-        log.addHandler(logConsoleHandler)
+        log.addHandler(log_consoleHandler)
 
     except Exception as error:
         print(str(error))
-        print(f"ERROR: Unable to create logger at {logFile}")
+        print(f"ERROR: Unable to create logger at {log_file}")
         print("Make sure you have write access to this directory.\n")
         log.info("Exiting\n")
         sys.exit(1)
@@ -1612,12 +1615,12 @@ class LickVncLauncher(object):
 
         account = self.ssh_account
 
-        logfile_handlers = [lh for lh in self.log.handlers if
+        log_file_handlers = [lh for lh in self.log.handlers if
                             isinstance(lh, logging.FileHandler)]
-        logfile = pathlib.Path(logfile_handlers.pop(0).baseFilename)
+        log_file = pathlib.Path(log_file_handlers.pop(0).baseFilename)
 
-        source = str(logfile)
-        destination = account + '@' + self.vncserver + ':' + logfile.name
+        source = str(log_file)
+        destination = account + '@' + self.vncserver + ':' + log_file.name
 
         command = ['scp',]
 
@@ -1651,7 +1654,7 @@ class LickVncLauncher(object):
             message = '  command failed with error ' + str(proc.returncode)
             self.log.error(message)
         else:
-            self.log.info(f'  Uploaded {logfile.name}')
+            self.log.info(f'  Uploaded {log_file.name}')
             self.log.info(f'  to {destination}')
 
 
@@ -1741,8 +1744,8 @@ class LickVncLauncher(object):
         #and call exit_app function
         msg = traceback.format_exc()
         if self.log:
-            logfile = self.log.handlers[0].baseFilename
-            print(f"* Attach log file at: {logfile}\n")
+            log_file = self.log.handlers[0].baseFilename
+            print(f"* Attach log file at: {log_file}\n")
             self.log.debug(f"\n\n!!!!! PROGRAM ERROR:\n{msg}\n")
         else:
             print(msg)
