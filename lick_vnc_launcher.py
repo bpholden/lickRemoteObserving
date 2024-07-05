@@ -133,6 +133,8 @@ class LickVncLauncher(object):
         self.vncviewonly  = False
         self.tigervnc     = False
 
+        self.ssh_cmd = 'ssh'
+
         self.ssh_forward      = True
         self.connection_valid = False
 
@@ -473,6 +475,14 @@ class LickVncLauncher(object):
         lps = self.config.get('local_port_start', None)
         if lps: self.local_port = lps
 
+        self.ssh_command = self.config.get('ssh_path', 'ssh')
+        try:
+            whereisssh = subprocess.check_output(['which', self.ssh_command])
+            self.log.debug('SSH command is %s' % whereisssh.decode().strip())
+        except subprocess.CalledProcessError:
+            self.log.error('SSH command %s not found' % self.ssh_command)
+            sys.exit()
+
 
         #check ssh_pkeys
         filepath = os.path.dirname(os.path.abspath(__file__))
@@ -733,7 +743,7 @@ class LickVncLauncher(object):
 
         # build the command
         forwarding = f"{local_port}:localhost:{remote_port}"
-        command = ['ssh', '-l', username, '-L', forwarding, '-N', '-T', server]
+        command = [self.ssh_cmd, '-l', username, '-L', forwarding, '-N', '-T', server]
         command.append('-oStrictHostKeyChecking=no')
         command.append('-oCompression=yes')
         if self.ssh_additional_kex is not None:
@@ -1054,7 +1064,7 @@ class LickVncLauncher(object):
         '''
         output = None
         self.log.debug(f'Trying SSH connect to {server} as {account}:')
-        command = ['ssh', server, '-l', account, '-T', '-x']
+        command = [self.ssh_cmd, server, '-l', account, '-T', '-x']
 
         if self.ssh_pkey is not None:
             command.append('-i')
