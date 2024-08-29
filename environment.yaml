@@ -1,4 +1,4 @@
-name: LRO
+name: KRO
 channels:
   - conda-forge
 dependencies:
