@@ -1388,115 +1388,6 @@ class LickVncLauncher(object):
                     self.geometry.append([x, y])
         self.log.debug('geometry: ' + str(self.geometry))
 
-    def position_vnc_windows(self):
-        '''Reposition the VNC windows to the preferred positions
-        '''
-        self.log.info("Re-reading config file")
-        self.get_config()
-        self.log.info(f"Positioning VNC windows...")
-        self.calc_window_geometry()
-
-        #get all x-window processes
-        #NOTE: using wmctrl (does not work for Mac)
-        #alternate option: xdotool?
-        cmd = ['wmctrl', '-l']
-        wmctrl_l = subprocess.run(cmd, stdout=subprocess.PIPE, timeout=5)
-        stdout = wmctrl_l.stdout.decode()
-        for line in stdout.split('\n'):
-            self.log.debug(f'wmctrl line: {line}')
-        if wmctrl_l.returncode != 0:
-            self.log.debug(f'wmctrl failed')
-            for line in stdout.split('\n'):
-                self.log.debug(f'wmctrl line: {line}')
-            stderr = wmctrl_l.stderr.decode()
-            for line in stderr.split('\n'):
-                self.log.debug(f'wmctrl line: {line}')
-            return None
-        win_ids = dict([x for x in zip(self.sessions_found,
-                                [None for entry in self.sessions_found])])
-        for line in stdout.split('\n'):
-            for thread in self.vnc_threads:
-                session = thread.name
-                if session in line:
-                    self.log.debug(f"Found {session} in {line}")
-                    win_id = line.split()[0]
-                    win_ids[session] = line.split()[0]
-
-        for i,thread in enumerate(self.vnc_threads):
-            session = thread.name
-            if win_ids.get(session, None) is not None:
-                index = i % len(self.geometry)
-                geom = self.geometry[index]
-                self.log.debug(f'{session} has geometry: {geom}')
-
-                cmd = ['wmctrl', '-i', '-r', win_ids[session], '-e',
-                       f'0,{geom[0]},{geom[1]},-1,-1']
-                self.log.debug(f"Positioning '{session}' with command: " + ' '.join(cmd))
-                wmctrl = subprocess.run(cmd, stdout=subprocess.PIPE, timeout=5)
-                if wmctrl.returncode != 0:
-                    return None
-                stdout = wmctrl.stdout.decode()
-#                 for line in stdout.split('\n'):
-#                     self.log.debug(f'wmctrl line: {line}')
-            else:
-                self.log.info(f"Could not find window process for VNC session '{session}'")
-
-
-
-    ##-------------------------------------------------------------------------
-    ## Position vncviewers
-    ##-------------------------------------------------------------------------
-    def position_vnc_windows(self):
-        '''
-        position_vnc_windows(self)
-
-        Postions the VNC windows. This only works if wmctrl is installed.
-
-
-        '''
-        self.log.info(f"Positioning VNC windows...")
-
-        try:
-            #get all x-window processes
-            #NOTE: using wmctrl (does not work for Mac)
-            #alternate option: xdotool?
-            xlines = []
-            cmd = ['wmctrl', '-l']
-            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-            while True:
-                line = proc.stdout.readline()
-                if not line: break
-                line = line.rstrip().decode('utf-8')
-                self.log.debug(f'wmctrl line: {line}')
-                xlines.append(line)
-
-            #reposition each vnc session window
-            for i, session in enumerate(self.sessions_found):
-                self.log.debug(f'Search xlines for "{session}"')
-                win_id = None
-                for line in xlines:
-                    if session not in line: continue
-                    parts = line.split()
-                    win_id = parts[0]
-
-                if win_id:
-                    index = i % len(self.geometry)
-                    geom = self.geometry[index]
-                    ww = geom[0]
-                    wh = geom[1]
-                    wx = geom[2]
-                    wy = geom[3]
-                    # cmd = ['wmctrl', '-i', '-r', win_id, '-e', f'0,{wx},{wy},{ww},{wh}']
-                    cmd = ['wmctrl', '-i', '-r', win_id, '-e',
-                           f'0,{wx},{wy},-1,-1']
-                    self.log.debug(f"Positioning '{session}' with command: " + ' '.join(cmd))
-                    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-                else:
-                    self.log.info(f"Could not find window process for VNC session '{session}'")
-        except Exception as error:
-            self.log.error("Failed to reposition windows.  See log for details.")
-            self.log.debug(str(error))
-
 
     ##-------------------------------------------------------------------------
     ## Prompt command line menu and wait for quit signal
@@ -1517,7 +1408,6 @@ class LickVncLauncher(object):
                  f"-"*(line_length-2),
                  f"  l               List VNC sessions available",
                  f"  [desktop number]  Open VNC session by number (1-6)",
-                 f"  w               Position VNC windows",
                  f"  s               Soundplayer restart",
                  f"  u               Upload log to Lick",
 #                  f"|  p               Play a local test sound",
@@ -1542,14 +1432,6 @@ class LickVncLauncher(object):
             elif cmd == 'q':
                 self.log.debug(f'Recieved command "{cmd}"')
                 quit = True
-            elif cmd == 'w':
-                self.log.debug(f'Recieved command "{cmd}"')
-                try:
-                    self.position_vnc_windows()
-                except:
-                    self.log.error("Failed to reposition windows, see log")
-                    trace = traceback.format_exc()
-                    self.log.debug(trace)
             elif cmd == 'p':
                 self.log.debug(f'Recieved command "{cmd}"')
                 self.play_test_sound()
