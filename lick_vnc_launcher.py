@@ -303,9 +303,9 @@ class LickVncLauncher(object):
         #get session data by name
         session = None
         for s in self.sessions_found:
-                if s.display == session_display:
-                        session = s
-                        break
+            if s.display == session_display:
+                session = s
+                break
 
         if not session:
             self.log.error(f"No server VNC session found for '{session_display}'.")
