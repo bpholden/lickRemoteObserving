@@ -145,7 +145,7 @@ class LickVncLauncher(object):
         self.ssh_pkey           = 'lick_id_rsa'
         self.ssh_key_valid      = False
         self.ssh_account        = 'user'
-        self.ssh_server         = 'shimmy.ucolick.org'
+        self.ssh_server         = '128.114.176.21'
         self.ssh_additional_kex = '+diffie-hellman-group1-sha1'
 
         self.exit = False
@@ -158,13 +158,13 @@ class LickVncLauncher(object):
         self.aplay         = None
         self.pv            = None
 
-
-        self.servers_to_try = {'shane' : 'shimmy.ucolick.org',
-                                   'nickel' : 'noir.ucolick.org',
-                                   'apf' : 'frankfurt.apf.ucolick.org'}
-        self.soundservers = {'shane' : 'shimmy.ucolick.org',
-                                   'nickel' : 'noir.ucolick.org',
-                                   'apf' : 'frankfurt.apf.ucolick.org'}
+        self.ping_cmd      = None
+        self.servers_to_try = {'shane' : '128.114.176.21',
+                                   'nickel' : '128.114.176.6',
+                                   'apf' : '128.114.17.109'}
+        self.soundservers = {'shane' : '128.114.176.21',
+                                   'nickel' : '128.114.176.6',
+                                   'apf' : '128.114.17.109'}
 
         self.geometry = list()
         self.vncviewer_has_geometry = False
