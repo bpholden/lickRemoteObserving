@@ -357,8 +357,8 @@ class LickVncLauncher(object):
         #If vncviewer is not defined, then prompt them to open manually and
         # return now
         if self.vncviewer in [None, 'None', 'none']:
-            self.log.info(f"\nNo VNC viewer application specified")
-            self.log.info(f"Open your VNC viewer manually\n")
+            self.log.info("\nNo VNC viewer application specified")
+            self.log.info("Open your VNC viewer manually\n")
             return
 
         #determine geometry
@@ -644,17 +644,17 @@ class LickVncLauncher(object):
         result = subprocess.run(cmd, capture_output=True)
         output = result.stdout.decode() + '\n' + result.stderr.decode()
         if re.search(r'TigerVNC', output):
-            self.log.info(f'We ARE using TigerVNC')
+            self.log.info('We ARE using TigerVNC')
             self.tigervnc = True
         else:
-            self.log.debug(f'We ARE NOT using TigerVNC')
+            self.log.debug('We ARE NOT using TigerVNC')
             self.tigervnc = False
 
         if re.search(r'[Gg]eometry', output):
-            self.log.info(f'Found geometry argument')
+            self.log.info('Found geometry argument')
             self.vncviewer_has_geometry = True
         else:
-            self.log.debug(f'Could not find geometry argument')
+            self.log.debug('Could not find geometry argument')
             self.vncviewer_has_geometry = False
 
 
@@ -685,10 +685,10 @@ class LickVncLauncher(object):
         a soundplay connection dissappeared.
         '''
         if len(self.ports_in_use) == 0:
-            print(f"No SSH tunnels opened by this program")
+            print("No SSH tunnels opened by this program")
         else:
-            print(f"\nSSH tunnels:")
-            print(f"  Local Port | Desktop   | Remote Connection")
+            print("\nSSH tunnels:")
+            print("  Local Port | Desktop   | Remote Connection")
             for p in self.ports_in_use.keys():
                 desktop = self.ports_in_use[p][1]
                 remote_connection = self.ports_in_use[p][0]
@@ -734,7 +734,7 @@ class LickVncLauncher(object):
 
         #if we can't find an open port, error and return
         if not local_port:
-            self.log.error(f"Could not find an open local port for SSH tunnel "
+            self.log.error("Could not find an open local port for SSH tunnel "
                            f"to {username}@{server}:{remote_port}")
             self.local_port = self.LOCAL_PORT_START
             return False
@@ -771,7 +771,7 @@ class LickVncLauncher(object):
         checks = 50
         while checks > 0:
             result = self.is_local_port_in_use(local_port)
-            if result == True:
+            if result is True:
                 break
             else:
                 checks -= 1
@@ -1086,7 +1086,7 @@ class LickVncLauncher(object):
             raise RuntimeError('subprocess failed to execute ssh')
 
         try:
-            stdout,stderr = proc.communicate(timeout=timeout)
+            stdout,_ = proc.communicate(timeout=timeout)
         except subprocess.TimeoutExpired:
             proc.kill()
             stdout,stderr = proc.communicate(timeout=timeout)
@@ -1101,7 +1101,8 @@ class LickVncLauncher(object):
             message = '  command failed with error ' + str(proc.returncode)
             self.log.error(message)
             if 'Host key verification failed' in stdout:
-                message = f'The entry into .ssh/known_hosts for {server} is old and needs to be removed, edit that file and try to ssh by hand.' 
+                message = f'The entry into .ssh/known_hosts for {server}'
+                message += 'is old and needs to be removed, edit that file and try to ssh by hand.'
                 self.log.error(message)
             return None
 
@@ -1692,8 +1693,8 @@ class LickVncLauncher(object):
             #NOTE: poll() value of None means it still exists.
             while self.vnc_processes:
                 proc = self.vnc_processes.pop()
-                self.log.debug('terminating VNC process: ' + str(proc.args))
-                if proc.poll() == None:
+                self.log.debug('terminating VNC process: %s' % str(proc.args))
+                if proc.poll() is None:
                     proc.terminate()
 
         except:
@@ -1718,7 +1719,8 @@ class LickVncLauncher(object):
         if self.exit: return
 
         #todo: Fix app exit so certain clean ups don't cause errors (ie thread not started, etc
-        if msg != None: self.log.info(msg)
+        if msg is not None: 
+            self.log.info(msg)
 
         #terminate soundplayer
         if self.sound:
@@ -1759,7 +1761,7 @@ class LickVncLauncher(object):
         if self.log:
             log_file = self.log.handlers[0].baseFilename
             print(f"* Attach log file at: {log_file}\n")
-            self.log.debug(f"\n\n!!!!! PROGRAM ERROR:\n{msg}\n")
+            self.log.debug("\n\n!!!!! PROGRAM ERROR:\n%s\n" % msg)
         else:
             print(msg)
 
@@ -1828,9 +1830,9 @@ class LickVncLauncher(object):
 
         one_works = self.check_cmd is not None
         assert one_works
-        self.log.info(f' Passed')
+        self.log.info(' Passed')
         assert self.is_local_port_in_use(self.LOCAL_PORT_START) is False
-        self.log.info(f' Passed')
+        self.log.info(' Passed')
 
     ##-------------------------------------------------------------------------
     ## test connection
@@ -1846,7 +1848,7 @@ class LickVncLauncher(object):
         self.tel = 'shane'
         self.validate_connection()
         assert self.connection_valid is True
-        self.log.info(f' Passed')
+        self.log.info(' Passed')
 
     ##-------------------------------------------------------------------------
     ## test to see if you can connect to the servers
@@ -1863,13 +1865,13 @@ class LickVncLauncher(object):
         vnc_account = self.ssh_account
         vnc_password = None
         result = f'{server}'
-        self.log.info(f'Testing SSH to {vnc_account}@{server}')
+        self.log.info('Testing SSH to %s@%s' % (vnc_account,result))
         output = self.do_ssh_cmd('hostname', result,
                                 vnc_account)
         assert output is not None
         assert output != ''
         assert output.strip() in [server, result]
-        self.log.info(f' Passed')
+        self.log.info(' Passed')
 
 
 
@@ -1910,7 +1912,8 @@ def create_parser():
     parser.add_argument("--check", dest="check",default=None,
         help="How to check for open ports.")
     parser.add_argument("--novpn", dest="vpn",default=False,
-                            action="store_true",help="Turn off VPN check to allow the software to run without a VPN.")
+                            action="store_true",
+                            help="Turn off VPN check to allow the software to run without a VPN.")
 
     parser.add_argument("--viewonly", dest="viewonly",default=False,
         action='store_true',
