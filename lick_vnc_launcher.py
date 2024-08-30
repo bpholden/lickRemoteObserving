@@ -120,7 +120,8 @@ class LickVncLauncher(object):
         #init vars we need to shutdown app properly
         self.config  = None
         self.sound   = None
-        self.tel        = None
+        self.tel     = None
+        self.args    = None
 
         self.ports_in_use   = {}
         self.vnc_threads    = []
@@ -135,9 +136,10 @@ class LickVncLauncher(object):
         self.tigervnc     = False
 
         self.ssh_cmd = 'ssh'
-
         self.ssh_forward      = True
         self.connection_valid = False
+        self.local_port       = None
+        self.novpn            = False
 
         #ssh key constants
         self.ssh_pkey           = 'lick_id_rsa'
