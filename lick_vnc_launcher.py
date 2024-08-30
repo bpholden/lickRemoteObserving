@@ -422,14 +422,14 @@ class LickVncLauncher(object):
         self.log.info(f'Using config file:\n {file}')
 
         # open file a first time just to log the raw contents
-        with open(file) as FO:
-            contents = FO.read()
+        with open(file, encoding='ascii') as file_open:
+            contents = file_open.read()
 #             lines = contents.split('/n')
         self.log.debug(f"Contents of config file: {contents}")
 
         # open file a second time to properly read config
-        with open(file) as FO:
-            config = yaml.load(FO, Loader=yaml.FullLoader)
+        with open(file, encoding='ascii') as file_open:
+            config = yaml.load(file_open, Loader=yaml.FullLoader)
 
         for key in ['vncviewer', 'soundplayer', 'aplay']:
             if key in config.keys():
