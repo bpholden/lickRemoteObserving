@@ -11,6 +11,7 @@ import atexit
 import datetime
 import logging
 import pathlib
+import platform
 import socket
 import subprocess
 import threading
