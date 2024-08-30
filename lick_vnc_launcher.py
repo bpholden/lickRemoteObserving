@@ -1096,7 +1096,7 @@ class LickVncLauncher(object):
         stdout = stdout.decode()
         stdout = stdout.strip()
         self.log.debug(f"Output: '{stdout}'")
-        
+
         if proc.returncode != 0:
             message = '  command failed with error ' + str(proc.returncode)
             self.log.error(message)
