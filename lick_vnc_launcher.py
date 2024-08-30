@@ -478,12 +478,12 @@ class LickVncLauncher(object):
         lps = self.config.get('local_port_start', None)
         if lps: self.local_port = lps
 
-        self.ssh_command = self.config.get('ssh_path', 'ssh')
+        self.ssh_cmd = self.config.get('ssh_path', 'ssh')
         try:
-            whereisssh = subprocess.check_output(['which', self.ssh_command])
+            whereisssh = subprocess.check_output(['which', self.ssh_cmd])
             self.log.debug('SSH command is %s' % whereisssh.decode().strip())
         except subprocess.CalledProcessError:
-            self.log.error('SSH command %s not found' % self.ssh_command)
+            self.log.error('SSH command %s not found' % self.ssh_cmd)
             sys.exit()
 
 
