@@ -34,7 +34,7 @@ def main():
     try:
         lvl = LickVncLauncher() # create the main object
         create_logger() #
-        lvl.log = logging.getLogger('KRO')
+        lvl.log = logging.getLogger('LRO')
         lvl.start()
     except Exception as error:
         lvl.handle_fatal_error(error)
@@ -53,7 +53,7 @@ def create_logger():
     '''
     try:
         ## Create logger object
-        log = logging.getLogger('KRO')
+        log = logging.getLogger('LRO')
         log.setLevel(logging.DEBUG)
 
         #create log file and log dir if not exist
@@ -111,7 +111,7 @@ class LickVncLauncher(object):
     this:
             lvl = LickVncLauncher() # instantize object
             create_logger()  # create a location for logging
-            lvl.log = logging.getLogger('KRO') # link log object to VNC object
+            lvl.log = logging.getLogger('LRO') # link log object to VNC object
             lvl.start() # now start the whole process
 
     '''
