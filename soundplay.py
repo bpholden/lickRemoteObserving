@@ -6,7 +6,7 @@ import time
 import argparse
 import logging
 
-log = logging.getLogger('KRO')
+log = logging.getLogger('LRO')
 
 
 class soundplay(object):
@@ -105,7 +105,7 @@ def create_logger():
 
     try:
         ## Create logger object
-        log = logging.getLogger('KRO')
+        log = logging.getLogger('LRO')
         log.setLevel(logging.DEBUG)
 
         #stream/console handler (info+ only)
@@ -131,7 +131,7 @@ if __name__ == "__main__":
 
     #create logger
     create_logger()
-    log = logging.getLogger('KRO')
+    log = logging.getLogger('LRO')
 
     # arg parser
     parser = argparse.ArgumentParser(description="Start Lick event sounds player.")
