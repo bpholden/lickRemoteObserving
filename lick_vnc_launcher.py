@@ -1439,7 +1439,7 @@ class LickVncLauncher(object):
                 quit = True
             elif cmd == 'p':
                 self.log.debug(f'Recieved command "{cmd}"')
-                self.play_test_sound()
+                pass
             elif cmd == 's':
                 self.log.debug(f'Recieved command "{cmd}"')
                 self.start_soundplay()
@@ -1750,7 +1750,6 @@ class LickVncLauncher(object):
 
         '''
         vnc_account = self.ssh_account
-        vnc_password = None
         result = f'{server}'
         self.log.info('Testing SSH to %s@%s' % (vnc_account,result))
         output = self.do_ssh_cmd('hostname', result,
