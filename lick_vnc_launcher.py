@@ -165,6 +165,9 @@ class LickVncLauncher(object):
         self.soundservers = {'shane' : '128.114.176.21',
                                    'nickel' : '128.114.176.6',
                                    'apf' : '128.114.17.109'}
+        self.servers_names = {'shane' : 'shimmy.ucolick.org',
+                                   'nickel' : 'noir.ucolick.org',
+                                   'apf' : 'frankfurt.ucolick.org'}
 
         self.geometry = list()
         self.vncviewer_has_geometry = False
@@ -1663,7 +1666,7 @@ class LickVncLauncher(object):
         self.test_vncviewer()
         self.test_port_lookup()
         self.test_connection()
-        server = self.servers_to_try[self.args.account]
+        server = self.servers_names[self.args.account]
         self.test_connection_to_servers(server)
 
 
