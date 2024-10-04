@@ -1155,8 +1155,8 @@ class LickVncLauncher(object):
             return
 
 
-        # note fix 
-        cmds = ['/usr/sbin/netstat','/sbin/ip']
+        # note fix
+        cmds = ['netstat','ip']
         correct_cmd = None
         for cmd in cmds:
             if correct_cmd is None:
@@ -1167,13 +1167,16 @@ class LickVncLauncher(object):
                     self.log.debug('  Failed to find command ' +str(cmd) + ' ' + str(e))
                     data = None
                 if data:
-                    correct_cmd = cmd
+                    data = data.decode().strip()
+                    correct_cmd = data
+                    break
 
         flags = ''
-        if correct_cmd == '/usr/sbin/netstat':
+        if 'netstat' in correct_cmd:
             flags = '-nr'
-        if correct_cmd == '/sbin/ip':
+        elif 'ip' in correct_cmd:
             flags = 'route'
+
         if correct_cmd:
             cmd = f"{correct_cmd} {flags} | grep 128.114"
             proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
