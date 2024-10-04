@@ -271,8 +271,8 @@ class LickVncLauncher(object):
         ##---------------------------------------------------------------------
         ## Open Soundplay
         ##---------------------------------------------------------------------
-        sound = None
-        if self.args.nosound is False and self.config.get('nosound', False) != True:
+
+        if self.args.nosound is False and self.config.get('nosound', False) is not True:
             self.start_soundplay()
 
 
@@ -795,7 +795,7 @@ class LickVncLauncher(object):
         This examines the output of various commands on the observers local
         host.
         The purpose is to find the correct command to find open ports.
-        Prefers in order ss,lsof, netstat.exe (Windows System for Linux)
+        Prefers in order ss, lsof, netstat.exe (Windows System for Linux)
         and then ps.  ps does not always work the way one would like as
         a process may not have an actual open port even if it claims the
         port was open.
@@ -949,7 +949,6 @@ class LickVncLauncher(object):
             #config vars
             sound_port   = 9798
             sound_server = self.soundservers[self.tel]
-            sound_server = sound_server
 
             if self.soundplayer is None:
                 self.guess_soundplay()
@@ -965,7 +964,7 @@ class LickVncLauncher(object):
                                                   password, self.ssh_pkey,
                                                   sound_port,
                                                   local_port=sound_port,
-                                                    session_name='soundplay')
+                                                  session_name='soundplay')
                 if not sound_port:
                     return
                 else:
@@ -1142,7 +1141,7 @@ class LickVncLauncher(object):
         if self.args.vpn or self.novpn:
             self.connection_valid = True
             return
-        
+
         self.log.info(f"Validating connection...")
         if self.tel is None:
             self.log.error(" Cannot conncet with undefined telescope")

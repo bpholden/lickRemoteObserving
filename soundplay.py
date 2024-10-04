@@ -17,7 +17,8 @@ class soundplay(object):
         self.proc = None
 
 
-    def connect(self, instrument, server=None, port=9798, aplay='aplay', player='soundplay',pv=None):
+    def connect(self, instrument, server=None, port=9798, 
+                aplay='aplay', player='soundplay', pv=None):
         '''
         Connect to sound server
         '''
@@ -27,12 +28,13 @@ class soundplay(object):
             #massage inputs
             instrument = instrument.lower()
             port = str(port)
-            if server == None:
-                server = self.getSoundServer(instrument)
-            if server == None:
+            if server is None:
+                server = self.get_sound_server(instrument)
+            if server is None:
                 return False
             serverport = f'{server}:{port}'
-            if player == None: player = 'soundplay'
+            if player is None:
+                player = 'soundplay'
 
             #check existing soundplay process
             procs = self.check_existing_process(server, port, instrument)
@@ -43,10 +45,10 @@ class soundplay(object):
 
             #path to soundplay is relative to this script
             #todo: auto-detect based on OS, etc?
-            soundplayPath  = os.path.dirname(os.path.abspath(__file__)) + "/soundplayer/" + player
+            soundplay_path  = self.full_path(player)
 
             #create command and open process and hold on to handle so we can terminate later
-            cmd = [soundplayPath, '-s', serverport, '-T', instrument]
+            cmd = [soundplay_path, '-s', serverport, '-T', instrument]
             if aplay is not None:
                 cmd.append('-px')
                 cmd.append(aplay)
@@ -62,6 +64,12 @@ class soundplay(object):
 
         return True
 
+    def full_path(self, filename):
+        '''
+        Return full path to file in same directory as this script
+        '''
+        return os.path.join(os.path.dirname(os.path.abspath(__file__)), "soundplayer",filename)
+        
 
     def check_existing_process(self, server, port, instrument):
         '''
@@ -77,9 +85,11 @@ class soundplay(object):
         return lines
 
 
-    def getSoundServer(self, instrument):
+    def get_sound_server(self, instrument):
         '''
-        #todo: move this common function to shared module.  It can look for ssh key.  If not found, then it can prompt for password.
+        #todo: move this common function to shared module.
+        #   It can look for ssh key.  If not found, then 
+        # it can prompt for password.
         '''
 
         soundservers = {'kast' : 'shred',
@@ -125,9 +135,8 @@ def create_logger():
 ##  main
 ##-------------------------------------------------------------------------
 if __name__ == "__main__":
-    '''
-    Run in command line mode
-    '''
+
+    # Run in command line mode
 
     #create logger
     create_logger()
