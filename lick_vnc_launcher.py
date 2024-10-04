@@ -990,8 +990,8 @@ class LickVncLauncher(object):
             return
 
         # Build the soundplay test command.
-        self.soundplayer = self.config.get('soundplayer', None)
-        soundplayer = soundplay.full_path(self.soundplayer)
+
+        soundplayer = self.sound.full_path(self.soundplayer)
 
         command = [soundplayer, '-l']
 
