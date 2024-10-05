@@ -165,6 +165,9 @@ class LickVncLauncher(object):
         self.soundservers = {'shane' : '128.114.176.21',
                                    'nickel' : '128.114.176.6',
                                    'apf' : '128.114.17.109'}
+        self.servers_names = {'shane' : 'shimmy.ucolick.org',
+                                   'nickel' : 'noir.ucolick.org',
+                                   'apf' : 'frankfurt.ucolick.org'}
 
         self.geometry = list()
         self.vncviewer_has_geometry = False
@@ -271,8 +274,8 @@ class LickVncLauncher(object):
         ##---------------------------------------------------------------------
         ## Open Soundplay
         ##---------------------------------------------------------------------
-        sound = None
-        if self.args.nosound is False and self.config.get('nosound', False) != True:
+
+        if self.args.nosound is False and self.config.get('nosound', False) is not True:
             self.start_soundplay()
 
 
@@ -795,7 +798,7 @@ class LickVncLauncher(object):
         This examines the output of various commands on the observers local
         host.
         The purpose is to find the correct command to find open ports.
-        Prefers in order ss,lsof, netstat.exe (Windows System for Linux)
+        Prefers in order ss, lsof, netstat.exe (Windows System for Linux)
         and then ps.  ps does not always work the way one would like as
         a process may not have an actual open port even if it claims the
         port was open.
@@ -949,7 +952,6 @@ class LickVncLauncher(object):
             #config vars
             sound_port   = 9798
             sound_server = self.soundservers[self.tel]
-            sound_server = sound_server
 
             if self.soundplayer is None:
                 self.guess_soundplay()
@@ -965,7 +967,7 @@ class LickVncLauncher(object):
                                                   password, self.ssh_pkey,
                                                   sound_port,
                                                   local_port=sound_port,
-                                                    session_name='soundplay')
+                                                  session_name='soundplay')
                 if not sound_port:
                     return
                 else:
@@ -991,8 +993,8 @@ class LickVncLauncher(object):
             return
 
         # Build the soundplay test command.
-        self.soundplayer = self.config.get('soundplayer', None)
-        soundplayer = soundplay.full_path(self.soundplayer)
+
+        soundplayer = self.sound.full_path(self.soundplayer)
 
         command = [soundplayer, '-l']
 
@@ -1142,7 +1144,7 @@ class LickVncLauncher(object):
         if self.args.vpn or self.novpn:
             self.connection_valid = True
             return
-        
+
         self.log.info(f"Validating connection...")
         if self.tel is None:
             self.log.error(" Cannot conncet with undefined telescope")
@@ -1153,8 +1155,8 @@ class LickVncLauncher(object):
             return
 
 
-        # note fix 
-        cmds = ['/usr/sbin/netstat','/sbin/ip']
+        # note fix
+        cmds = ['netstat','ip']
         correct_cmd = None
         for cmd in cmds:
             if correct_cmd is None:
@@ -1165,13 +1167,16 @@ class LickVncLauncher(object):
                     self.log.debug('  Failed to find command ' +str(cmd) + ' ' + str(e))
                     data = None
                 if data:
-                    correct_cmd = cmd
+                    data = data.decode().strip()
+                    correct_cmd = data
+                    break
 
         flags = ''
-        if correct_cmd == '/usr/sbin/netstat':
+        if 'netstat' in correct_cmd:
             flags = '-nr'
-        if correct_cmd == '/sbin/ip':
+        elif 'ip' in correct_cmd:
             flags = 'route'
+
         if correct_cmd:
             cmd = f"{correct_cmd} {flags} | grep 128.114"
             proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
@@ -1434,7 +1439,7 @@ class LickVncLauncher(object):
                 quit = True
             elif cmd == 'p':
                 self.log.debug(f'Recieved command "{cmd}"')
-                self.play_test_sound()
+                pass
             elif cmd == 's':
                 self.log.debug(f'Recieved command "{cmd}"')
                 self.start_soundplay()
@@ -1664,7 +1669,7 @@ class LickVncLauncher(object):
         self.test_vncviewer()
         self.test_port_lookup()
         self.test_connection()
-        server = self.servers_to_try[self.args.account]
+        server = self.servers_names[self.args.account]
         self.test_connection_to_servers(server)
 
 
@@ -1745,7 +1750,6 @@ class LickVncLauncher(object):
 
         '''
         vnc_account = self.ssh_account
-        vnc_password = None
         result = f'{server}'
         self.log.info('Testing SSH to %s@%s' % (vnc_account,result))
         output = self.do_ssh_cmd('hostname', result,
