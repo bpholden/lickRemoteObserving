@@ -1355,11 +1355,11 @@ class LickVncLauncher(object):
              for line in stderr.split('\n'):
                  self.log.debug(f"xdpyinfo: {line}")
              return None
-        find_nscreens = re.search('number of screens:\s+(\d+)', stdout)
+        find_nscreens = re.search(r'number of screens:\s+(\d+)', stdout)
         nscreens = int(find_nscreens.group(1)) if find_nscreens is not None else 1
         self.log.debug(f'Number of screens = {nscreens}')
 
-        find_dimensions = re.findall('dimensions:\s+(\d+)x(\d+)', stdout)
+        find_dimensions = re.findall(r'dimensions:\s+(\d+)x(\d+)', stdout)
         if len(find_dimensions) == 0:
             self.log.debug(f'Could not find screen dimensions')
             return None
