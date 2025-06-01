@@ -58,7 +58,10 @@ def create_logger():
         log.setLevel(logging.DEBUG)
 
         #create log file and log dir if not exist
-        ymd = datetime.datetime.now(datetime.UTC).date().strftime('%Y%m%d')
+        try:
+            ymd = datetime.datetime.now(datetime.UTC).date().strftime('%Y%m%d')
+        except AttributeError:
+            ymd = datetime.datetime.utcnow().date().strftime('%Y%m%d')
         pathlib.Path('logs/').mkdir(parents=True, exist_ok=True)
 
         #file handler (full debug logging)
