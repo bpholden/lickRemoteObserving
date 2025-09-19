@@ -22,7 +22,7 @@ import yaml
 
 import soundplay
 
-__version__ = '1.33'
+__version__ = '1.36'
 
 ##-------------------------------------------------------------------------
 ## Start from command line
