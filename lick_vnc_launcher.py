@@ -22,7 +22,7 @@ import yaml
 
 import soundplay
 
-__version__ = '1.33'
+__version__ = '1.36'
 
 ##-------------------------------------------------------------------------
 ## Start from command line
@@ -58,7 +58,10 @@ def create_logger():
         log.setLevel(logging.DEBUG)
 
         #create log file and log dir if not exist
-        ymd = datetime.datetime.utcnow().date().strftime('%Y%m%d')
+        try:
+            ymd = datetime.datetime.now(datetime.UTC).date().strftime('%Y%m%d')
+        except AttributeError:
+            ymd = datetime.datetime.utcnow().date().strftime('%Y%m%d')
         pathlib.Path('logs/').mkdir(parents=True, exist_ok=True)
 
         #file handler (full debug logging)
@@ -839,13 +842,14 @@ class LickVncLauncher(object):
         determined by how_check_local_port()
 
         '''
+        
         if self.check_cmd == 'netstat.exe':
             cmd = f'netstat.exe -an | grep ":{port}"'
         elif self.check_cmd == 'ss':
             cmd = f'ss -l | grep ":{port}"'
         elif self.check_cmd == 'lsof':
             cmd = f'lsof -i -P -n | grep LISTEN | grep ":{port} (LISTEN)" | grep -v grep'
-        elif self.check_cmd == 'ps':
+        else:
             cmd = f'ps aux | grep "{port}:" | grep -v grep'
 
         self.log.debug(f'Checking for port {port} in use: {cmd}')
@@ -907,7 +911,8 @@ class LickVncLauncher(object):
 
         if self.tigervnc and self.vncviewonly:
             vncargs += ' -ViewOnly=1'
-        elif self.vncviewer == '/Applications/VNC Viewer.app/Contents/MacOS/vncviewer' and self.vncviewonly:
+        elif self.vncviewer == '/Applications/VNC Viewer.app/Contents/MacOS/vncviewer'\
+              and self.vncviewonly:
             vncargs += ' SendPointerEvents=0'
 
         cmd = [vncviewercmd]
@@ -1355,11 +1360,11 @@ class LickVncLauncher(object):
              for line in stderr.split('\n'):
                  self.log.debug(f"xdpyinfo: {line}")
              return None
-        find_nscreens = re.search('number of screens:\s+(\d+)', stdout)
+        find_nscreens = re.search(r'number of screens:\s+(\d+)', stdout)
         nscreens = int(find_nscreens.group(1)) if find_nscreens is not None else 1
         self.log.debug(f'Number of screens = {nscreens}')
 
-        find_dimensions = re.findall('dimensions:\s+(\d+)x(\d+)', stdout)
+        find_dimensions = re.findall(r'dimensions:\s+(\d+)x(\d+)', stdout)
         if len(find_dimensions) == 0:
             self.log.debug(f'Could not find screen dimensions')
             return None
@@ -1376,10 +1381,10 @@ class LickVncLauncher(object):
         if window_positions is not None:
             self.geometry = window_positions
         else:
-            self.log.debug(f"Calculating VNC window geometry...")
+            self.log.debug("Calculating VNC window geometry...")
             num_win = len(self.sessions_found)
-            cols = 2
             rows = 2
+            cols = num_win // rows
             screen = self.screens[0]
             #get x/y coords (assume two rows)
             for row in range(0, rows):
@@ -1391,7 +1396,7 @@ class LickVncLauncher(object):
                         x = window_positions[index][0]
                         y = window_positions[index][1]
                     self.geometry.append([x, y])
-        self.log.debug('geometry: ' + str(self.geometry))
+        self.log.debug('geometry: %s' % str(self.geometry))
 
 
     ##-------------------------------------------------------------------------
@@ -1407,20 +1412,20 @@ class LickVncLauncher(object):
 
         '''
         line_length = 52
-        lines = [f"-"*(line_length-2),
+        lines = ["-"*(line_length-2),
                  f"          Lick Remote Observing (v{__version__})",
-                 f"                        MENU",
-                 f"-"*(line_length-2),
-                 f"  l               List VNC sessions available",
-                 f"  [desktop number]  Open VNC session by number (1-6)",
-                 f"  s               Soundplayer restart",
-                 f"  u               Upload log to Lick",
+                 "                        MENU",
+                 "-"*(line_length-2),
+                 "  l               List VNC sessions available",
+                 "  [desktop number]  Open VNC session by number (1-6)",
+                 "  s               Soundplayer restart",
+                 "  u               Upload log to Lick",
 #                  f"|  p               Play a local test sound",
-                 f"  t               List local ports in use",
-                 f"  c [port]        Close ssh tunnel on local port",
-                 f"  v               Check if software is up to date",
-                 f"  q               Quit (or Control-C)",
-                 f"-"*(line_length-2),
+                 "  t               List local ports in use",
+                 "  c [port]        Close ssh tunnel on local port",
+                 "  v               Check if software is up to date",
+                 "  q               Quit (or Control-C)",
+                 "-"*(line_length-2),
                  ]
         menu = "\n"
         for newline in lines:
@@ -1486,13 +1491,13 @@ class LickVncLauncher(object):
         try:
             import requests
             from packaging import version
-            r = requests.get(url)
+            r = requests.get(url, timeout=10)
             findversion = re.search(r"__version__ = '(\d.+)'", r.text)
             if findversion is not None:
                 remote_version = version.parse(findversion.group(1))
                 local_version = version.parse(__version__)
             else:
-                self.log.warning(f'Unable to determine software version on GitHub')
+                self.log.warning('Unable to determine software version on GitHub')
                 return
             if remote_version == local_version:
                 self.log.info(f'Your software is up to date (v{__version__})')
@@ -1536,7 +1541,6 @@ class LickVncLauncher(object):
 
         self.log.debug('scp command: ' + ' '.join (command))
 
-        pipe = subprocess.PIPE
         null = subprocess.DEVNULL
 
         stdin = null
@@ -1546,7 +1550,7 @@ class LickVncLauncher(object):
             raise RuntimeError('subprocess failed to execute scp')
 
         try:
-            stdout,stderr = proc.communicate(timeout=10)
+            _,_ = proc.communicate(timeout=10)
         except subprocess.TimeoutExpired:
             self.log.error('  Timeout attempting to upload log file')
             return
@@ -1603,7 +1607,8 @@ class LickVncLauncher(object):
         '''
         #hack for preventing this function from being called twice
         #todo: need to figure out how to use atexit with threads properly
-        if self.exit: return
+        if self.exit:
+            return
 
         #todo: Fix app exit so certain clean ups don't cause errors (ie thread not started, etc
         if msg is not None: 
