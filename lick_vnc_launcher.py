@@ -125,6 +125,10 @@ class LickVncLauncher(object):
         self.sound   = None
         self.tel     = None
         self.args    = None
+        self.log     = None
+        self.novpn   = False
+        self.local_port = None
+        self.ping_cmd   = None
 
         self.ports_in_use   = {}
         self.vnc_threads    = []
@@ -1041,14 +1045,9 @@ class LickVncLauncher(object):
 
         account - the name of the telescope to be connected to.
 
-
         '''
         if account is None:
             return
-
-        instruments = {'apf' : 'apf',
-                           'shane' : 'kast',
-                           'nickel' : 'nickel'}
 
         telescope = ('apf','shane','nickel')
 
@@ -1081,7 +1080,7 @@ class LickVncLauncher(object):
             command.append(self.ssh_pkey)
 
         command.append(cmd)
-        self.log.debug('ssh command: ' + ' '.join (command))
+        self.log.debug('ssh command: %s' % (' '.join (command)))
 
         pipe = subprocess.PIPE
         null = subprocess.DEVNULL
