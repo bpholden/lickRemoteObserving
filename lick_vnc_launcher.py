@@ -1351,25 +1351,25 @@ class LickVncLauncher(object):
 
         stdout = xpdyinfo.stdout.decode()
         if xpdyinfo.returncode != 0:
-             self.log.debug(f'xpdyinfo failed')
-             for line in stdout.split('\n'):
-                 self.log.debug(f"xdpyinfo: {line}")
-             stderr = xpdyinfo.stderr.decode()
-             for line in stderr.split('\n'):
-                 self.log.debug(f"xdpyinfo: {line}")
-             return None
+            self.log.debug('xpdyinfo failed')
+            for line in stdout.split('\n'):
+                self.log.debug("xdpyinfo: %s" % line)
+            stderr = xpdyinfo.stderr.decode()
+            for line in stderr.split('\n'):
+                self.log.debug("xdpyinfo: %s" % line)
+            return None
         find_nscreens = re.search(r'number of screens:\s+(\d+)', stdout)
         nscreens = int(find_nscreens.group(1)) if find_nscreens is not None else 1
-        self.log.debug(f'Number of screens = {nscreens}')
+        self.log.debug('Number of screens = %d' % nscreens)
 
         find_dimensions = re.findall(r'dimensions:\s+(\d+)x(\d+)', stdout)
         if len(find_dimensions) == 0:
-            self.log.debug(f'Could not find screen dimensions')
+            self.log.debug('Could not find screen dimensions')
             return None
         # convert values from strings to int
         self.screens = [[int(val) for val in line] for line in find_dimensions]
         for screen in self.screens:
-            self.log.debug(f"Screen size: {screen[0]}x{screen[1]}")
+            self.log.debug("Screen size: %dx%d" % (screen[0], screen[1]))
 
 
     def calc_window_geometry(self):
@@ -1435,42 +1435,36 @@ class LickVncLauncher(object):
             cmd = input(menu).lower()
             cmatch = re.match(r'c (\d+)', cmd)
             nmatch = re.match(r'(\d)', cmd)
+            cmd_log = "Recieved command: " + cmd
+            self.log.debug(cmd_log)
             if cmd == '':
                 pass
             elif cmd == 'q':
-                self.log.debug(f'Recieved command "{cmd}"')
                 quit = True
             elif cmd == 'p':
-                self.log.debug(f'Recieved command "{cmd}"')
                 pass
             elif cmd == 's':
-                self.log.debug(f'Recieved command "{cmd}"')
                 self.start_soundplay()
             elif cmd == 'u':
-                self.log.debug(f'Recieved command "{cmd}"')
                 self.upload_log()
             elif cmd == 'l':
-                self.log.debug(f'Recieved command "{cmd}"')
                 self.print_sessions_found()
             elif cmd == 't':
-                self.log.debug(f'Recieved command "{cmd}"')
                 self.list_tunnels()
             elif cmd == 'v':
-                self.log.debug(f'Recieved command "{cmd}"')
                 self.check_version()
             elif cmatch is not None:
-                self.log.debug(f'Recieved command "{cmd}"')
                 self.close_ssh_thread(int(cmatch.group(1)))
             elif nmatch is not None:
-                self.log.debug(f'Recieved command "{cmd}"')
                 desktop = int(nmatch.group(1)) - 1
                 if desktop >= 0 and desktop < 6:
                     self.start_vnc_session(self.sessions_found[desktop].display)
                 else:
-                    self.log.error(f'Unrecognized desktop: "{cmd}"')
+                    logstr = f"Desktop number {desktop+1} is out of range, must be 1-6"
+                    self.log.error(logstr)
             else:
-                self.log.debug(f'Recieved command "{cmd}"')
-                self.log.error(f'Unrecognized command: "{cmd}"')
+                logstr = f"Unrecognized command: {cmd}"
+                self.log.error(logstr)
 
 
     ##-------------------------------------------------------------------------
@@ -1498,11 +1492,12 @@ class LickVncLauncher(object):
                 self.log.warning('Unable to determine software version on GitHub')
                 return
             if remote_version == local_version:
-                self.log.info(f'Your software is up to date (v{__version__})')
+                logstr = f'Your software is up to date (v{__version__})'
+                self.log.info(logstr)
             else:
-                self.log.warning(f'Your local software (v{__version__}) is not  '
-                                 f'the currently available version '
-                                 f'(v{remote_version})')
+                logstr = f'Your local software (v{__version__}) is not  '
+                logstr += f'the currently available version (v{remote_version})'
+                self.log.warning(logstr)
         except:
             self.log.warning("Unable to verify remote version")
 
@@ -1536,8 +1531,8 @@ class LickVncLauncher(object):
         command.append('-oCompression=yes')
         command.append(source)
         command.append(destination)
-
-        self.log.debug('scp command: ' + ' '.join (command))
+        logstr = 'scp command: ' + ' '.join (command)
+        self.log.debug(logstr)
 
         null = subprocess.DEVNULL
 
@@ -1557,8 +1552,10 @@ class LickVncLauncher(object):
             message = '  command failed with error ' + str(proc.returncode)
             self.log.error(message)
         else:
-            self.log.info(f'  Uploaded {log_file.name}')
-            self.log.info(f'  to {destination}')
+            logstr = '  Uploaded log file:'
+            logstr += f'  {log_file.name}'
+            logstr += f'  to {destination}'
+            self.log.info(logstr)
 
 
     ##-------------------------------------------------------------------------
