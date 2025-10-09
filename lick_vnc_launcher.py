@@ -1329,7 +1329,6 @@ class LickVncLauncher(object):
         '''
 
         self.log.debug('Determining display info')
-        self.geometry = list()
         try:
             xpdyinfo = subprocess.run('xdpyinfo', stdout=subprocess.PIPE,
                                        stderr=subprocess.PIPE, timeout=5)
